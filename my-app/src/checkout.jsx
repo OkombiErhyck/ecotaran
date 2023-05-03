@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './checkout.css';
 
 const CheckoutPage = () => {
@@ -19,34 +20,31 @@ const CheckoutPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Get the existing orders from localStorage or initialize an empty array
-    const existingOrders = JSON.parse(localStorage.getItem('orders')) || [];
+    try {
+      // Send a POST request to the backend to save the order data to the database
+      const response = await axios.post('/api/orders', {
+        formData,
+        cartItems: [], // Modify this with the actual cart items
+      });
 
-    // Create a new order object with the form data and add it to the orders array
-    const newOrder = {
-      formData,
-      cartItems: [], // Modify this with the actual cart items
-    };
-    existingOrders.push(newOrder);
+      // Reset form data
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        address: '',
+        city: '',
+        zipCode: '',
+      });
 
-    // Update the orders array in localStorage
-    localStorage.setItem('orders', JSON.stringify(existingOrders));
-
-    // Reset form data
-    setFormData({
-      firstName: '',
-      lastName: '',
-      email: '',
-      address: '',
-      city: '',
-      zipCode: '',
-    });
-
-    // Redirect to the orders page
-    window.location.href = '/';
+      // Redirect to the orders page
+      window.location.href = '/';
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
