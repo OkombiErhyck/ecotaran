@@ -61,6 +61,9 @@ app.get("/test", (req,res) => {
 });
 
 
+
+
+
 app.post("/register", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
@@ -148,7 +151,29 @@ app.post("/upload", photosMiddleware.single('photo'), async (req, res) => {
 });
 
 
+app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  const { firstName, lastName, email, address, city, zipCode, cartItems } = req.body;
 
+  const newOrder = new Order({
+    firstName,
+    lastName,
+    email,
+    address,
+    city,
+    zipCode,
+    cartItems,
+  });
+
+  newOrder.save()
+    .then(() => {
+      res.status(200).json({ message: 'Order saved successfully' });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Failed to save order' });
+    });
+});
 
 app.post("/places", (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
