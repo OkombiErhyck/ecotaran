@@ -38,7 +38,7 @@ const Orders = lazy(() => import('./orders'));
 
 
 
-axios.defaults.baseURL = 'https://ecotaran-nigs.vercel.app/';
+axios.defaults.baseURL = 'https://ecotaran-nigs.vercel.app';
 axios.defaults.withCredentials = true;
 
 function App() {
