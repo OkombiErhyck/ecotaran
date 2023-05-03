@@ -60,8 +60,41 @@ app.get("/test", (req,res) => {
     res.json("test ok");
 });
 
+mongoose.connect(process.env.MONGO_URL);
+const orderSchema = new mongoose.Schema({
+  // Define the fields for the order collection
+  // For example:
+  firstName: String,
+  lastName: String,
+  email: String,
+  address: String,
+  city: String,
+  zipCode: String,
+});
 
 
+
+// Create the "orders" model based on the schema
+const Order = mongoose.model('Order', orderSchema);
+
+// Make sure the "orders" collection exists in the database
+mongoose.connection.once('open', () => {
+  mongoose.connection.db.listCollections({ name: 'orders' }).toArray((err, collections) => {
+    if (err) {
+      console.error(err);
+    } else {
+      if (collections.length === 0) {
+        mongoose.connection.db.createCollection('orders', (error) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log('The "orders" collection has been created successfully.');
+          }
+        });
+      }
+    }
+  });
+});
 
 
 app.post("/register", async (req,res) => {
@@ -173,6 +206,19 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
     .catch((error) => {
       res.status(500).json({ error: 'Failed to save order' });
     });
+});
+
+app.get('/orders', async (req, res) => {
+  try {
+    // Retrieve the orders from the database
+    const orders = await Order.find();
+
+    // Send the orders as the response
+    res.json(orders);
+  } catch (error) {
+    console.error('Failed to retrieve orders: ', error);
+    res.status(500).json({ error: 'Failed to retrieve orders' });
+  }
 });
 
 app.post("/places", (req,res) => {

@@ -25,8 +25,8 @@ const CheckoutPage = () => {
 
     try {
       // Send a POST request to the backend to save the order data to the database
-      const response = await axios.post('/api/orders', {
-        formData,
+      const response = await axios.post('/orders', {
+        ...formData,
         cartItems: [], // Modify this with the actual cart items
       });
 

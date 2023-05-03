@@ -14,6 +14,10 @@ const OrdersPage = () => {
       });
   }, []);
 
+  if (!orders || orders.length === 0) {
+    return <p>No orders found.</p>;
+  }
+
   return (
     <div>
       <h1>Orders</h1>
@@ -31,9 +35,13 @@ const OrdersPage = () => {
           </div>
           <div>
             <strong>Cart Items:</strong>
-            {order.items.map((item, itemIndex) => (
-              <p key={itemIndex}>{item.name} - ${item.price}</p>
-            ))}
+            {order.items && order.items.length > 0 ? (
+              order.items.map((item, itemIndex) => (
+                <p key={itemIndex}>{item.name} - ${item.price}</p>
+              ))
+            ) : (
+              <p>No items found for this order.</p>
+            )}
           </div>
         </div>
       ))}
