@@ -1,0 +1,62 @@
+
+
+.about img{
+    height: 350px;
+    width: 600px;
+    object-fit: cover;
+}
+.about .col-sm-6 h6{
+    
+    font-weight: 600;
+    color: var(--main);
+}
+@media screen and (max-width: 768px) {
+    .img-fluid1 {
+      display: none;
+    }
+  }
+  #about-bg-1{
+    background-Size: cover;
+   overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  #bx{
+    background: var(--main);
+    border: #0000ff00;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 7px;
+  }
+  .col-12 p {
+
+font-size: 15px;
+  }
+  .col-12 h3 {
+
+    font-weight: 700;
+      }
+      .container-fluid{
+        overflow: hidden;
+
+      }
+  
+
+
+      @keyframes pulsate {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      
+      .pulsate {
+        animation: pulsate 1s ease-out infinite;
+      }

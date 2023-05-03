@@ -1,0 +1,53 @@
+.loginbox .logincontent {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: aliceblue !important;
+    background: #000;
+    padding: 70px;
+    text-align: center;
+    
+}
+.loginbox{
+background: #3b3b3b;
+    height: 100vh;
+ 
+}
+
+  
+.logincontent{
+
+
+    height: 350px;
+}
+.loginbtn{
+
+
+    position: relative;
+    top: 30%;
+    
+
+}
+.logincontent span {
+
+color: var(--main);
+
+}
+.loginbox .logincontent span {
+   
+    color: var(--main);
+    
+ }
+ .top{
+
+    background: #090909;
+    height: 92px;
+ }
+ @media (max-width: 768px){
+    .top{
+
+        background: #000000;
+        height: 82px;
+     }
+    }

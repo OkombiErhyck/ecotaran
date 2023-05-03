@@ -1,0 +1,59 @@
+.header {
+    position: relative;
+}
+.header img {
+    height: 100vh;
+    width: 100%;
+    object-fit: cover;
+}
+.Overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    opacity: 0.7;
+}
+.header .Content{
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: aliceblue !important;
+    background: #000000db;
+    backdrop-filter: blur(10px);
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+}
+.header .Content h2 {
+   font-size: 40px;
+   font-weight: 700;
+   color: beige;
+}
+.header .Content h2 span {
+    font-weight: 500;
+    color: var(--main);
+    font-size: 45px;
+ }
+ .logo{
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: aliceblue !important;
+    background: #00000000;
+    padding: 1px;
+    text-align: center;
+    
+ }
+ .logo h1 {
+    font-size: 170px;
+    text-align: center;
+    color: var(--main);
+    border-bottom: 5px solid #ffffff;
+    border-top: 5px solid #ffffff;
+    width: 350px;
+    
+ }

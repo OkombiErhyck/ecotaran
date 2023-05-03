@@ -1,0 +1,41 @@
+/*google fonts*/
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&family=Roboto:ital,wght@0,400;0,500;1,300;1,500&display=swap');
+
+/* global variable*/
+:root {
+    --main:#76ab58;
+ }
+ 
+*{
+    font-family:  'Roboto Slab', Roboto, monospace;
+    transition: 0.2s;
+}
+*::section {
+    background: var(--main);
+    color: #fff;
+}
+.btn{
+    width: 300px;
+    background: var(--main);
+    color: #fff !important;
+}
+.btn:hover{
+    width: 300px;
+    background: #b0622a;
+    color: #f0f0f0 !important;
+}
+html::-webkit-scrollbar{
+    width: 3px;
+}
+html::-webkit-scrollbar-thumb{
+    background: var(--main);
+}
+html::-webkit-scrollbar-track{
+   background: #000000;
+}
+
+
+
+
+

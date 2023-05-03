@@ -1,0 +1,19 @@
+.col-sm-4 p {
+    font-weight: 500;
+}
+.container1{
+width: 100%;
+   background-color: rgba(255, 255, 255, 0.774);
+   overflow: hidden;
+   opacity: 100;
+   color: rgb(0, 0, 0);
+}
+.font-weight-bold span{
+
+    color: var(--main);
+}
+@media (max-width: 768px) {
+    #p{
+        font-size: 15px;
+    }
+}
