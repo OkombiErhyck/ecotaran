@@ -1,38 +1,18 @@
 const mongoose = require('mongoose');
 
+// Define the schema for the Order collection
 const orderSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true
-  },
-  address: {
-    type: String,
-    required: true
-  },
-  city: {
-    type: String,
-    required: true
-  },
-  cartItems: [{
-    name: {
-      type: String,
-      required: true
-    },
-    price: {
-      type: Number,
-      required: true
-    }
-  }]
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true },
+  address: { type: String, required: true },
+  city: { type: String, required: true },
+  zipCode: { type: String, required: true },
+  cartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CartItem' }],
 });
 
+// Create the Order model using the schema
 const Order = mongoose.model('Order', orderSchema);
 
+// Export the Order model
 module.exports = Order;
