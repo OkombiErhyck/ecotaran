@@ -45,7 +45,7 @@ const OrdersPage = () => {
     <div className="orders-container">
       <h1 className="orders-title">Orders</h1>
       {orders.map((order, index) => (
-        <div key={index} className="order">
+        <div key={index} className={`order ${order.delivered ? 'delivered' : ''}`}>
           <h3 className="order-number">Order #{index + 1}</h3>
           <div className="delivery-details">
             <strong>Delivery Details:</strong>
@@ -64,13 +64,13 @@ const OrdersPage = () => {
                   <p className="place-title">{place.title} - Lei{place.km}</p>
                   <p className="place-description">{place.description}</p>
                   <p className="place-price">{place.price}</p>
-                </div>
-              ))
-            ) : (
-              <p>No places found for this order.</p>
-            )}
-          </div>
-          <button
+</div>
+))
+) : (
+<p>No places found for this order.</p>
+)}
+</div>
+<button
 className="deliver-button"
 onClick={() => markAsDelivered(order._id)}
 disabled={order.delivered}
@@ -82,8 +82,8 @@ Order Status: {order.delivered ? 'Delivered' : 'Not Delivered'}
 </p>
 </div>
 ))}
-    </div>
-  );
+</div>
+);
 };
 
 export default OrdersPage;
