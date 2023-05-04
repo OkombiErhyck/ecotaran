@@ -28,6 +28,19 @@ const OrdersPage = () => {
     }
   };
 
+  const handlePlaceOrder = async () => {
+    try {
+      // Place the order logic goes here
+      // ...
+
+      // Add the 'delivered' property to the new order
+      const newOrder = { delivered: false }; // Assuming initially the order is not delivered
+      setOrders([...orders, newOrder]);
+    } catch (error) {
+      console.error('Failed to place the order: ', error);
+    }
+  };
+
   if (!orders || orders.length === 0) {
     return <p>No orders found.</p>;
   }
@@ -38,11 +51,7 @@ const OrdersPage = () => {
       {orders.map((order, index) => (
         <div
           key={index}
-          style={{
-            backgroundColor: order.status === 'Delivered' ? 'green' : 'transparent',
-            padding: '10px',
-            marginBottom: '10px',
-          }}
+          className={`order ${order.delivered ? 'order-delivered' : ''}`}
         >
           <h3>Order #{index + 1}</h3>
           <div className="delivery-details">
@@ -59,7 +68,9 @@ const OrdersPage = () => {
             {order.cartItems && order.cartItems.length > 0 ? (
               order.cartItems.map((place, placeIndex) => (
                 <div key={placeIndex} className="place">
-                  <p className="place-title">{place.title} - Lei{place.km}</p>
+                  <p className="place-title">
+                    {place.title} - Lei{place.km}
+                  </p>
                   <p className="place-description">{place.description}</p>
                   <p className="place-price">{place.price}</p>
                   {/* Add more fields as needed */}
@@ -72,12 +83,15 @@ const OrdersPage = () => {
           <button
             className="mark-delivered-btn"
             onClick={() => handleClickDelivered(order._id)}
-            disabled={order.status === 'Delivered'}
+            disabled={order.delivered}
           >
-            {order.status === 'Delivered' ? 'Delivered' : 'Mark as Delivered'}
+            {order.delivered ? 'Delivered' : 'Mark as Delivered'}
           </button>
         </div>
       ))}
+      <button className="place-order-btn" onClick={handlePlaceOrder}>
+        Place Order
+      </button>
     </div>
   );
 };
