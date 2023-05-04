@@ -36,8 +36,14 @@ const OrdersPage = () => {
     <div className="orders-container">
       <h1>Orders</h1>
       {orders.map((order, index) => (
-      <div key={index} className={`order ${order.status === 'Delivered' ? 'order-delivered' : ''}`}>
-       
+        <div
+          key={index}
+          style={{
+            backgroundColor: order.status === 'Delivered' ? 'green' : 'transparent',
+            padding: '10px',
+            marginBottom: '10px',
+          }}
+        >
           <h3>Order #{index + 1}</h3>
           <div className="delivery-details">
             <strong>Delivery Details:</strong>
