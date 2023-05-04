@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import './OrdersPage.css';
-
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
 
@@ -33,15 +31,12 @@ const OrdersPage = () => {
   }
 
   return (
-    <div className="orders-container">
+    <div>
       <h1>Orders</h1>
       {orders.map((order, index) => (
-        <div
-          key={index}
-          className={`order ${order.status === 'Delivered' ? 'delivered' : ''}`}
-        >
+        <div key={index} className={`order ${order.status === 'Delivered' ? 'delivered' : ''}`}>
           <h3>Order #{index + 1}</h3>
-          <div className="delivery-details">
+          <div>
             <strong>Delivery Details:</strong>
             <p>First Name: {order.firstName}</p>
             <p>Last Name: {order.lastName}</p>
@@ -50,14 +45,15 @@ const OrdersPage = () => {
             <p>City: {order.city}</p>
             <p>ZIP Code: {order.zipCode}</p>
           </div>
-          <div className="cart-places">
+          <div>
             <strong>Cart Places:</strong>
             {order.cartItems && order.cartItems.length > 0 ? (
               order.cartItems.map((place, placeIndex) => (
-                <div key={placeIndex} className="place">
-                  <p className="place-title">{place.title} - Lei{place.km}</p>
-                  <p className="place-description">{place.description}</p>
-                  <p className="place-price">{place.price}</p>
+                <div key={placeIndex}>
+                  <p>{place.title} - Lei{place.km}</p>
+                  {/* Access other necessary fields of the place data */}
+                  <p>{place.description}</p>
+                  <p>{place.price}</p>
                   {/* Add more fields as needed */}
                 </div>
               ))
@@ -66,11 +62,10 @@ const OrdersPage = () => {
             )}
           </div>
           <button
-            className="mark-delivered-btn"
             onClick={() => handleClickDelivered(order._id)}
             disabled={order.status === 'Delivered'}
           >
-            {order.status === 'Delivered' ? 'Delivered' : 'Mark as Delivered'}
+            Mark as Delivered
           </button>
         </div>
       ))}
