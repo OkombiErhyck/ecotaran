@@ -38,11 +38,7 @@ const OrdersPage = () => {
       {orders.map((order, index) => (
         <div
           key={index}
-          style={{
-            backgroundColor: order.status === 'Delivered' ? 'green' : 'transparent',
-            padding: '10px',
-            marginBottom: '10px',
-          }}
+          className={`order ${order.delivered ? 'order-delivered' : ''}`}
         >
           <h3>Order #{index + 1}</h3>
           <div className="delivery-details">
@@ -52,7 +48,7 @@ const OrdersPage = () => {
             <p>Email: {order.email}</p>
             <p>Address: {order.address}</p>
             <p>City: {order.city}</p>
-            <p>ZIP Code: {order.zipCode}</p>
+            <p>telefon: {order.zipCode}</p>
           </div>
           <div className="cart-places">
             <strong>Cart Places:</strong>
