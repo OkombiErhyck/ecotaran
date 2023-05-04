@@ -50,4 +50,6 @@
   .place-price {
     color: #555;
   }
-  
+  .delivered {
+    background-color: green;
+  }  

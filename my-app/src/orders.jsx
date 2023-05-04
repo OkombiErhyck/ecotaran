@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './OrdersPage.css';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -41,11 +42,11 @@ const OrdersPage = () => {
   }
 
   return (
-    <div>
-      <h1>Orders</h1>
+    <div className="orders-container">
+      <h1 className="orders-title">Orders</h1>
       {orders.map((order, index) => (
         <div key={index} className="order">
-          <h3>Order #{index + 1}</h3>
+          <h3 className="order-number">Order #{index + 1}</h3>
           <div className="delivery-details">
             <strong>Delivery Details:</strong>
             <p>First Name: {order.firstName}</p>
@@ -69,12 +70,18 @@ const OrdersPage = () => {
               <p>No places found for this order.</p>
             )}
           </div>
-          {!order.delivered && (
-            <button onClick={() => markAsDelivered(order._id)}>Mark as Delivered</button>
-          )}
-          {order.delivered && <p>Order Delivered</p>}
-        </div>
-      ))}
+          <button
+className="deliver-button"
+onClick={() => markAsDelivered(order._id)}
+disabled={order.delivered}
+>
+Mark as Delivered
+</button>
+<p className="order-status">
+Order Status: {order.delivered ? 'Delivered' : 'Not Delivered'}
+</p>
+</div>
+))}
     </div>
   );
 };
