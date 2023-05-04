@@ -407,6 +407,29 @@ app.delete("/places/:id", (req,res) => {
   });
 });
 
+app.put('/orders/:orderId/markDelivered', (req, res) => {
+  const orderId = req.params.orderId;
 
+  // Find the order in the database by its ID
+  Order.findById(orderId)
+    .then((order) => {
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+
+      // Update the order status to 'Delivered'
+      order.status = 'Delivered';
+
+      // Save the updated order
+      return order.save();
+    })
+    .then(() => {
+      res.status(200).json({ message: 'Order marked as delivered' });
+    })
+    .catch((error) => {
+      console.error('Failed to mark order as delivered: ', error);
+      res.status(500).json({ error: 'Failed to mark order as delivered' });
+    });
+});
 
 app.listen(4000);
