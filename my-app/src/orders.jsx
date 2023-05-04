@@ -36,10 +36,8 @@ const OrdersPage = () => {
     <div className="orders-container">
       <h1>Orders</h1>
       {orders.map((order, index) => (
-        <div
-          key={index}
-          className={`order ${order.status === 'Delivered' ? 'delivered' : ''}`}
-        >
+      <div key={index} className={`order ${order.status === 'Delivered' ? 'order-delivered' : ''}`}>
+       
           <h3>Order #{index + 1}</h3>
           <div className="delivery-details">
             <strong>Delivery Details:</strong>

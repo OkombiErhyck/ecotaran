@@ -8,9 +8,10 @@
     margin-bottom: 20px;
   }
   
-  .order.delivered {
-    background-color: #c9f9c9;
+  .order-delivered {
+    background-color: green;
   }
+  
   
   .delivery-details {
     margin-bottom: 10px;
