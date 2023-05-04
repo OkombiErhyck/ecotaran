@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './checkout.css';
 
-const CheckoutPage = () => {
+const CheckoutPage = ({ cartItems, total }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -22,30 +22,28 @@ const CheckoutPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // Send a POST request to the backend to save the order data to the database
+      const storedCartItems = JSON.parse(window.localStorage.getItem('cart'));
+  
       const response = await axios.post('/orders', {
-        ...formData,
-        cartItems: [], // Modify this with the actual cart items
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        address: formData.address,
+        city: formData.city,
+        zipCode: formData.zipCode,
+        cartItems: storedCartItems ? [...storedCartItems] : [],
       });
-
-      // Reset form data
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        address: '',
-        city: '',
-        zipCode: '',
-      });
-
-      // Redirect to the orders page
+  
+      window.localStorage.removeItem('cart');
+  
       window.location.href = '/';
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   return (
     <div className="checkout-container">
@@ -97,7 +95,7 @@ const CheckoutPage = () => {
           />
         </label>
         <label>
-          ZIP Code:
+          nr. tel.:
           <input
             type="text"
             name="zipCode"

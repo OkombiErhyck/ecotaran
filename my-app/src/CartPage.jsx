@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Image from './image';
-import { Link } from "react-router-dom";
-
-
+import { Link } from 'react-router-dom';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
 
   // Function to remove an item from the cart
-  const removeFromCart = (placeId) => {
-    const updatedCartItems = cartItems.filter((place) => place.id !== placeId);
-    setCartItems(updatedCartItems);
-  };
+ // Function to remove an item from the cart
+const removeFromCart = (title) => {
+  const updatedCartItems = cartItems.filter((place) => place.title !== title);
+  setCartItems(updatedCartItems);
+  localStorage.setItem('cart', JSON.stringify(updatedCartItems)); // Update the cart data in localStorage
+};
+
 
   // Function to calculate the total price of the cart
   const calculateTotalKm = () => {
@@ -48,15 +49,15 @@ const CartPage = () => {
                 />
               )}
               <p style={priceStyle}>Price: Lei{place.km}</p>
-              <button style={removeButtonStyle} onClick={() => removeFromCart(place.id)}>
-                Remove from Cart
-              </button>
+              <button style={removeButtonStyle} onClick={() => removeFromCart(place.title)}>
+    Remove from Cart
+  </button>
             </div>
           ))}
-          <h3 style={totalStyle}>Total:  {calculateTotalKm()} Lei</h3>
+          <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
           <Link to="/checkout">
-  <button style={checkoutButtonStyle}>Checkout</button>
-</Link>
+            <button style={checkoutButtonStyle}>Checkout</button>
+          </Link>
         </div>
       )}
     </div>
@@ -112,6 +113,7 @@ const checkoutButtonStyle = {
   padding: '10px 20px',
   border: 'none',
   borderRadius: '4px',
+ 
   cursor: 'pointer',
   marginTop: '2rem',
   display: 'block',

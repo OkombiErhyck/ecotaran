@@ -19,12 +19,15 @@ const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = "123456789";
 const bucket = 'ecotaran'
 
+
+
+
 app.use(express.json());
 app.use(CookieParser());
 app.use("/uploads", express.static(__dirname+"/uploads"));
 app.use(cors({
     credentials: true,
-    origin: "https://ecotaran.vercel.app", 
+    origin: "http://localhost:3000", 
 }));
 
 
@@ -70,6 +73,7 @@ const orderSchema = new mongoose.Schema({
   address: String,
   city: String,
   zipCode: String,
+  cartItems: [],
 });
 
 
@@ -100,7 +104,7 @@ mongoose.connection.once('open', () => {
 app.post("/register", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     const {name,email,password} = req.body;
 
     try { 
@@ -122,7 +126,7 @@ res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
 app.post("/login", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     const { email, password } = req.body;
     const userDoc = await User.findOne({ email });
     if (userDoc) {
@@ -148,7 +152,7 @@ app.post("/login", async (req, res) => {
   
   app.get("/profile", (req,res) => {
     res.header("Access-Control-Allow-Credentials", "true");
-    res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+    res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     mongoose.connect(process.env.MONGO_URL);
     const {token} = req.cookies;
     if (token) {
@@ -186,7 +190,7 @@ app.post("/upload", photosMiddleware.single('photo'), async (req, res) => {
 
 app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const { firstName, lastName, email, address, city, zipCode, cartItems } = req.body;
 
   const newOrder = new Order({
@@ -224,7 +228,7 @@ app.get('/orders', async (req, res) => {
 app.post("/places", (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {token} = req.cookies;
   const {title, marca, model, km, anul, addedPhotos, description, perks,
     culoare,
@@ -276,7 +280,7 @@ app.post("/places", (req,res) => {
 app.get("/user-places", (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {token} = req.cookies;
   jwt.verify(token, jwtSecret, {}, async (err,userData) => {
     const {id} = userData;
@@ -288,7 +292,7 @@ app.get("/user-places", (req,res) => {
 app.get("/places/:id", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {id} = req.params;
   res.json( await Place.findById(id));
 });
@@ -297,7 +301,7 @@ app.get("/places/:id", async (req,res) => {
 app.put("/places" , async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {token} = req.cookies;
   const {
     id, title, marca, model, km, anul, addedPhotos, description, perks,culoare,
@@ -350,7 +354,7 @@ app.put("/places" , async (req,res) => {
 app.get("/places", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   res.json( await Place.find() );
 });
 
@@ -364,7 +368,7 @@ app.get("/places", async (req,res) => {
 app.post('/reset-password', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const { email, newPassword } = req.body;
 
   // Find user by email
@@ -390,7 +394,7 @@ app.post('/reset-password', async (req, res) => {
 app.delete("/places/:id", (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {id} = req.params;
   Place.findByIdAndDelete(id, (err, deletedPlace) => {
     if (err) {

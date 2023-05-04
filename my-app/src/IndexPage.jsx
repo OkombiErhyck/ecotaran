@@ -148,7 +148,7 @@ export default function IndexPage() {
   
     localStorage.setItem('cart', JSON.stringify(cart));
   
-    alert('Place added to cart!');
+    
   };
   
 

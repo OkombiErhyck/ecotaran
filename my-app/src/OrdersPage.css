@@ -1,0 +1,53 @@
+/* OrdersPage.css */
+
+.orders-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .orders-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .order {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .order-number {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .delivery-details {
+    margin-bottom: 20px;
+  }
+  
+  .delivery-details strong {
+    font-weight: bold;
+  }
+  
+  .cart-places {
+    margin-bottom: 20px;
+  }
+  
+  .place {
+    margin-bottom: 10px;
+  }
+  
+  .place-title {
+    font-weight: bold;
+  }
+  
+  .place-description {
+    color: #888;
+  }
+  
+  .place-price {
+    color: #555;
+  }
+  

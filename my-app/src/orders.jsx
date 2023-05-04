@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './OrdersPage.css';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios.get('/orders')
+    axios
+      .get('/orders')
       .then((response) => {
         setOrders(response.data);
       })
@@ -19,28 +21,34 @@ const OrdersPage = () => {
   }
 
   return (
-    <div>
-      <h1>Orders</h1>
+    <div className="orders-container">
+      <h1 className="orders-title">Orders</h1>
       {orders.map((order, index) => (
         <div key={index} className="order">
-          <h3>Order #{index + 1}</h3>
-          <div>
+          <h3 className="order-number">Order #{index + 1}</h3>
+          <div className="delivery-details">
             <strong>Delivery Details:</strong>
-            <p>First Name: {order.firstName}</p>
-            <p>Last Name: {order.lastName}</p>
-            <p>Email: {order.email}</p>
-            <p>Address: {order.address}</p>
-            <p>City: {order.city}</p>
-            <p>ZIP Code: {order.zipCode}</p>
+            <p><span>First Name:</span> {order.firstName}</p>
+            <p><span>Last Name:</span> {order.lastName}</p>
+            <p><span>Email:</span> {order.email}</p>
+            <p><span>Address:</span> {order.address}</p>
+            <p><span>City:</span> {order.city}</p>
+            <p><span>ZIP Code:</span> {order.zipCode}</p>
           </div>
-          <div>
-            <strong>Cart Items:</strong>
-            {order.items && order.items.length > 0 ? (
-              order.items.map((item, itemIndex) => (
-                <p key={itemIndex}>{item.name} - ${item.price}</p>
+          <div className="cart-places">
+            <strong>Cart Places:</strong>
+            {order.cartItems && order.cartItems.length > 0 ? (
+              order.cartItems.map((place, placeIndex) => (
+                <div key={placeIndex} className="place">
+                  <p className="place-title">{place.title} - Lei{place.km}</p>
+                  {/* Access other necessary fields of the place data */}
+                  <p className="place-description">{place.description}</p>
+                  <p className="place-price">{place.price}</p>
+                  {/* Add more fields as needed */}
+                </div>
               ))
             ) : (
-              <p>No items found for this order.</p>
+              <p>No places found for this order.</p>
             )}
           </div>
         </div>
