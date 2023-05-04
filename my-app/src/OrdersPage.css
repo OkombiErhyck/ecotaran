@@ -50,6 +50,19 @@
   .place-price {
     color: #555;
   }
-  .delivered {
-    background-color: green;
-  }  
+  .deliver-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #f5f5f5;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .deliver-button.delivered {
+    background-color: #c8f7c5;
+  }
+  
+  .order-status {
+    font-weight: bold;
+    margin-top: 10px;
+  }
