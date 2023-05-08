@@ -203,6 +203,8 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
     zipCode,
     sector,
     cartItems,
+    createdAt: new Date(),
+ 
   });
 
   newOrder.save()
