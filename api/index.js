@@ -219,10 +219,11 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
 
 app.put('/orders/:orderId', (req, res) => {
   const orderId = req.params.orderId;
+  const status = req.body.status || 'Processing'; // Use default value if status is not provided
 
   Order.findByIdAndUpdate(
     orderId,
-    { delivered: true, status: 'Delivered' }, // Update delivered and status fields
+    { delivered: true, status }, // Update delivered and status fields
     { new: true },
     (err, order) => {
       if (err) {
