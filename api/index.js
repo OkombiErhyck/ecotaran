@@ -217,25 +217,22 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
 });
 
 
-app.put('/orders/:id/markDelivered', async (req, res) => {
-  try {
-    const orderId = req.params.id;
-    const order = await Order.findById(orderId);
+app.put('/orders/:orderId', (req, res) => {
+  const orderId = req.params.orderId;
 
-    if (!order) {
-      res.status(404).json({ message: 'Order not found' });
-      return;
+  Order.findByIdAndUpdate(
+    orderId,
+    { delivered: true, status: 'Delivered' }, // Update delivered and status fields
+    { new: true },
+    (err, order) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Failed to mark order as delivered');
+      } else {
+        res.send(order);
+      }
     }
-
-    order.status = 'Delivered';
-    order.delivered = true;
-    await order.save();
-
-    res.json({ message: 'Order delivered', order });
-  } catch (error) {
-    console.error('Failed to mark order as delivered: ', error);
-    res.status(500).json({ message: 'Failed to mark order as delivered' });
-  }
+  );
 });
 
 
