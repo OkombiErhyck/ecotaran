@@ -10,6 +10,9 @@ const orderSchema = new mongoose.Schema({
   zipCode: { type: String, required: true },
   sector:  { type: String, required: true },
   cartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CartItem' }],
+  status: { type: String, default: 'Pending' },
+  delivered: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
 });
 
 // Create the Order model using the schema
