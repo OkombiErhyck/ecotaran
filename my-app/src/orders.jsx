@@ -19,7 +19,7 @@ const OrdersPage = () => {
 
   const handleClickDelivered = async (orderId) => {
     try {
-      await axios.put(`/orders/${orderId}/markDelivered`);
+      await axios.put(`/orders/${orderId}`, { delivered: true });
       // Refresh the orders list by making another GET request
       const response = await axios.get('/orders');
       setOrders(response.data);

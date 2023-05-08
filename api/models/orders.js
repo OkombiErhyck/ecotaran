@@ -12,6 +12,10 @@ const orderSchema = new mongoose.Schema({
   cartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CartItem' }],
   status: { type: String, default: 'Pending' },
   delivered: { type: Boolean, default: false },
+  delivered: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now // Automatically set the field to the current date and time when an order is created

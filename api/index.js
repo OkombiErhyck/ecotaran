@@ -216,6 +216,22 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
     });
 });
 
+
+app.put('/orders/:orderId', (req, res) => {
+  const orderId = req.params.orderId;
+
+  Order.findByIdAndUpdate(orderId, { delivered: true }, { new: true }, (err, order) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Failed to mark order as delivered');
+    } else {
+      res.send(order);
+    }
+  });
+});
+
+
+
 app.get('/orders', async (req, res) => {
   try {
     // Retrieve the orders from the database
