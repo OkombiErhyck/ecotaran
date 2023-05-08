@@ -97,6 +97,15 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
+          Sectorul:
+          <input
+            type="text"
+            name="sector"
+            value={formData.sector}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
           nr. tel.:
           <input
             type="text"

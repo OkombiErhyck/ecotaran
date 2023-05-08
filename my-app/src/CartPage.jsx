@@ -27,7 +27,9 @@ const removeFromCart = (title) => {
   }, []);
 
   return (
-    <div style={containerStyle}>
+    <div  style= {{
+          padding: "60px"
+    }}>
       <h1 style={headerStyle}>Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <p style={emptyCartStyle}>Your cart is empty.</p>
@@ -48,7 +50,7 @@ const removeFromCart = (title) => {
                   }}
                 />
               )}
-              <p style={priceStyle}>Price: Lei{place.km}</p>
+              <p style={priceStyle}>Price: Lei {place.km}</p>
               <button style={removeButtonStyle} onClick={() => removeFromCart(place.title)}>
     Remove from Cart
   </button>
