@@ -74,6 +74,7 @@ const orderSchema = new mongoose.Schema({
   city: String,
   zipCode: String,
   cartItems: [],
+  createdAt:  Date,
 });
 
 
@@ -216,7 +217,7 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
 app.get('/orders', async (req, res) => {
   try {
     // Retrieve the orders from the database
-    const orders = await Order.find();
+    const orders = await Order.find({}, { createdAt: 1 });
 
     // Send the orders as the response
     res.json(orders);
