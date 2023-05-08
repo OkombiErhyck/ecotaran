@@ -10,6 +10,7 @@ const CheckoutPage = ({ cartItems, total }) => {
     address: '',
     city: '',
     zipCode: '',
+    sector:'',
   });
 
   const handleChange = (e) => {
@@ -33,6 +34,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         address: formData.address,
         city: formData.city,
         zipCode: formData.zipCode,
+        sector: formData.sector,
         cartItems: storedCartItems ? [...storedCartItems] : [],
       });
   
@@ -50,7 +52,7 @@ const CheckoutPage = ({ cartItems, total }) => {
       <h1 className="checkout-title">Checkout</h1>
       <form onSubmit={handleSubmit} className="checkout-form">
         <label>
-          First Name:
+          Nume:
           <input
             type="text"
             name="firstName"
@@ -59,7 +61,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-          Last Name:
+          Prenume:
           <input
             type="text"
             name="lastName"
@@ -77,7 +79,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-          Address:
+          Adresa:
           <input
             type="text"
             name="address"
@@ -86,7 +88,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-          City:
+          Oras:
           <input
             type="text"
             name="city"
@@ -104,7 +106,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <button type="submit" className="place-order-button">
-          Place Order
+          Plaseaza Comanda
         </button>
       </form>
     </div>

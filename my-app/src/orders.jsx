@@ -43,12 +43,13 @@ const OrdersPage = () => {
           <h3>Order #{index + 1}</h3>
           <div className="delivery-details">
             <strong>Delivery Details:</strong>
-            <p>First Name: {order.firstName}</p>
-            <p>Last Name: {order.lastName}</p>
+            <p>Nume: {order.firstName}</p>
+            <p>Prenume: {order.lastName}</p>
             <p>Email: {order.email}</p>
-            <p>Address: {order.address}</p>
-            <p>City: {order.city}</p>
-            <p>telefon: {order.zipCode}</p>
+            <p>Adresa: {order.address}</p>
+            <p>Sectorul:{order.sector}</p>
+            <p>Orasul: {order.city}</p>
+            <p>Telefon: {order.zipCode}</p>
           </div>
           <div className="cart-places">
             <strong>Cart Places:</strong>
