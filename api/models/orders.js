@@ -16,6 +16,8 @@ const orderSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  status: { type: String, default: 'Pending' }, // new field for status
+  delivered: { type: Boolean, default: false },
   createdAt: {
     type: Date,
     default: Date.now // Automatically set the field to the current date and time when an order is created
