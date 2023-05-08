@@ -40,7 +40,7 @@ const OrdersPage = () => {
           key={index}
           className={`order ${order.delivered ? 'order-delivered' : ''}`}
         >
-          <h3>Order #{index + 1}</h3>
+          <h3>Order #{index + 1}</h3><p>Created: {new Date(order.createdAt).toLocaleString()}</p>
           <div className="delivery-details">
             <strong>Delivery Details:</strong>
             <p>Nume: {order.firstName}</p>
