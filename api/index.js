@@ -74,7 +74,6 @@ const orderSchema = new mongoose.Schema({
   city: String,
   zipCode: String,
   cartItems: [],
-  createdAt: order.createdAt ,
 });
 
 
@@ -203,7 +202,6 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
     zipCode,
     sector,
     cartItems,
-    createdAt,
   });
 
   newOrder.save()
