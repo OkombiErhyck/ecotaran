@@ -217,8 +217,8 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
 
 app.get('/orders', async (req, res) => {
   try {
-    // Retrieve the orders from the database, including the createdAt property
-    const orders = await Order.find({}, { createdAt: 1 });
+    // Retrieve the orders from the database
+    const orders = await Order.find();
 
     // Send the orders as the response
     res.json(orders);
@@ -227,7 +227,6 @@ app.get('/orders', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve orders' });
   }
 });
-
 
 app.post("/places", (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
