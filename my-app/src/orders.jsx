@@ -19,7 +19,7 @@ const OrdersPage = () => {
 
   const handleClickDelivered = async (orderId) => {
     try {
-      await axios.put(`/orders/${orderId}`, { delivered: true, status: 'Delivered' }); // Send the status property in the request
+      await axios.put(`/orders/${orderId}`, { delivered: true, status: 'Delivered' });
       // Refresh the orders list by making another GET request
       const response = await axios.get('/orders');
       setOrders(response.data);
@@ -27,7 +27,11 @@ const OrdersPage = () => {
       console.error('Failed to mark order as delivered: ', error);
     }
   };
-  
+
+  const handleGetDirections = (address) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
+    window.open(url, '_blank');
+  };
 
   if (!orders || orders.length === 0) {
     return <p>No orders found.</p>;
@@ -52,6 +56,12 @@ const OrdersPage = () => {
             <p>Sectorul:{order.sector}</p>
             <p>Orasul: {order.city}</p>
             <p>Telefon: {order.zipCode}</p>
+            <button
+              className="get-directions-btn"
+              onClick={() => handleGetDirections(order.address)}
+            >
+              Get Directions
+            </button>
           </div>
           <div className="cart-places">
             <strong>Cart Places:</strong>
