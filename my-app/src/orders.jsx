@@ -76,7 +76,6 @@ const OrdersPage = () => {
             ) : (
               <p>No places found for this order.</p>
             )}
-            <p className="order-total-price">Total price: Lei{order.cartItems.reduce((acc, place) => acc + place.price, 0)}</p>
           </div>
           <button
             className="mark-delivered-btn"
@@ -91,4 +90,4 @@ const OrdersPage = () => {
   );
 };
 
-export default Orders
+export default OrdersPage;
