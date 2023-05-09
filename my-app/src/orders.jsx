@@ -33,10 +33,6 @@ const OrdersPage = () => {
     window.open(url, '_blank');
   };
 
-  const calculateTotalPrice = (cartItems) => {
-    return cartItems.reduce((total, cartItem) => total + cartItem.price, 0);
-  };
-
   if (!orders || orders.length === 0) {
     return <p>No orders found.</p>;
   }
@@ -44,55 +40,63 @@ const OrdersPage = () => {
   return (
     <div className="orders-container">
       <h1>Orders</h1>
-      {orders.map((order, index) => (
-        <div
-          key={index}
-          className={`order ${order.delivered ? 'order-delivered' : ''}`}
-        >
-          <h3>Order #{index + 1}</h3>
-          <p>Created at: {new Date(order.createdAt).toLocaleString()}</p>
-          <div className="delivery-details">
-            <strong>Delivery Details:</strong>
-            <p>Nume: {order.firstName}</p>
-            <p>Prenume: {order.lastName}</p>
-            <p>Email: {order.email}</p>
-            <p>Adresa: {order.address}</p>
-            <p>Orasul: {order.city}</p>
-            <p>Telefon: {order.zipCode}</p>
+      {orders.map((order, index) => {
+        let totalPrice = 0;
+        order.cartItems.forEach((place) => {
+          totalPrice += place.price;
+        });
+
+        return (
+          <div
+            key={index}
+            className={`order ${order.delivered ? 'order-delivered' : ''}`}
+          >
+            <h3>Order #{index + 1}</h3>
+            <p>Created at: {new Date(order.createdAt).toLocaleString()}</p>
+            <div className="delivery-details">
+              <strong>Delivery Details:</strong>
+              <p>Nume: {order.firstName}</p>
+              <p>Prenume: {order.lastName}</p>
+              <p>Email: {order.email}</p>
+              <p>Adresa: {order.address}</p>
+              <p>Orasul: {order.city}</p>
+              <p>Telefon: {order.zipCode}</p>
+              <button
+                className="get-directions-btn"
+                onClick={() => handleGetDirections(order.address)}
+              >
+                Get Directions
+              </button>
+            </div>
+            <div className="cart-places">
+              <strong>Cart Places:</strong>
+              {order.cartItems && order.cartItems.length > 0 ? (
+                order.cartItems.map((place, placeIndex) => (
+                  <div key={placeIndex} className="place">
+                    <p className="place-title">{place.title} - Lei{place.km}</p>
+                    <p className="place-description">{place.description}</p>
+                    <p className="place-price">{place.price}</p>
+                    {/* Add more fields as needed */}
+                  </div>
+                ))
+              ) : (
+                <p>No places found for this order.</p>
+              )}
+            </div>
+            <p>Total price: Lei{totalPrice}</p>
             <button
-              className="get-directions-btn"
-              onClick={() => handleGetDirections(order.address)}
+              className="mark-delivered-btn"
+              onClick={() => handleClickDelivered(order._id)}
+              disabled={order.status === 'Delivered'}
             >
-              Get Directions
+              {order.status === 'Delivered' ? 'Delivered' : 'Mark as Delivered'}
             </button>
           </div>
-          <div className="cart-places">
-            <strong>Cart Places:</strong>
-            {order.cartItems && order.cartItems.length > 0 ? (
-              order.cartItems.map((place, placeIndex) => (
-                <div key={placeIndex} className="place">
-                  <p className="place-title">{place.title} - Lei{place.km}</p>
-                  <p className="place-description">{place.description}</p>
-                  <p className="place-price">{place.price}</p>
-                  {/* Add more fields as needed */}
-                </div>
-              ))
-            ) : (
-              <p>No places found for this order.</p>
-            )}
-            <p>Total Price: {calculateTotalPrice(order.cartItems)}</p>
-          </div>
-          <button
-            className="mark-delivered-btn"
-            onClick={() => handleClickDelivered(order._id)}
-            disabled={order.status === 'Delivered'}
-          >
-            {order.status === 'Delivered' ? 'Delivered' : 'Mark as Delivered'}
-          </button>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
 
-export default Orders
+export default OrdersPage;
+``
