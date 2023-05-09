@@ -33,6 +33,10 @@ const OrdersPage = () => {
     window.open(url, '_blank');
   };
 
+  const calculateTotalPrice = (cartItems) => {
+    return cartItems.reduce((total, cartItem) => total + cartItem.price, 0);
+  };
+
   if (!orders || orders.length === 0) {
     return <p>No orders found.</p>;
   }
@@ -53,7 +57,6 @@ const OrdersPage = () => {
             <p>Prenume: {order.lastName}</p>
             <p>Email: {order.email}</p>
             <p>Adresa: {order.address}</p>
-            <p>Sectorul:{order.sector}</p>
             <p>Orasul: {order.city}</p>
             <p>Telefon: {order.zipCode}</p>
             <button
@@ -77,6 +80,7 @@ const OrdersPage = () => {
             ) : (
               <p>No places found for this order.</p>
             )}
+            <p>Total Price: {calculateTotalPrice(order.cartItems)}</p>
           </div>
           <button
             className="mark-delivered-btn"
@@ -91,4 +95,4 @@ const OrdersPage = () => {
   );
 };
 
-export default OrdersPage;
+export default Orders

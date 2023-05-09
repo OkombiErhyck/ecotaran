@@ -192,7 +192,7 @@ app.post("/upload", photosMiddleware.single('photo'), async (req, res) => {
 app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
   res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
-  const { firstName, lastName, email, address, city, zipCode, sector, cartItems } = req.body;
+  const { firstName, lastName, email, address, city, zipCode, cartItems } = req.body;
 
   const newOrder = new Order({
     firstName,
@@ -201,7 +201,6 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
     address,
     city,
     zipCode,
-    sector,
     cartItems,
     createdAt: new Date(),
  

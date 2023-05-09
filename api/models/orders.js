@@ -8,7 +8,7 @@ const orderSchema = new mongoose.Schema({
   address: { type: String, required: true },
   city: { type: String, required: true },
   zipCode: { type: String, required: true },
-  sector:  { type: String, required: true },
+ 
   cartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CartItem' }],
   delivered: {
     type: Boolean,

@@ -10,7 +10,7 @@ const CheckoutPage = ({ cartItems, total }) => {
     address: '',
     city: '',
     zipCode: '',
-    sector:'',
+   
   });
 
   const handleChange = (e) => {
@@ -34,7 +34,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         address: formData.address,
         city: formData.city,
         zipCode: formData.zipCode,
-        sector: formData.sector,
+       
         cartItems: storedCartItems ? [...storedCartItems] : [],
       });
   
@@ -96,15 +96,7 @@ const CheckoutPage = ({ cartItems, total }) => {
             onChange={handleChange}
           />
         </label>
-        <label>
-          Sectorul:
-          <input
-            type="text"
-            name="sector"
-            value={formData.sector}
-            onChange={handleChange}
-          />
-        </label>
+       
         <label>
           nr. tel.:
           <input
