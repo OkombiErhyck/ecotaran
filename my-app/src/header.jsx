@@ -23,8 +23,8 @@ const Header = () => {
                    
                   Gusturi din <span>copilarie</span> !
                   </h2>
-                  <Link to="/IndexPage" className="btn">
-        Vezi toate <span>produsele</span>
+                  <Link to="/details2" className="btn">
+        Hai in <span>Magazin</span>
       </Link>
                 </div>
             </div>

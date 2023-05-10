@@ -30,7 +30,7 @@ function Home(){
    return(
     
        <div>
-{/*showPopup && <Popup />/*} {/* Add this line */}
+{showPopup && <Popup />} {/* Add this line */}
           <Header/>
           
           <About2/>

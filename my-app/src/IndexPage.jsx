@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Image from "./image";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox, faCalendarAlt,faRoad } from '@fortawesome/free-solid-svg-icons';
-
+import Categorii from "./categorii";
 
 
 
@@ -160,10 +160,10 @@ export default function IndexPage() {
         <div className="filter-container">
         
 
-        <div className="marca-buttons">
+        <div className="marca1-buttons">
         <button
         onClick={() => handleMarcaClick('Fructe')}
-        className={`marca-button ${selectedMarca === 'Fructe' ? 'active' : ''}`}
+        className={`marca1-button ${selectedMarca === 'Fructe' ? 'active' : ''}`}
       >
         Fructe
        
@@ -173,7 +173,7 @@ export default function IndexPage() {
 
   <button
     onClick={() => setSelectedMarca('Legume')}
-    className={`marca-button ${selectedMarca === 'Legume' ? 'active' : ''}`}
+    className={`marca1-button ${selectedMarca === 'Legume' ? 'active' : ''}`}
   >
     Legume
   </button>
@@ -182,7 +182,7 @@ export default function IndexPage() {
 
   <button
     onClick={() => setSelectedMarca('Mezeluri')}
-    className={`marca-button ${selectedMarca === 'Mezeluri' ? 'active' : ''}`}
+    className={`marca1-button ${selectedMarca === 'Mezeluri' ? 'active' : ''}`}
   >
     Mezeluri
   </button>
@@ -191,7 +191,7 @@ export default function IndexPage() {
 
   <button
     onClick={() => setSelectedMarca('Lactate')}
-    className={`marca-button ${selectedMarca === 'Lactate' ? 'active' : ''}`}
+    className={`marca1-button ${selectedMarca === 'Lactate' ? 'active' : ''}`}
   >
     Lactate
   </button>
@@ -217,7 +217,7 @@ export default function IndexPage() {
         <button onClick={resetFilters}>Reset</button>
       </div>
     </div>
-    
+    <Categorii />
         </div>
         <div className="details container">
           <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -230,10 +230,10 @@ export default function IndexPage() {
                       <Image src={ place.photos[0]} className="img-fluid" style={{height: "270px", width: "100%", objectFit: "cover"}}/>
                     )}
                     <div className="box_content">
-                     <h4> {place.title}</h4>
+                     <h4> {place.title} {place.km}    lei </h4>
                      <div className="row pl-2 pr-2">
     <div > 
-      {place.km}    lei
+      
   </div>
  
                      
@@ -241,13 +241,16 @@ export default function IndexPage() {
 
   <button
   style={{
-    background: "#cccccc00",
-    color: "var(--main)",
+    background: "rgb(216 212 208 / 78%)" ,
+    color: "var(--main)" ,
+    padding: "14px" ,
+    width: "131px" ,
+    marginLeft: "126px",
   }}
   className="btn1"
   onClick={() => addToCart(place)}
 >
-  Add to Cart
+  Adauga in Cos
 </button>
                     </div>
                   </div>

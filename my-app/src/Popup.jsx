@@ -21,16 +21,14 @@ import { Link } from "react-router-dom";
   return (
     <div className='popup'>
     <a href="/" className="navbar-brand">
-          <span>LS</span>Auto
+          <span>Eco</span>Taran
         </a>
-      <Link to="/IndexPage" className="btn">
-        Vezi toate <span>anunturile</span>
+      <Link to="/details2" className="btn">
+        Hai in <span>magazin</span>
       </Link>
       
-      <br></br>
-      <Link to="/signup" className="btn">
-        Adauga un <span>anunt</span>
-      </Link>
+     <br></br>
+     
       <button className="popup__button" onClick={handleClose}>X</button>
     </div>
   );

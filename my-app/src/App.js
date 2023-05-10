@@ -35,7 +35,7 @@ const Plescoi = lazy(() => import('./plescoi'));
 const CartPage = lazy(() => import('./CartPage'));
 const Checkout = lazy(() => import('./checkout'));
 const Orders = lazy(() => import('./orders'));
-
+const Details2 = lazy(() => import('./details2'));
 
 
 axios.defaults.baseURL = 'https://ecotaran-nigs.vercel.app';
@@ -80,6 +80,7 @@ function App() {
               <Route path='/userpage' element={<Userpage />} />
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<Signup />} />
+              <Route path='/details2' element={<Details2 />} />
               <Route path='/PlacesPage' element={<PlacesPage />} />
               <Route path='/IndexPage' element={<IndexPage />} />
               <Route

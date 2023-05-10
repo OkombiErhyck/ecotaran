@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
+import cos from "./images/cos.png";
+
 import "./navbar.css";
 
 const NavBar = () => {
@@ -48,6 +50,7 @@ const NavBar = () => {
         >
           <img src={MenuImg} alt="menu" />
         </button>
+        
         <div
           className={`${
             mobileMenuOpen ? "show " : ""
@@ -60,7 +63,7 @@ const NavBar = () => {
               </a>
             </div>
             <div className="nav-item">
-              <a href="/IndexPage" className="nav-link">
+              <a href="/details2" className="nav-link">
                 Magazin
               </a>
             </div>
@@ -68,7 +71,7 @@ const NavBar = () => {
             {/* Display cart quantity */}
             <div className="nav-item">
               <Link to="/CartPage" className="nav-link">
-                Cosul meu 
+              <img src={cos} alt="cos" /> 
               </Link>
             </div>
           </div>

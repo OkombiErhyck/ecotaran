@@ -1,14 +1,14 @@
 /*google fonts*/
 
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&family=Roboto:ital,wght@0,400;0,500;1,300;1,500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Alkatra:wght@400;500;600;700&family=Great+Vibes&display=swap');
 /* global variable*/
 :root {
     --main:#76ab58;
+    overflow-x: hidden;
  }
  
 *{
-    font-family:  'Roboto Slab', Roboto, monospace;
+    font-family:  'Alkatra', Alkatra, monospace;
     transition: 0.2s;
 }
 *::section {
