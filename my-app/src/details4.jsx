@@ -31,9 +31,9 @@ export default function Details() {
     return array;
   };
 
-  const filteredPlaces = places.filter(place => place.marca === 'fructe'); // filter places with "Fructe" marca
+  const filteredPlaces = places.filter(place => place.marca === 'fructe'); // filter places with "legume" marca
 
-  const limitedPlaces = shuffleArray(filteredPlaces).slice(0, 3); // display 3 random posts from filteredPlaces
+const limitedPlaces = filteredPlaces.slice(0, 3); // display first 3 posts from filteredPlaces
 
   return(
     <div className="main2"> 
