@@ -6,9 +6,6 @@ import Image from "./image";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox, faCalendarAlt,faRoad } from '@fortawesome/free-solid-svg-icons';
 
-
-
-
 export default function Details() {
   const [places, setPlaces] = useState([]);
 
@@ -34,39 +31,30 @@ export default function Details() {
     return array;
   };
 
-  const filteredPlaces = places.filter(place => place.marca === 'Legume');
+  const filteredPlaces = places.filter(place => place.marca === 'Fructe'); // filter places with "Fructe" marca
 
-  const limitedPlaces = shuffleArray(places)
-   
+  const limitedPlaces = shuffleArray(filteredPlaces).slice(0, 3); // display 3 random posts from filteredPlaces
 
-    .slice(0, 3); // display 3 random posts
-  
   return(
     <div className="main2"> 
       <div className="container">
         <div className="details container">
-        <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {filteredPlaces.length > 0 && filteredPlaces.map(place => (
-  <Link to={"/place/" + place._id} key={place._id} className="link-no-underline">
-    <div className="col ">
-                  <div className="box card-body p-0  shadow-sm mb-5">
+          <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {limitedPlaces.length > 0 && limitedPlaces.map(place => ( 
+              <Link to={"/place/" + place._id} key={place._id} className="link-no-underline" >
+                <div className="col ">
+                  <div className="box card-body p-0 shadow-sm mb-5">
                     {place.photos.length > 0 && (
                       <Image src={place.photos[0]} className="img-fluid" style={{height: "270px", width: "100%", objectFit: "cover"}}/>
                     )}
                     <div className="box_content">
-                     <h4>  {place.title}</h4>
-                     <div className="row pl-2 pr-2">
-    <div > 
-      {place.putere}
-  </div>
- 
-                     
-
-
-  <button style={{background : "#cccccc00", color : "var(--main)"}} className="btn1">Detalii</button>
+                      <h4>{place.title}</h4>
+                      <div className="row pl-2 pr-2">
+                        <div>{place.putere}</div>
+                        <button style={{background : "#cccccc00", color : "var(--main)"}} className="btn1">Detalii</button>
+                      </div>
                     </div>
                   </div>
-                </div>
                 </div>
               </Link>
             ))}
