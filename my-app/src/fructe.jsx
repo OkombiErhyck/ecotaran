@@ -33,21 +33,20 @@ function Fructe() {
     }
   };
 
-  const handleAddToCart = (place) => {
-    let cart = localStorage.getItem("cart");
+  const addToCart = (place) => {
+    let cart = localStorage.getItem('cart');
     if (!cart) {
       cart = [];
     } else {
       cart = JSON.parse(cart);
     }
-
+  
     cart.push(place);
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-
-    alert("Place added to cart!");
+  
+    localStorage.setItem('cart', JSON.stringify(cart));
+  
+    
   };
-
   return (
     <>
       <div className="top"></div>
@@ -80,15 +79,18 @@ function Fructe() {
                           <div className="row pl-2 pr-2">
                             <div>{place.km}</div>
                             <button
-                              style={{
-                                background: "#cccccc00",
-                                color: "var(--main)",
-                              }}
-                              className="btn1"
-                              onClick={() => handleAddToCart(place)}
-                            >
-                              Add to Cart
-                            </button>
+  style={{
+    background: "rgb(216 212 208 / 78%)" ,
+    color: "var(--main)" ,
+    padding: "14px" ,
+    width: "131px" ,
+    marginLeft: "115px",
+  }}
+  className="btn1"
+  onClick={() => addToCart(place)}
+>
+                                Adauga in cos
+                              </button>
                           </div>
                         </div>
                       </div>

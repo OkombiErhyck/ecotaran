@@ -30,7 +30,7 @@ function Lactate() {
     }
   };
 
-  
+
   const addToCart = (place) => {
     let cart = localStorage.getItem('cart');
     if (!cart) {
@@ -85,7 +85,7 @@ function Lactate() {
     color: "var(--main)" ,
     padding: "14px" ,
     width: "131px" ,
-    marginLeft: "126px",
+    marginLeft: "115px",
   }}
   className="btn1"
   onClick={() => addToCart(place)}
