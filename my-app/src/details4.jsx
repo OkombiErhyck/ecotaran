@@ -34,20 +34,21 @@ export default function Details() {
     return array;
   };
 
-  const marca = "Fructe"; // replace with the desired marca
+  const filteredPlaces = places.filter(place => place.marca === 'Fructe');
 
-const limitedPlaces = shuffleArray(places)
-  .filter(place => place.marca === marca) // filter by marca
-  .slice(0, 3); // display 3 random posts
+  const limitedPlaces = shuffleArray(places)
+   
 
+    .slice(0, 3); // display 3 random posts
+  
   return(
     <div className="main2"> 
       <div className="container">
         <div className="details container">
         <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {limitedPlaces.length > 0 && limitedPlaces.map(place => ( 
-              <Link to={"/place/" + place._id} key={place._id} className="link-no-underline" >
-              <div className="col ">
+        {filteredPlaces.length > 0 && filteredPlaces.map(place => (
+  <Link to={"/place/" + place._id} key={place._id} className="link-no-underline">
+    <div className="col ">
                   <div className="box card-body p-0  shadow-sm mb-5">
                     {place.photos.length > 0 && (
                       <Image src={place.photos[0]} className="img-fluid" style={{height: "270px", width: "100%", objectFit: "cover"}}/>
