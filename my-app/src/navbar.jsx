@@ -41,7 +41,7 @@ const NavBar = () => {
         }
       >
         <a href="/" className="navbar-brand">
-          <span>Eco</span>Taran
+          <span>eco</span>Taran
         </a>
         <button
           className={`navbar-toggler ${mobileMenuOpen ? "active" : ""}`}
