@@ -37,6 +37,14 @@ const OrdersPage = () => {
     return <p>No orders found.</p>;
   }
 
+  const calculateTotalKm = (cartItems) => {
+    let totalKm = 0;
+    cartItems.forEach((place) => {
+      totalKm += place.km * place.quantity;
+    });
+    return totalKm;
+  };
+
   return (
     <div className="orders-container">
       <h1>Orders</h1>
@@ -67,27 +75,32 @@ const OrdersPage = () => {
             {order.cartItems && order.cartItems.length > 0 ? (
               order.cartItems.map((place, placeIndex) => (
                 <div key={placeIndex} className="place">
-                  <p className="place-title">{place.title} - Lei{place.km}</p>
+                  <p className="place-title">{place.title} -  {place.km} Lei</p>
                   <p className="place-description">{place.description}</p>
                   <p className="place-price">{place.price}</p>
+                  <p style={{ borderBottom: "solid 2px red" }} className="place-quantity">Cantitate: {place.quantity}</p> {/* Added quantity field */}
                   {/* Add more fields as needed */}
                 </div>
               ))
             ) : (
               <p>No places found for this order.</p>
             )}
+            <p style={{ marginTop: '10px' }}>
+              Total : {calculateTotalKm(order.cartItems)} Lei
+            </p>
           </div>
           <button
-            className="mark-delivered-btn"
-            onClick={() => handleClickDelivered(order._id)}
-            disabled={order.status === 'Delivered'}
-          >
-            {order.status === 'Delivered' ? 'Delivered' : 'Mark as Delivered'}
-          </button>
-        </div>
-      ))}
-    </div>
-  );
+            className="mark
+-delivered-btn"
+onClick={() => handleClickDelivered(order._id)}
+disabled={order.status === 'Delivered'}
+>
+{order.status === 'Delivered' ? 'Delivered' : 'Mark as Delivered'}
+</button>
+</div>
+))}
+</div>
+);
 };
 
 export default OrdersPage;

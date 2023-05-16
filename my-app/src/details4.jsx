@@ -12,7 +12,7 @@ export default function Details() {
       return () => clearInterval(intervalId); // Cleanup function to clear the interval
     }, []);
   
-    const filteredPlaces = places.filter(place => place.marca === 'legume'); // filter places with "legume" marca
+    const filteredPlaces = places.filter(place => place.marca === 'fructe'); // filter places with "legume" marca
   
     return(
       <div className="main2"> 

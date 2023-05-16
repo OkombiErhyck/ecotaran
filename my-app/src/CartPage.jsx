@@ -5,18 +5,25 @@ import { Link } from 'react-router-dom';
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
 
-  // Function to remove an item from the cart
- // Function to remove an item from the cart
-const removeFromCart = (title) => {
-  const updatedCartItems = cartItems.filter((place) => place.title !== title);
-  setCartItems(updatedCartItems);
-  localStorage.setItem('cart', JSON.stringify(updatedCartItems)); // Update the cart data in localStorage
-};
+  const removeFromCart = (title) => {
+    const updatedCartItems = cartItems.filter((place) => place.title !== title);
+    setCartItems(updatedCartItems);
+    localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+  };
 
+  const increaseQuantity = (title) => {
+    const updatedCartItems = cartItems.map((place) => {
+      if (place.title === title) {
+        return { ...place, quantity: place.quantity + 1 };
+      }
+      return place;
+    });
+    setCartItems(updatedCartItems);
+    localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+  };
 
-  // Function to calculate the total price of the cart
   const calculateTotalKm = () => {
-    return cartItems.reduce((total, place) => total + place.km, 0);
+    return cartItems.reduce((total, place) => total + place.km * place.quantity, 0);
   };
 
   useEffect(() => {
@@ -27,9 +34,7 @@ const removeFromCart = (title) => {
   }, []);
 
   return (
-    <div  style= {{
-          padding: "60px"
-    }}>
+    <div style={{ padding: '60px' }}>
       <h1 style={headerStyle}>Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <p style={emptyCartStyle}>Your cart is empty.</p>
@@ -51,9 +56,31 @@ const removeFromCart = (title) => {
                 />
               )}
               <p style={priceStyle}>Price: Lei {place.km}</p>
+              <div style={quantityContainerStyle}>
+                <button style={quantityButtonStyle} onClick={() => increaseQuantity(place.title)}>
+                  +
+                </button>
+                <span style={quantityStyle}>{place.quantity}</span>
+                <button
+                  style={quantityButtonStyle}
+                  onClick={() => {
+                    if (place.quantity > 1) {
+                      setCartItems((prevItems) =>
+                        prevItems.map((prevItem) =>
+                          prevItem.title === place.title ? { ...prevItem, quantity: prevItem.quantity - 1 } : prevItem
+                        )
+                      );
+                    } else {
+                      removeFromCart(place.title);
+                    }
+                  }}
+                >
+                  -
+                </button>
+              </div>
               <button style={removeButtonStyle} onClick={() => removeFromCart(place.title)}>
-    Remove from Cart
-  </button>
+                Remove from Cart
+              </button>
             </div>
           ))}
           <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
@@ -66,11 +93,7 @@ const removeFromCart = (title) => {
   );
 };
 
-const containerStyle = {
-  maxWidth: '900px',
-  margin: '0 auto',
-  padding: '20px',
-};
+// Styles
 
 const headerStyle = {
   fontSize: '3rem',
@@ -87,39 +110,58 @@ const cartItemStyle = {
   marginBottom: '20px',
   borderBottom: '1px solid #ccc',
   paddingBottom: '10px',
-};
-
-const priceStyle = {
+  };
+  
+  const priceStyle = {
   fontSize: '1.2rem',
   marginBottom: '10px',
-};
-
-const removeButtonStyle = {
+  };
+  
+  const removeButtonStyle = {
   backgroundColor: '#ff5252',
   color: 'white',
   padding: '10px 20px',
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-};
-
-const totalStyle = {
+  };
+  
+  const totalStyle = {
   marginTop: '2rem',
   fontSize: '2rem',
   fontWeight: 'bold',
-};
-
-const checkoutButtonStyle = {
+  };
+  
+  const checkoutButtonStyle = {
   backgroundColor: '#4CAF50',
   color: 'white',
   padding: '10px 20px',
   border: 'none',
   borderRadius: '4px',
- 
   cursor: 'pointer',
   marginTop: '2rem',
   display: 'block',
   margin: '0 auto',
-};
-
-export default CartPage;
+  };
+  
+  const quantityContainerStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  };
+  
+  const quantityButtonStyle = {
+  backgroundColor: '#cccccc',
+  color: 'white',
+  padding: '5px',
+  border: 'none',
+  borderRadius: '50%',
+  cursor: 'pointer',
+  marginRight: '5px',
+  };
+  
+  const quantityStyle = {
+  fontSize: '1.2rem',
+  fontWeight: 'bold',
+  };
+  
+  export default CartPage;

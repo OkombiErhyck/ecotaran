@@ -130,7 +130,7 @@ export default function Details() {
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
         <div className="box_content">
-        <Link to={"/fructe" }  className="link-no-underline" >
+        <Link to={"/lactate" }  className="link-no-underline" >
           <img
             src={fruits}
             alt=""
@@ -146,7 +146,7 @@ export default function Details() {
             style={{ background: "#cccccc00", color: "black" }}
             className="btn1"
           >
-            <h4>Legume</h4>
+            <h4>Lactate</h4>
           </button>
           </Link>
         </div>
@@ -188,7 +188,7 @@ export default function Details() {
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
         <div className="box_content">
-        <Link to={"/fructe" }  className="link-no-underline" >
+        <Link to={"/plescoi" }  className="link-no-underline" >
           <img
             src={fruits}
             alt=""
@@ -204,7 +204,7 @@ export default function Details() {
             style={{ background: "#cccccc00", color: "black" }}
             className="btn1"
           >
-            <h4>Legume</h4>
+            <h4>Produse Plescoi</h4>
           </button>
           </Link>
         </div>
@@ -217,7 +217,7 @@ export default function Details() {
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
         <div className="box_content">
-        <Link to={"/fructe" }  className="link-no-underline" >
+        <Link to={"/miere" }  className="link-no-underline" >
           <img
             src={fruits}
             alt=""
@@ -233,37 +233,7 @@ export default function Details() {
             style={{ background: "#cccccc00", color: "black" }}
             className="btn1"
           >
-            <h4>Legume</h4>
-          </button>
-          </Link>
-        </div>
-      </div>
-    </div>
-    </div>
-
-
-
-    <div className="details container">
-    <div className="col">
-      <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
-        <Link to={"/fructe" }  className="link-no-underline" >
-          <img
-            src={fruits}
-            alt=""
-            className="img-fluid"
-            style={{
-              height: "270px",
-              width: "100%",
-              objectFit: "cover",
-              borderRadius: "5px",
-            }}
-          />
-          <button
-            style={{ background: "#cccccc00", color: "black" }}
-            className="btn1"
-          >
-            <h4>Legume</h4>
+            <h4>Miere</h4>
           </button>
           </Link>
         </div>
@@ -277,7 +247,7 @@ export default function Details() {
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
         <div className="box_content">
-        <Link to={"/fructe" }  className="link-no-underline" >
+        <Link to={"/fainoase" }  className="link-no-underline" >
           <img
             src={fruits}
             alt=""
@@ -293,7 +263,7 @@ export default function Details() {
             style={{ background: "#cccccc00", color: "black" }}
             className="btn1"
           >
-            <h4>Legume</h4>
+            <h4>Fainoase</h4>
           </button>
           </Link>
         </div>
@@ -307,7 +277,7 @@ export default function Details() {
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
         <div className="box_content">
-        <Link to={"/fructe" }  className="link-no-underline" >
+        <Link to={"/bauturi" }  className="link-no-underline" >
           <img
             src={fruits}
             alt=""
@@ -323,7 +293,7 @@ export default function Details() {
             style={{ background: "#cccccc00", color: "black" }}
             className="btn1"
           >
-            <h4>Legume</h4>
+            <h4>Bauturi</h4>
           </button>
           </Link>
         </div>
@@ -337,7 +307,7 @@ export default function Details() {
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
         <div className="box_content">
-        <Link to={"/fructe" }  className="link-no-underline" >
+        <Link to={"/camaraeco" }  className="link-no-underline" >
           <img
             src={fruits}
             alt=""
@@ -353,7 +323,37 @@ export default function Details() {
             style={{ background: "#cccccc00", color: "black" }}
             className="btn1"
           >
-            <h4>Legume</h4>
+            <h4>CamaraEco</h4>
+          </button>
+          </Link>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+    <div className="details container">
+    <div className="col">
+      <div className="box card-body p-0 shadow-sm mb-5">
+        <div className="box_content">
+        <Link to={"/vegan" }  className="link-no-underline" >
+          <img
+            src={fruits}
+            alt=""
+            className="img-fluid"
+            style={{
+              height: "270px",
+              width: "100%",
+              objectFit: "cover",
+              borderRadius: "5px",
+            }}
+          />
+          <button
+            style={{ background: "#cccccc00", color: "black" }}
+            className="btn1"
+          >
+            <h4>Vegan</h4>
           </button>
           </Link>
         </div>

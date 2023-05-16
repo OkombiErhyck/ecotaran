@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import "./IndexPage.css";
-import { Link } from "react-router-dom";
-import Image from "./image";
+import { UserContext } from "./UserContext";
 
-function Vegan() {
+function Fructe() {
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const placesPerPage = 9;
+
+  const { cart, setCart } = useContext(UserContext);
 
   useEffect(() => {
     axios.get("/places").then((response) => {
@@ -30,21 +31,37 @@ function Vegan() {
     }
   };
 
-
-  const addToCart = (place) => {
-    let cart = localStorage.getItem('cart');
-    if (!cart) {
-      cart = [];
+  const addToCart = (place, quantity) => {
+    const updatedPlace = { ...place, quantity };
+    let updatedCart = localStorage.getItem("cart");
+    if (!updatedCart) {
+      updatedCart = [];
     } else {
-      cart = JSON.parse(cart);
+      updatedCart = JSON.parse(updatedCart);
     }
-  
-    cart.push(place);
-  
-    localStorage.setItem('cart', JSON.stringify(cart));
-  
-    
+
+    const placeIndex = updatedCart.findIndex((item) => item._id === place._id);
+    if (placeIndex !== -1) {
+      updatedCart[placeIndex].quantity += quantity;
+    } else {
+      updatedCart.push(updatedPlace);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
+
+  const handleDecreaseQuantity = (place) => {
+    if (place.quantity > 1) {
+      place.quantity -= 1;
+      setPlaces([...places]);
+    }
+  };
+
+  const handleIncreaseQuantity = (place) => {
+    place.quantity = (place.quantity || 1) + 1;
+    setPlaces([...places]);
+  };
+
   return (
     <>
       <div className="top"></div>
@@ -53,56 +70,98 @@ function Vegan() {
           <div className="details container">
             <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
               {currentPlaces.length > 0 &&
-                currentPlaces
-                  .filter((place) => place.marca === "Vegan")
-                  .map((place) => (
-                    <Link
-                      to={"/place/" + place._id}
-                      key={place._id}
-                      className="link-no-underline"
-                    >
-                      <div className="col">
-                        <div className="box card-body p-0  shadow-sm mb-5">
-                          {place.photos.length > 0 && (
-                            <Image
-                              src={place.photos[0]}
-                              className="img-fluid"
-                              style={{
-                                height: "270px",
-                                width: "100%",
-                                objectFit: "cover",
-                              }}
-                            />
-                          )}
-                          <div className="box_content">
-                            <h4>{place.title}</h4>
-                            <div className="row pl-2 pr-2">
-                              <div>{place.putere}</div>
-                              <button
-  style={{
-    background: "rgb(216 212 208 / 78%)" ,
-    color: "var(--main)" ,
-    padding: "14px" ,
-    width: "131px" ,
-    marginLeft: "115px",
-  }}
-  className="btn1"
-  onClick={() => addToCart(place)}
->
-                                Adauga in cos
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-            </div>
-          </div>
+                currentPlaces.map((place) => (
+                  <div className="col" key={place._id}>
+                    <div className="box card-body p-0 shadow-sm mb-5">
+                      {place.photos.length > 0 && (
+                        <img
+                          src={place.photos[0]}
+                          className="img-fluid"
+                          alt={place.title}
+                          style={{
+                            height: "270px",
+                            width: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      )}
+                      <div className="box_content">
+                        <h4>{place.title}</h4>
+                        <div className="row pl-2 pr-2">
+                           
+                          <div className="quantity-control">
+  <div className="quantity-btn-container" style={{display:"flex",
+    flexWrap:" wrap",
+    alignContent: "flex-end",
+    justifyContent: "space-between",
+    background: "#d3d3d3",
+    borderRadius: '10%',
+    alignItems: "center",}}>
+    <button
+      className="quantity-btn"
+      style={{
+        backgroundColor: 'rgb(154 154 154)',
+        color: 'white',
+        padding: '5px',
+        border: 'none',
+        borderRadius: '10%',
+        cursor: 'pointer',
+        marginRight: '5px',
+      }}
+      onClick={() => handleDecreaseQuantity(place)}
+    >
+      -
+    </button>
+    <div className="quantity">{place.quantity || 1}</div>
+    
+    <button
+      className="quantity-btn"
+      style={{
+        backgroundColor: 'rgb(154 154 154)',
+        color: 'white',
+        padding: '5px',
+        border: 'none',
+        borderRadius: '10%',
+        cursor: 'pointer',
+        marginLeft: '5px',
+      }}
+      onClick={() => handleIncreaseQuantity(place)}
+    >
+      +
+    </button>
+  </div>
+  <div  style={{display:"flex",
+    flexWrap:" wrap",
+    alignContent: "flex-end",
+    justifyContent: "space-around",
+    alignItems: "center",}}>{place.km  } lei</div>
+  <button
+    style={{
+      background: '#0d623b',
+      color: 'var(--main)',
+      padding: ' 4px',
+      width: '300px',
+      
+    }}
+    className="btn1"
+    onClick={() => addToCart(place, place.quantity)}
+  >
+    Adauga in cos
+  </button>
+</div>
+
+                       
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
-    </>
-  );
+    </div>
+  </div>
+</>
+);
 }
 
-export default Vegan;
+export default Fructe;
