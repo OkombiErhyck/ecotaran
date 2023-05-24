@@ -29,7 +29,19 @@ const NavBar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const cartData = localStorage.getItem("cart");
+    if (cartData) {
+      setCartItems(JSON.parse(cartData));
+    }
+  }, []);
+
   const cartQuantity = cartItems.length; // Get the cart quantity
+
+  const addToCart = (item) => {
+    setCartItems([...cartItems, item]); // Add item to the cartItems array
+    localStorage.setItem("cart", JSON.stringify([...cartItems, item])); // Update local storage
+  };
 
   return (
     <>
@@ -50,7 +62,7 @@ const NavBar = () => {
         >
           <img src={MenuImg} alt="menu" />
         </button>
-        
+
         <div
           className={`${
             mobileMenuOpen ? "show " : ""
@@ -71,7 +83,8 @@ const NavBar = () => {
             {/* Display cart quantity */}
             <div className="nav-item">
               <Link to="/CartPage" className="nav-link">
-              <img src={cos} alt="cos" /> 
+                <img src={cos} alt="cos" />
+                <span className="cart-quantity">{cartQuantity}</span>
               </Link>
             </div>
           </div>
