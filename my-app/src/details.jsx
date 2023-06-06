@@ -51,7 +51,7 @@ export default function Details() {
       {loading ? (
           <div className="loader">
         <div className="spinner"> </div>
-        <span className="loading-text">Lenes Automobile</span>
+        <span className="loading-text">EcoTaran</span>
       </div>
        ) : (
         <div className="details container">
