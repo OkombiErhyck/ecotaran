@@ -20,7 +20,7 @@ import { gsap } from 'gsap';
 
 function Home(){
 
-  const [showPopup, setShowPopup] = useState(false);
+  /*const [showPopup, setShowPopup] = useState(false);
   const handleScroll = () => {
     if (window.pageYOffset > 1600) {
       setShowPopup(true);
@@ -30,7 +30,7 @@ function Home(){
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, []);*/
 
   // Refs for each component
  
@@ -43,7 +43,7 @@ function Home(){
   const about4Ref = useRef(null);
   const details4Ref = useRef(null);
   const header2Ref = useRef(null);
-  const cookiePopupRef = useRef(null);
+ 
   const footer2Ref = useRef(null);
 
   // Intersection Observer setup
@@ -72,7 +72,7 @@ function Home(){
     observer.observe(about4Ref.current);
     observer.observe(details4Ref.current);
     observer.observe(header2Ref.current);
-    observer.observe(cookiePopupRef.current);
+   
     observer.observe(footer2Ref.current);
 
     return () => {
@@ -83,7 +83,7 @@ function Home(){
   return (
  
     <div>
-      {showPopup && <Popup />}
+      
       
         <Header/>
       
@@ -116,9 +116,9 @@ function Home(){
       <div ref={header2Ref} style={{ opacity: 0, transform: 'translateY(20px)' }}>
         <Header2/>
       </div>
-      <div ref={cookiePopupRef} style={{ opacity: 0, transform: 'translateY(20px)' }}>
+      
         <CookiePolicyPopup/> 
-      </div>
+     
       <div ref={footer2Ref} style={{ opacity: 0, transform: 'translateY(20px)' }}>
         <Footer2/>
       </div>

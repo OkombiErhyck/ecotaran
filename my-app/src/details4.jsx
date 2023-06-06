@@ -12,11 +12,25 @@ export default function Details() {
       return () => clearInterval(intervalId); // Cleanup function to clear the interval
     }, []);
   
+    const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    axios.get('/places').then(response => {
+      const sortedPlaces = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setPlaces(sortedPlaces);
+      setLoading(false); // Set loading to false when the data is fetched
+    });
+  }, []);
     const filteredPlaces = places.filter(place => place.marca === 'fructe'); // filter places with "legume" marca
   
     return(
       <div className="main2"> 
         <div className="container">
+        {loading ? (
+          <div className="loader">
+        <div className="spinner"> </div>
+        <span className="loading-text">Lenes Automobile</span>
+      </div>
+       ) : (
           <div className="details container">
             <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
               {filteredPlaces.length > 0 && filteredPlaces.map(place => ( 
@@ -39,6 +53,7 @@ export default function Details() {
               ))}
             </div>
           </div>
+       )}
         </div>
       </div>
     );

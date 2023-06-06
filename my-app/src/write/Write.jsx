@@ -11,11 +11,11 @@ export default function Write() {
   const cars = [
     {
       brand: "Legume",
-      models: ["Morcovi", "Cartofi", "Rosi", "Varza", "Salata", "Vinete"]
+      models: ["Morcovi", "Cartofi", "Rosi", "Varza", "Dovleac","Salata", "Vinete", "Ghimbir","Ceapa","Usturoi","Ciuperci","Pastarnac","Telina","Loboda","Ardei Gras","Castravete","Mazare","Stevie","Ridiche","Ardei Iute",]
     } ,
     {
       brand: "Fructe",
-      models: ["Mere", "Pere", "Pepene", "Portocale"]
+      models: ["Mere", "Pere", "Pepene", "Portocale" ,"Capsuni" ,"Alune","Cirese", "Grepfrut","Clementine","Lime","Lamaie","Caise","Nectarine",]
       },
       {
         brand: "Carne",
