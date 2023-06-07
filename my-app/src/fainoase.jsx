@@ -20,7 +20,7 @@ function Fructe() {
     });
   }, []);
 
-   
+  const [loading, setLoading] = useState(true);
 
   const lastPlaceIndex = currentPage * placesPerPage;
   const firstPlaceIndex = lastPlaceIndex - placesPerPage;
