@@ -1,179 +1,102 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
-import "./IndexPage.css";
-import { UserContext } from "./UserContext";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import MenuImg from "./images/menu.png";
+import cos from "./images/cos.png";
 
-function Fructe() {
-  const [places, setPlaces] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const placesPerPage = 90;
+import "./navbar.css";
 
-  const { cart, setCart } = useContext(UserContext);
+const NavBar = () => {
+  const [navbar, setNavbar] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleNavbar = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const changeBg = () => {
+    if (window.scrollY >= 100) {
+      setNavbar(true);
+    } else {
+      setNavbar(false);
+    }
+  };
 
   useEffect(() => {
-    axios.get("/places").then((response) => {
-      const filteredPlaces = response.data.filter(
-        (place) => place.marca === "Miere"
-      );
-      setPlaces(filteredPlaces);
-      setLoading(false); 
-    });
+    window.addEventListener("scroll", changeBg);
+    return () => {
+      window.removeEventListener("scroll", changeBg);
+    };
   }, []);
 
-  const [loading, setLoading] = useState(true);
-   
-
-  const lastPlaceIndex = currentPage * placesPerPage;
-  const firstPlaceIndex = lastPlaceIndex - placesPerPage;
-  const currentPlaces = places.slice(firstPlaceIndex, lastPlaceIndex);
-  const totalPages = Math.ceil(places.length / placesPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    if (window.pageYOffset > 0) {
-      window.scrollTo(0, 0);
+  useEffect(() => {
+    const cartData = localStorage.getItem("cart");
+    if (cartData) {
+      const parsedCartItems = JSON.parse(cartData);
+      setCartItems(parsedCartItems);
     }
-  };
+  }, []);
 
-  const addToCart = (place, quantity) => {
-    const updatedPlace = { ...place, quantity: quantity || 1 }; // Set default quantity to 1 if not provided
-    let updatedCart = localStorage.getItem("cart");
-    if (!updatedCart) {
-      updatedCart = [];
-    } else {
-      updatedCart = JSON.parse(updatedCart);
+  useEffect(() => {
+    const updatedCartQuantity = cartItems.length;
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+    // Update the cart quantity in the navbar
+    const cartQuantityElement = document.getElementById("cart-quantity");
+    if (cartQuantityElement) {
+      cartQuantityElement.textContent = updatedCartQuantity.toString();
     }
-  
-    const placeIndex = updatedCart.findIndex((item) => item._id === place._id);
-    if (placeIndex !== -1) {
-      updatedCart[placeIndex].quantity += quantity;
-    } else {
-      updatedCart.push(updatedPlace);
-    }
-  
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-  };
-  
-
-  const handleDecreaseQuantity = (place) => {
-    if (place.quantity > 1) {
-      place.quantity -= 1;
-      setPlaces([...places]);
-    }
-  };
-
-  const handleIncreaseQuantity = (place) => {
-    place.quantity = (place.quantity || 1) + 1;
-    setPlaces([...places]);
-  };
+  }, [cartItems]);
 
   return (
     <>
-      <div className="top"></div>
-      <div className="main2">
-        <div className="container">
-        {loading ? (
-          <div className="loader">
-        <div className="spinner"> </div>
-        <span className="loading-text">Lenes Automobile</span>
-      </div>
-       ) : (
-          <div className="details container">
-            <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
-              {currentPlaces.length > 0 &&
-                currentPlaces.map((place) => (
-                  <div className="col" key={place._id}>
-                    <div className="box card-body p-0 shadow-sm mb-5">
-                      {place.photos.length > 0 && (
-                        <img
-                          src={place.photos[0]}
-                          className="img-fluid"
-                          alt={place.title}
-                          style={{
-                            height: "270px",
-                            width: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
-                      )}
-                      <div className="box_content">
-                        <h4>{place.title}</h4>
-                        <div className="row pl-2 pr-2">
-                           
-                          <div className="quantity-control">
-  <div className="quantity-btn-container" style={{display:"flex",
-    flexWrap:" wrap",
-    alignContent: "flex-end",
-    justifyContent: "space-between",
-    background: "#d3d3d3",
-    borderRadius: '10%',
-    alignItems: "center",}}>
-    <button
-      className="quantity-btn"
-      style={{
-        backgroundColor: 'rgb(154 154 154)',
-        color: 'white',
-        padding: '5px',
-        border: 'none',
-        borderRadius: '10%',
-        cursor: 'pointer',
-        marginRight: '5px',
-      }}
-      onClick={() => handleDecreaseQuantity(place)}
-    >
-      -
-    </button>
-    <div className="quantity">{place.quantity || 1}</div>
-    
-    <button
-      className="quantity-btn"
-      style={{
-        backgroundColor: 'rgb(154 154 154)',
-        color: 'white',
-        padding: '5px',
-        border: 'none',
-        borderRadius: '10%',
-        cursor: 'pointer',
-        marginLeft: '5px',
-      }}
-      onClick={() => handleIncreaseQuantity(place)}
-    >
-      +
-    </button>
-  </div>
-  <div  style={{display:"flex",
-    flexWrap:" wrap",
-    alignContent: "flex-end",
-    justifyContent: "space-around",
-    alignItems: "center",}}>{place.km  } lei</div>
-  <button
-    style={{
-      background: '#0d623b',
-      color: 'var(--main)',
-      padding: ' 4px',
-      width: '300px',
-      
-    }}
-    className="btn1"
-    onClick={() => addToCart(place, place.quantity)}
-  >
-    Adauga in cos
-  </button>
-</div>
-
-                       
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+      <nav
+        className={
+          navbar
+            ? "navbar navbar-expand-lg navbar-expand-md fixed-top active"
+            : "navbar navbar-expand-lg navbar-expand-md fixed-top"
+        }
+      >
+        <div className="navbar-left">
+          <Link to="/CartPage" className="nav-link">
+            <img src={cos} alt="cos" />
+            <span id="cart-quantity" className="cart-quantity">
+              {cartItems.length}
+            </span>
+          </Link>
         </div>
-      </div>
-       )}
-    </div>
-  </div>
-</>
-);
-}
+        <div className="navbar-middle">
+          <a href="/" className="navbar-brand">
+            <span>eco</span>Taran
+          </a>
+        </div>
+        <button
+          className={`navbar-toggler ${mobileMenuOpen ? "active" : ""}`}
+          type="button"
+          onClick={toggleNavbar}
+        >
+          <img src={MenuImg} alt="menu" />
+        </button>
+        <div
+          className={`${
+            mobileMenuOpen ? "show " : ""
+          }collapse navbar-collapse justify-content-end`}
+        >
+          <div className="navbar-nav">
+            <div className="nav-item">
+              <a href="/" className="nav-link">
+                Acasa
+              </a>
+            </div>
+            <div className="nav-item">
+              <a href="/details2" className="nav-link">
+                Magazin
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </>
+  );
+};
 
-export default Fructe;
+export default NavBar;
