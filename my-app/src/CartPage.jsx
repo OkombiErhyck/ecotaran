@@ -34,7 +34,7 @@ const CartPage = () => {
   }, []);
 
   return (
-    <div style={{ padding: '50px', marginTop: '200px', marginBottom: '250px' }}>
+    <div style={containerStyle}>
       <h1 style={headerStyle}>Cos de Cumparaturi</h1>
       {cartItems.length === 0 ? (
         <p style={emptyCartStyle}>Cosul tau este gol.</p>
@@ -42,51 +42,53 @@ const CartPage = () => {
         <div>
           {cartItems.map((place) => (
             <div key={place.id} style={cartItemStyle}>
-              <h3>{place.title}</h3>
-              {place.photos.length > 0 && (
-                <Image
-                  src={place.photos[0]}
-                  alt={place.title}
-                  className="img-fluid"
-                  style={{
-                    height: '100px',
-                    width: '30%',
-                    objectFit: 'cover',
-                  }}
-                />
-              )}
-              <p style={priceStyle}>Price: Lei {place.km}</p>
-              <div style={quantityContainerStyle}>
-                <button style={quantityButtonStyle} onClick={() => increaseQuantity(place.title)}>
-                  +
-                </button>
-                <span style={quantityStyle}>{place.quantity}</span>
-                <button
-                  style={quantityButtonStyle}
-                  onClick={() => {
-                    if (place.quantity > 1) {
-                      setCartItems((prevItems) =>
-                        prevItems.map((prevItem) =>
-                          prevItem.title === place.title ? { ...prevItem, quantity: prevItem.quantity - 1 } : prevItem
-                        )
-                      );
-                    } else {
-                      removeFromCart(place.title);
-                    }
-                  }}
-                >
-                  -
+              <div style={imageContainerStyle}>
+                {place.photos.length > 0 && (
+                  <Image
+                    src={place.photos[0]}
+                    alt={place.title}
+                    className="img-fluid"
+                    style={imageStyle}
+                  />
+                )}
+              </div>
+              <div style={detailsContainerStyle}>
+                <h3>{place.title}</h3>
+                <p style={priceStyle}>Price: Lei {place.km}</p>
+                <div style={quantityContainerStyle}>
+                  <button style={quantityButtonStyle} onClick={() => increaseQuantity(place.title)}>
+                    +
+                  </button>
+                  <span style={quantityStyle}>{place.quantity}</span>
+                  <button
+                    style={quantityButtonStyle}
+                    onClick={() => {
+                      if (place.quantity > 1) {
+                        setCartItems((prevItems) =>
+                          prevItems.map((prevItem) =>
+                            prevItem.title === place.title ? { ...prevItem, quantity: prevItem.quantity - 1 } : prevItem
+                          )
+                        );
+                      } else {
+                        removeFromCart(place.title);
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                </div>
+                <button style={removeButtonStyle} onClick={() => removeFromCart(place.title)}>
+                  Sterge din cos
                 </button>
               </div>
-              <button style={removeButtonStyle} onClick={() => removeFromCart(place.title)}>
-                Sterge din cos
-              </button>
             </div>
           ))}
-          <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
-          <Link to="/checkout">
-            <button style={checkoutButtonStyle}>Checkout</button>
-          </Link>
+          <div style={totalContainerStyle}>
+            <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
+            <Link to="/checkout">
+              <button style={checkoutButtonStyle}>Checkout</button>
+            </Link>
+          </div>
         </div>
       )}
     </div>
@@ -95,9 +97,16 @@ const CartPage = () => {
 
 // Styles
 
+const containerStyle = {
+  padding: '50px',
+  marginTop: '100px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+};
+
 const headerStyle = {
   fontSize: '3rem',
-  textAlign: 'center',
   marginBottom: '2rem',
 };
 
@@ -107,9 +116,31 @@ const emptyCartStyle = {
 };
 
 const cartItemStyle = {
+  display: 'flex',
   marginBottom: '20px',
-  borderBottom: '1px solid #ccc',
-  paddingBottom: '10px',
+  padding: '20px',
+  backgroundColor: '#ffffff',
+  borderRadius: '8px',
+  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+};
+
+const imageContainerStyle = {
+  flex: '0 0 120px',
+  marginRight: '20px',
+};
+
+const imageStyle = {
+  height: '100%',
+  width: '100%',
+  objectFit: 'cover',
+  borderRadius: '8px',
+};
+
+const detailsContainerStyle = {
+  flex: '1',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
 };
 
 const priceStyle = {
@@ -126,10 +157,17 @@ const removeButtonStyle = {
   cursor: 'pointer',
 };
 
-const totalStyle = {
+const totalContainerStyle = {
   marginTop: '2rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-end',
+};
+
+const totalStyle = {
   fontSize: '2rem',
   fontWeight: 'bold',
+  marginBottom: '10px',
 };
 
 const checkoutButtonStyle = {
@@ -139,13 +177,11 @@ const checkoutButtonStyle = {
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  marginTop: '2rem',
-  display: 'block',
-  margin: '0 auto',
 };
 
 const quantityContainerStyle = {
   display: 'flex',
+  marginBottom:"15px",
   alignItems: 'center',
 };
 
