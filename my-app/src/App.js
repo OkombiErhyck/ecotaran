@@ -142,9 +142,9 @@ function App() {
 
  function AppWrapper() {
   return (
-    
+    <CartProvider>
       <Main />
-    
+      </CartProvider>
   );
 } 
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
 import cos from "./images/cos.png";
@@ -9,7 +9,7 @@ import "./navbar.css";
 const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { cartQuantity } = useContext(CartContext);
+  const { cartItems } = useContext(CartContext);
 
   const toggleNavbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -42,7 +42,7 @@ const NavBar = () => {
         <div className="navbar-left">
           <Link to="/CartPage" className="nav-link">
             <img src={cos} alt="cos" />
-            <span className="cart-quantity">{cartQuantity}</span>
+            <span className="cart-quantity">{cartItems.length}</span>
           </Link>
         </div>
         <div className="navbar-middle">
