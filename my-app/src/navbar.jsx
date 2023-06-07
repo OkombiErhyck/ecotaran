@@ -32,16 +32,30 @@ const NavBar = () => {
     };
   }, []);
 
-  const updateCartQuantity = () => {
-    const updatedCartQuantity = cartItems.length;
-    setCartQuantity(updatedCartQuantity);
-  };
+  useEffect(() => {
+    setCartQuantity(cartItems.length);
+  }, [cartItems]);
 
-  const addToCart = (item) => {
-    const updatedCartItems = [...cartItems, item];
-    setCartItems(updatedCartItems);
-    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-    updateCartQuantity();
+  const addToCart = (place, quantity) => {
+    const updatedPlace = { ...place, quantity: quantity || 1 }; // Set default quantity to 1 if not provided
+    let updatedCart = localStorage.getItem("cart");
+    if (!updatedCart) {
+      updatedCart = [];
+    } else {
+      updatedCart = JSON.parse(updatedCart);
+    }
+  
+    const placeIndex = updatedCart.findIndex((item) => item._id === place._id);
+    if (placeIndex !== -1) {
+      updatedCart[placeIndex].quantity += quantity;
+    } else {
+      updatedCart.push(updatedPlace);
+    }
+  
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  
+    setCartItems(updatedCart);
+    setCartQuantity(updatedCart.length);
   };
 
   return (
