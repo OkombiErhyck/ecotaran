@@ -8,6 +8,7 @@ import "./navbar.css";
 
 const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Added mobileMenuOpen state
   const { cart } = useContext(UserContext); // Access the cart state from the UserContext
 
   const toggleNavbar = () => {
