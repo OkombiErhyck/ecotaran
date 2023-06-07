@@ -34,7 +34,7 @@ const CartPage = () => {
   }, []);
 
   return (
-    <div style={{ padding: '230px', marginTop:"200px" , marginBottom:"250px"}}>
+    <div style={{ padding: '50px', marginTop:"200px" , marginBottom:"250px"}}>
       <h1 style={headerStyle}>Cos de Cumparaturi</h1>
       {cartItems.length === 0 ? (
         <p style={emptyCartStyle}>Cosul tau este gol.</p>
