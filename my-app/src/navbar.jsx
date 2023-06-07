@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
 import cos from "./images/cos.png";
+import { CartContext } from "./CartContext";
 
 import "./navbar.css";
 
 const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cartQuantity, setCartQuantity] = useState(0);
+  const { cartQuantity } = useContext(CartContext);
 
   const toggleNavbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -28,18 +29,6 @@ const NavBar = () => {
       window.removeEventListener("scroll", changeBg);
     };
   }, []);
-
-  useEffect(() => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartQuantity(storedCartItems.length);
-  }, []);
-
-  const addToCart = (item) => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    const updatedCartItems = [...storedCartItems, item];
-    setCartQuantity(updatedCartItems.length);
-    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-  };
 
   return (
     <>
