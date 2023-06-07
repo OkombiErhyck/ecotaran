@@ -6,7 +6,7 @@ import { UserContext } from "./UserContext";
 function Fructe() {
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const placesPerPage = 9;
+  const placesPerPage = 90;
 
   const { cart, setCart } = useContext(UserContext);
 
