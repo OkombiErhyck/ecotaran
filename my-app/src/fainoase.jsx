@@ -31,7 +31,7 @@ function Fructe() {
   useEffect(() => {
     axios.get("/places").then((response) => {
       const filteredPlaces = response.data.filter(
-        (place) => place.marca === "Fructe"
+        (place) => place.marca === "Fainoase"
       );
       setPlaces(filteredPlaces);
       setLoading(false);
