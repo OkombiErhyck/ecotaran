@@ -14,13 +14,14 @@ const CartPage = () => {
   const increaseQuantity = (title) => {
     const updatedCartItems = cartItems.map((place) => {
       if (place.title === title) {
-        return { ...place, quantity: place.quantity + 1 };
+        return { ...place, quantity: place.quantity ? place.quantity + 1 : 1 };
       }
       return place;
     });
     setCartItems(updatedCartItems);
     localStorage.setItem('cart', JSON.stringify(updatedCartItems));
   };
+  
 
   const calculateTotalKm = () => {
     return cartItems.reduce((total, place) => total + place.km * place.quantity, 0);
