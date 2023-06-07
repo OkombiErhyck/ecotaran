@@ -14,10 +14,17 @@ const CartPage = () => {
   const increaseQuantity = (title) => {
     const updatedCartItems = cartItems.map((place) => {
       if (place.title === title) {
-        return { ...place, quantity: place.quantity ? place.quantity + 1 : 1 };
+        return { ...place, quantity: place.quantity + 1 };
       }
       return place;
     });
+  
+    // If the item is not already in the cart, add it with a quantity of 1
+    const itemExists = updatedCartItems.some((place) => place.title === title);
+    if (!itemExists) {
+      updatedCartItems.push({ title, quantity: 1 });
+    }
+  
     setCartItems(updatedCartItems);
     localStorage.setItem('cart', JSON.stringify(updatedCartItems));
   };
