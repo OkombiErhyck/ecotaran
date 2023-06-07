@@ -18,17 +18,9 @@ const CartPage = () => {
       }
       return place;
     });
-  
-    // If the item is not already in the cart, add it with a quantity of 1
-    const itemExists = updatedCartItems.some((place) => place.title === title);
-    if (!itemExists) {
-      updatedCartItems.push({ title, quantity: 1 });
-    }
-  
     setCartItems(updatedCartItems);
     localStorage.setItem('cart', JSON.stringify(updatedCartItems));
   };
-  
 
   const calculateTotalKm = () => {
     return cartItems.reduce((total, place) => total + place.km * place.quantity, 0);
