@@ -42,7 +42,8 @@ const NavBar = () => {
   const addToCart = (item) => {
     const updatedCartItems = [...cartItems, item];
     setCartItems(updatedCartItems);
-    setCartQuantity(updatedCartItems.length);
+    const updatedCartQuantity = updatedCartItems.length; // Calculate the new cart quantity
+    setCartQuantity(updatedCartQuantity);
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
   };
 
