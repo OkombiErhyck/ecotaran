@@ -34,7 +34,7 @@ const CartPage = () => {
   }, []);
 
   return (
-    <div style={{ padding: '50px', marginTop:"200px" , marginBottom:"250px"}}>
+    <div style={{ padding: '50px', marginTop: '200px', marginBottom: '250px' }}>
       <h1 style={headerStyle}>Cos de Cumparaturi</h1>
       {cartItems.length === 0 ? (
         <p style={emptyCartStyle}>Cosul tau este gol.</p>
@@ -79,7 +79,7 @@ const CartPage = () => {
                 </button>
               </div>
               <button style={removeButtonStyle} onClick={() => removeFromCart(place.title)}>
-                Remove from Cart
+                Sterge din cos
               </button>
             </div>
           ))}
@@ -110,29 +110,29 @@ const cartItemStyle = {
   marginBottom: '20px',
   borderBottom: '1px solid #ccc',
   paddingBottom: '10px',
-  };
-  
-  const priceStyle = {
+};
+
+const priceStyle = {
   fontSize: '1.2rem',
   marginBottom: '10px',
-  };
-  
-  const removeButtonStyle = {
+};
+
+const removeButtonStyle = {
   backgroundColor: '#ff5252',
   color: 'white',
   padding: '10px 20px',
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  };
-  
-  const totalStyle = {
+};
+
+const totalStyle = {
   marginTop: '2rem',
   fontSize: '2rem',
   fontWeight: 'bold',
-  };
-  
-  const checkoutButtonStyle = {
+};
+
+const checkoutButtonStyle = {
   backgroundColor: '#4CAF50',
   color: 'white',
   padding: '10px 20px',
@@ -142,14 +142,14 @@ const cartItemStyle = {
   marginTop: '2rem',
   display: 'block',
   margin: '0 auto',
-  };
-  
-  const quantityContainerStyle = {
+};
+
+const quantityContainerStyle = {
   display: 'flex',
   alignItems: 'center',
-  };
-  
-  const quantityButtonStyle = {
+};
+
+const quantityButtonStyle = {
   backgroundColor: '#cccccc',
   color: 'white',
   padding: '5px',
@@ -157,11 +157,11 @@ const cartItemStyle = {
   borderRadius: '50%',
   cursor: 'pointer',
   marginRight: '5px',
-  };
-  
-  const quantityStyle = {
+};
+
+const quantityStyle = {
   fontSize: '1.2rem',
   fontWeight: 'bold',
-  };
-  
-  export default CartPage;
+};
+
+export default CartPage;
