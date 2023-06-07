@@ -16,17 +16,11 @@ function Fructe() {
         (place) => place.marca === "Fainoase"
       );
       setPlaces(filteredPlaces);
+      setLoading(false); 
     });
   }, []);
 
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    axios.get('/places').then(response => {
-      const sortedPlaces = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-      setPlaces(sortedPlaces);
-      setLoading(false); // Set loading to false when the data is fetched
-    });
-  }, []);
+   
 
   const lastPlaceIndex = currentPage * placesPerPage;
   const firstPlaceIndex = lastPlaceIndex - placesPerPage;
