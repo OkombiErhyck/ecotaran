@@ -34,10 +34,10 @@ const CartPage = () => {
   }, []);
 
   return (
-    <div style={{ padding: '60px' }}>
-      <h1 style={headerStyle}>Shopping Cart</h1>
+    <div style={{ padding: '260px' }}>
+      <h1 style={headerStyle}>Cos de Cumparaturi</h1>
       {cartItems.length === 0 ? (
-        <p style={emptyCartStyle}>Your cart is empty.</p>
+        <p style={emptyCartStyle}>Cosul tau este gol.</p>
       ) : (
         <div>
           {cartItems.map((place) => (
