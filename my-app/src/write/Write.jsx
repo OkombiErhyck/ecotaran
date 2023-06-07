@@ -27,7 +27,7 @@ export default function Write() {
           },
           {
             brand: "Bauturi",
-            models: ["Vin", "acidulate", "neacidulate"]
+            models: ["Vin", "Acidulate", "Neacidulate"]
             },
             {
               brand: "Miere",
@@ -35,7 +35,7 @@ export default function Write() {
               },
               {
                 brand: "CamaraEco",
-                models: ["Branza", "Lapte", "Oua"]
+                models: ["Hrean Ras", "Dulceata", "Zarzavat", "Ceai", "Sirop", "Apa","Zacusca",]
                 },
                 {
                   brand: "Fainoase",
