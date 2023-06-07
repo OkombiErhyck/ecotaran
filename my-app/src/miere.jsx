@@ -3,53 +3,57 @@ import axios from "axios";
 import "./IndexPage.css";
 import { UserContext } from "./UserContext";
 
-
 function Fructe() {
-const [places, setPlaces] = useState([]);
-const [currentPage, setCurrentPage] = useState(1);
-const placesPerPage = 90;
-const { cart, setCart } = useContext(UserContext);
-const [loading, setLoading] = useState(true);
-const [cartQuantity, setCartQuantity] = useState(0); // Add cartQuantity state variable
+  const [places, setPlaces] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const placesPerPage = 90;
 
-useEffect(() => {
-  axios.get("/places").then((response) => {
-    const filteredPlaces = response.data.filter(
-      (place) => place.marca === "Miere"
-    );
-    setPlaces(filteredPlaces);
-    setLoading(false);
-  });
-}, []);
+  const { cart, setCart } = useContext(UserContext);
 
-useEffect(() => {
-  const cartData = localStorage.getItem("cart");
-  if (cartData) {
-    const parsedCartItems = JSON.parse(cartData);
-    setCartQuantity(parsedCartItems.length); // Update cartQuantity based on the length of parsedCartItems
-  }
-}, []);
+  useEffect(() => {
+    axios.get("/places").then((response) => {
+      const filteredPlaces = response.data.filter(
+        (place) => place.marca === "Miere"
+      );
+      setPlaces(filteredPlaces);
+      setLoading(false); 
+    });
+  }, []);
 
-const addToCart = (place, quantity) => {
-  const updatedPlace = { ...place, quantity: quantity || 1 }; // Set default quantity to 1 if not provided
-  let updatedCart = localStorage.getItem("cart");
-  if (!updatedCart) {
-    updatedCart = [];
-  } else {
-    updatedCart = JSON.parse(updatedCart);
-  }
+  const [loading, setLoading] = useState(true);
+   
 
-  const placeIndex = updatedCart.findIndex((item) => item._id === place._id);
-  if (placeIndex !== -1) {
-    updatedCart[placeIndex].quantity += quantity;
-  } else {
-    updatedCart.push(updatedPlace);
-  }
+  const lastPlaceIndex = currentPage * placesPerPage;
+  const firstPlaceIndex = lastPlaceIndex - placesPerPage;
+  const currentPlaces = places.slice(firstPlaceIndex, lastPlaceIndex);
+  const totalPages = Math.ceil(places.length / placesPerPage);
 
-  localStorage.setItem("cart", JSON.stringify(updatedCart));
-  setCartQuantity(updatedCart.length); // Update cartQuantity after adding item to the cart
-};
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    if (window.pageYOffset > 0) {
+      window.scrollTo(0, 0);
+    }
+  };
 
+  const addToCart = (place, quantity) => {
+    const updatedPlace = { ...place, quantity: quantity || 1 }; // Set default quantity to 1 if not provided
+    let updatedCart = localStorage.getItem("cart");
+    if (!updatedCart) {
+      updatedCart = [];
+    } else {
+      updatedCart = JSON.parse(updatedCart);
+    }
+  
+    const placeIndex = updatedCart.findIndex((item) => item._id === place._id);
+    if (placeIndex !== -1) {
+      updatedCart[placeIndex].quantity += quantity;
+    } else {
+      updatedCart.push(updatedPlace);
+    }
+  
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+  
 
   const handleDecreaseQuantity = (place) => {
     if (place.quantity > 1) {
