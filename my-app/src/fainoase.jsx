@@ -98,10 +98,12 @@ function Fructe() {
                         <h4>{place.title}</h4>
                         <div className="row pl-2 pr-2">
                            
-                          <div className="quantity-control">
-  <div className="quantity-btn-container" style={{display:"flex",
-    flexWrap:" wrap",
+                          <div className="quantity-control" >
+  <div className="quantity-btn-container" style={{
+    display:"flex",
+    flexWrap:" nowrap",
     alignContent: "flex-end",
+    flexDirection: "column",
     justifyContent: "space-between",
     background: "#d3d3d3",
     borderRadius: '10%',

@@ -9,6 +9,7 @@ const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(0);
 
   const toggleNavbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -32,15 +33,17 @@ const NavBar = () => {
   useEffect(() => {
     const cartData = localStorage.getItem("cart");
     if (cartData) {
-      setCartItems(JSON.parse(cartData));
+      const parsedCartItems = JSON.parse(cartData);
+      setCartItems(parsedCartItems);
+      setCartQuantity(parsedCartItems.length);
     }
   }, []);
 
-  const cartQuantity = cartItems.length; // Get the cart quantity
-
   const addToCart = (item) => {
-    setCartItems([...cartItems, item]); // Add item to the cartItems array
-    localStorage.setItem("cart", JSON.stringify([...cartItems, item])); // Update local storage
+    const updatedCartItems = [...cartItems, item];
+    setCartItems(updatedCartItems);
+    setCartQuantity(updatedCartItems.length);
+    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
   };
 
   return (
@@ -52,9 +55,17 @@ const NavBar = () => {
             : "navbar navbar-expand-lg navbar-expand-md fixed-top"
         }
       >
-        <a href="/" className="navbar-brand">
-          <span>eco</span>Taran
-        </a>
+        <div className="navbar-left">
+          <Link to="/CartPage" className="nav-link">
+            <img src={cos} alt="cos" />
+            <span className="cart-quantity">{cartQuantity}</span>
+          </Link>
+        </div>
+        <div className="navbar-middle">
+          <a href="/" className="navbar-brand">
+            <span>eco</span>Taran
+          </a>
+        </div>
         <button
           className={`navbar-toggler ${mobileMenuOpen ? "active" : ""}`}
           type="button"
@@ -62,7 +73,6 @@ const NavBar = () => {
         >
           <img src={MenuImg} alt="menu" />
         </button>
-
         <div
           className={`${
             mobileMenuOpen ? "show " : ""
@@ -78,14 +88,6 @@ const NavBar = () => {
               <a href="/details2" className="nav-link">
                 Magazin
               </a>
-            </div>
-
-            {/* Display cart quantity */}
-            <div className="nav-item">
-              <Link to="/CartPage" className="nav-link">
-                <img src={cos} alt="cos" />
-                <span className="cart-quantity">{cartQuantity}</span>
-              </Link>
             </div>
           </div>
         </div>
