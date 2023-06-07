@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
 import cos from "./images/cos.png";
-import { UserContext } from "./UserContext";
 
 import "./navbar.css";
 
 const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Added mobileMenuOpen state
-  const { cart } = useContext(UserContext); // Access the cart state from the UserContext
+  const [cartItems, setCartItems] = useState(
+    JSON.parse(localStorage.getItem("cart")) || []
+  );
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(cartItems.length);
 
   const toggleNavbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -30,7 +32,17 @@ const NavBar = () => {
     };
   }, []);
 
-  const cartQuantity = cart.reduce((total, item) => total + item.quantity, 0); // Calculate the total cart quantity
+  const updateCartQuantity = () => {
+    const updatedCartQuantity = cartItems.length;
+    setCartQuantity(updatedCartQuantity);
+  };
+
+  const addToCart = (item) => {
+    const updatedCartItems = [...cartItems, item];
+    setCartItems(updatedCartItems);
+    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+    updateCartQuantity();
+  };
 
   return (
     <>
