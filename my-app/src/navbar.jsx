@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
 import cos from "./images/cos.png";
+import { CartContext } from "./CartContext";
 
 import "./navbar.css";
 
 const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cartQuantity, setCartQuantity] = useState(0);
+
+  const { cartItems } = useContext(CartContext);
 
   const toggleNavbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -30,23 +31,6 @@ const NavBar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const cartData = localStorage.getItem("cart");
-    if (cartData) {
-      const parsedCartItems = JSON.parse(cartData);
-      setCartItems(parsedCartItems);
-      setCartQuantity(parsedCartItems.length);
-    }
-  }, []);
-
-  const addToCart = (item) => {
-    const updatedCartItems = [...cartItems, item];
-    setCartItems(updatedCartItems);
-    const updatedCartQuantity = updatedCartItems.length; // Calculate the new cart quantity
-    setCartQuantity(updatedCartQuantity);
-    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-  };
-
   return (
     <>
       <nav
@@ -59,7 +43,7 @@ const NavBar = () => {
         <div className="navbar-left">
           <Link to="/CartPage" className="nav-link">
             <img src={cos} alt="cos" />
-            <span className="cart-quantity">{cartQuantity}</span>
+            <span className="cart-quantity">{cartItems.length}</span>
           </Link>
         </div>
         <div className="navbar-middle">
