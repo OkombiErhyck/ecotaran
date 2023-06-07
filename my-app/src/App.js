@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { UserContextProvider } from './UserContext';
 import SplashScreen from './SplashScreen';
-
+import { CartProvider } from "./CartContext";
 
 import './App.css';
 
@@ -72,6 +72,7 @@ function App() {
       <UserContextProvider>
         <Suspense >
           <Router>
+          <CartProvider>
             <Navbar />
             <Routes>
               <Route path='/details' element={<Details />} />
@@ -110,8 +111,10 @@ function App() {
               element={<Checkout setPreviousOrders={handleSetPreviousOrders} />}
             />
             <Route path="/orders" element={<Orders orders={previousOrders} />} />
+           
             </Routes>
             <Footer />
+       </CartProvider>
           </Router>
         </Suspense>
       </UserContextProvider>

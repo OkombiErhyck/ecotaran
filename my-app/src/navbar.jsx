@@ -7,10 +7,8 @@ import "./navbar.css";
 
 const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
-  const [cartItems, setCartItems] = useState(
-    JSON.parse(localStorage.getItem("cart")) || []
-  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(0);
 
   const toggleNavbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -33,16 +31,15 @@ const NavBar = () => {
 
   useEffect(() => {
     const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCartItems);
+    setCartQuantity(storedCartItems.length);
   }, []);
 
   const addToCart = (item) => {
-    const updatedCartItems = [...cartItems, item];
-    setCartItems(updatedCartItems);
+    const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
+    const updatedCartItems = [...storedCartItems, item];
+    setCartQuantity(updatedCartItems.length);
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
   };
-
-  const cartQuantity = cartItems.length;
 
   return (
     <>
