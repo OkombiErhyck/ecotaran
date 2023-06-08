@@ -37,7 +37,6 @@ const Checkout = lazy(() => import('./checkout'));
 const Orders = lazy(() => import('./orders'));
 const Details2 = lazy(() => import('./details2'));
 
-
 axios.defaults.baseURL = 'https://ecotaran-nigs.vercel.app';
 axios.defaults.withCredentials = true;
 
@@ -69,9 +68,9 @@ function App() {
   return (
     <div className='App'>
       <UserContextProvider>
-        <Suspense >
+        <Suspense fallback={<div>Loading...</div>}>
           <Router>
-            <Navbar />
+            <Navbar cartItems={cart} />
             <Routes>
               <Route path='/details' element={<Details />} />
               <Route path='/Write' element={<Write />} />
@@ -119,7 +118,7 @@ function App() {
   );
 }
 
- function Main() {
+function Main() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -135,14 +134,12 @@ function App() {
       {isLoaded ? <App /> : <SplashScreen />}
     </div>
   );
-}  
+}
 
- function AppWrapper() {
+function AppWrapper() {
   return (
-    
-      <Main />
-    
+    <Main />
   );
-} 
+}
 
 export default AppWrapper;
