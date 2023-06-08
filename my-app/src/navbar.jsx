@@ -37,14 +37,15 @@ const NavBar = () => {
   }, []);
 
   useEffect(() => {
-    // Update cart quantity whenever cart items change
     updateCartQuantity();
   }, [cartItems]);
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      const updatedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
-      setCartItems(updatedCartItems);
+    const handleStorageChange = (event) => {
+      if (event.key === "cart") {
+        const updatedCartItems = JSON.parse(event.newValue) || [];
+        setCartItems(updatedCartItems);
+      }
     };
 
     window.addEventListener("storage", handleStorageChange);
