@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
 import cos from "./images/cos.png";
+import { CartContext } from "./CartContext";
 
 import "./navbar.css";
 

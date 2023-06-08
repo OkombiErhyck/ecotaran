@@ -111,6 +111,7 @@ function App() {
             <Route path="/orders" element={<Orders orders={previousOrders} />} />
             </Routes>
             <Footer />
+            
           </Router>
         </Suspense>
       </UserContextProvider>
