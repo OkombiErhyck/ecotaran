@@ -147,8 +147,7 @@ function Fructe() {
     alignItems: "center",}}>{place.km  } lei</div>
   <button
     style={{
-      background: '#0d623b',
-      color: 'var(--main)',
+       
       padding: ' 4px',
       width: '300px',
       

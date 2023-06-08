@@ -241,17 +241,20 @@ export default function IndexPage() {
 
   <button
   style={{
-    background: "rgb(216 212 208 / 78%)" ,
-    color: "var(--main)" ,
-    padding: "14px" ,
-    width: "131px" ,
+    background: "rgb(216 212 208 / 78%)",
+    color: "var(--main)",
+    padding: "14px",
+    width: "131px",
     marginLeft: "126px",
+   
   }}
   className="btn1"
   onClick={() => addToCart(place)}
 >
   Adauga in Cos
 </button>
+
+
                     </div>
                   </div>
                 </div>
