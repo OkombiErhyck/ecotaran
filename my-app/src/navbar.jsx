@@ -36,7 +36,9 @@ const NavBar = () => {
   };
 
   const removeFromCart = (item) => {
-    const updatedCartItems = cartItems.filter((cartItem) => cartItem.id !== item.id);
+    const updatedCartItems = cartItems.filter(
+      (cartItem) => cartItem.id !== item.id
+    );
     setCartItems(updatedCartItems);
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
   };
@@ -49,8 +51,14 @@ const NavBar = () => {
   }, []);
 
   useEffect(() => {
-    updateCartQuantity();
-  }, [cartItems]);
+    const interval = setInterval(() => {
+      updateCartQuantity();
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <>
