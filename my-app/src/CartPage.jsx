@@ -26,6 +26,10 @@ const CartPage = () => {
     return cartItems.reduce((total, place) => total + place.km * place.quantity, 0);
   };
 
+  const calculateTotalItems = () => {
+    return cartItems.reduce((total, place) => total + place.quantity, 0);
+  };
+
   useEffect(() => {
     const cartData = localStorage.getItem('cart');
     if (cartData) {
@@ -85,6 +89,7 @@ const CartPage = () => {
           ))}
           <div style={totalContainerStyle}>
             <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
+            <p style={totalStyle}>Total Produse: {calculateTotalItems()}</p>
             <Link to="/checkout">
               <button style={checkoutButtonStyle}>Checkout</button>
             </Link>
