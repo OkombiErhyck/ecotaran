@@ -29,20 +29,6 @@ const NavBar = () => {
     setCartQuantity(cartItems.length);
   };
 
-  const addToCart = (item) => {
-    const updatedCartItems = [...cartItems, item];
-    setCartItems(updatedCartItems);
-    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-  };
-
-  const removeFromCart = (item) => {
-    const updatedCartItems = cartItems.filter(
-      (cartItem) => cartItem.id !== item.id
-    );
-    setCartItems(updatedCartItems);
-    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-  };
-
   useEffect(() => {
     window.addEventListener("scroll", changeBg);
     return () => {
@@ -51,12 +37,20 @@ const NavBar = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      updateCartQuantity();
-    }, 1000);
+    // Update cart quantity whenever cart items change
+    updateCartQuantity();
+  }, [cartItems]);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const updatedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
+      setCartItems(updatedCartItems);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
