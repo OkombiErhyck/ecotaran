@@ -5,9 +5,13 @@ import cos from "./images/cos.png";
 
 import "./navbar.css";
 
-const NavBar = ({ cartQuantity }) => {
+const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
+  const [cartItems, setCartItems] = useState(
+    JSON.parse(localStorage.getItem("cart")) || []
+  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(cartItems.length);
 
   const toggleNavbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -25,6 +29,29 @@ const NavBar = ({ cartQuantity }) => {
     window.addEventListener("scroll", changeBg);
     return () => {
       window.removeEventListener("scroll", changeBg);
+    };
+  }, []);
+
+  const updateCartQuantity = () => {
+    setCartQuantity(cartItems.length);
+  };
+
+  useEffect(() => {
+    updateCartQuantity();
+  }, [cartItems]);
+
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === "cart") {
+        const updatedCartItems = JSON.parse(event.newValue) || [];
+        setCartItems(updatedCartItems);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
@@ -78,26 +105,4 @@ const NavBar = ({ cartQuantity }) => {
   );
 };
 
-const CartContainer = () => {
-  const [cartItems, setCartItems] = useState(
-    JSON.parse(localStorage.getItem("cart")) || []
-  );
-  const [cartQuantity, setCartQuantity] = useState(cartItems.length);
-
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  const updateCartQuantity = () => {
-    const updatedCartQuantity = cartItems.length;
-    setCartQuantity(updatedCartQuantity);
-  };
-
-  useEffect(() => {
-    updateCartQuantity();
-  }, [cartItems]);
-
-  return <NavBar cartQuantity={cartQuantity} />;
-};
-
-export default CartContainer;
+export default NavBar;
