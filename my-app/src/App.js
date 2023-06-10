@@ -1,8 +1,7 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, startTransition } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { UserContextProvider } from './UserContext';
-import SplashScreen from './SplashScreen';
 
 import './App.css';
 
@@ -64,13 +63,12 @@ function App() {
     setPreviousOrders(orders);
   };
 
-
   return (
     <div className='App'>
       <UserContextProvider>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Router>
-            <Navbar cartItems={cart} />
+        <Router>
+          <Navbar cartItems={cart} />
+          <Suspense fallback={<div>Loading...</div>}>
             <Routes>
               <Route path='/details' element={<Details />} />
               <Route path='/Write' element={<Write />} />
@@ -99,47 +97,19 @@ function App() {
               <Route path='/miere' element={<Miere />} />
               <Route path='/fainoase' element={<Fainoase />} />
               <Route path='/plescoi' element={<Plescoi />} />
+              <Route path='/CartPage' element={<CartPage cart={cart} />} />
               <Route
-                path='/CartPage'
-                element={<CartPage cart={cart} />}
+                path="/checkout"
+                element={<Checkout setPreviousOrders={handleSetPreviousOrders} />}
               />
-             <Route
-              path="/checkout"
-              element={<Checkout setPreviousOrders={handleSetPreviousOrders} />}
-            />
-            <Route path="/orders" element={<Orders orders={previousOrders} />} />
+              <Route path="/orders" element={<Orders orders={previousOrders} />} />
             </Routes>
             <Footer />
-            
-          </Router>
-        </Suspense>
+          </Suspense>
+        </Router>
       </UserContextProvider>
     </div>
   );
 }
 
-function Main() {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <div>
-      {isLoaded ? <App /> : <SplashScreen />}
-    </div>
-  );
-}
-
-function AppWrapper() {
-  return (
-    <Main />
-  );
-}
-
-export default AppWrapper;
+export default App;
