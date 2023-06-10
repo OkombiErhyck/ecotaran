@@ -1,50 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Image from './image';
 import { Link } from 'react-router-dom';
+import { UserContext } from './UserContext';
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const { cart, setCart } = useContext(UserContext);
 
   const removeFromCart = (title) => {
-    const updatedCartItems = cartItems.filter((place) => place.title !== title);
-    setCartItems(updatedCartItems);
+    const updatedCartItems = cart.filter((place) => place.title !== title);
+    setCart(updatedCartItems);
     localStorage.setItem('cart', JSON.stringify(updatedCartItems));
   };
 
   const increaseQuantity = (title) => {
-    const updatedCartItems = cartItems.map((place) => {
+    const updatedCartItems = cart.map((place) => {
       if (place.title === title) {
         return { ...place, quantity: place.quantity + 1 };
       }
       return place;
     });
-    setCartItems(updatedCartItems);
+    setCart(updatedCartItems);
     localStorage.setItem('cart', JSON.stringify(updatedCartItems));
   };
 
   const calculateTotalKm = () => {
-    return cartItems.reduce((total, place) => total + place.km * place.quantity, 0);
+    return cart.reduce((total, place) => total + place.km * place.quantity, 0);
   };
 
   const calculateTotalItems = () => {
-    return cartItems.reduce((total, place) => total + place.quantity, 0);
+    return cart.reduce((total, place) => total + place.quantity, 0);
   };
 
   useEffect(() => {
     const cartData = localStorage.getItem('cart');
     if (cartData) {
-      setCartItems(JSON.parse(cartData));
+      setCart(JSON.parse(cartData));
     }
   }, []);
 
   return (
     <div style={containerStyle}>
       <h1 style={headerStyle}>Cos de Cumparaturi</h1>
-      {cartItems.length === 0 ? (
+      {cart.length === 0 ? (
         <p style={emptyCartStyle}>Cosul tau este gol.</p>
       ) : (
         <div>
-          {cartItems.map((place) => (
+          {cart.map((place) => (
             <div key={place.id} style={cartItemStyle}>
               <div style={imageContainerStyle}>
                 {place.photos.length > 0 && (
@@ -68,8 +69,8 @@ const CartPage = () => {
                     style={quantityButtonStyle}
                     onClick={() => {
                       if (place.quantity > 1) {
-                        setCartItems((prevItems) =>
-                          prevItems.map((prevItem) =>
+                        setCart((prevCart) =>
+                          prevCart.map((prevItem) =>
                             prevItem.title === place.title ? { ...prevItem, quantity: prevItem.quantity - 1 } : prevItem
                           )
                         );
@@ -99,6 +100,7 @@ const CartPage = () => {
     </div>
   );
 };
+
 
 // Styles
 
