@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
 import cos from "./images/cos.png";
-import { CartContext } from "./CartContext";
+import CartLink from "./CartLink";
 
 import "./navbar.css";
 
@@ -13,6 +13,8 @@ const NavBar = () => {
   );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartQuantity, setCartQuantity] = useState(cartItems.length);
+  const [refreshKey, setRefreshKey] = useState(0); // Key for forcing component refresh
+  const cartLinkRef = useRef(null);
 
   const toggleNavbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -35,6 +37,7 @@ const NavBar = () => {
 
   const updateCartQuantity = () => {
     setCartQuantity(cartItems.length);
+    setRefreshKey((prevKey) => prevKey + 1); // Increment the key to force component refresh
   };
 
   useEffect(() => {
@@ -46,6 +49,7 @@ const NavBar = () => {
       if (event.key === "cart") {
         const updatedCartItems = JSON.parse(event.newValue) || [];
         setCartItems(updatedCartItems);
+        forceCartLinkUpdate();
       }
     };
 
@@ -54,6 +58,19 @@ const NavBar = () => {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
+  }, []);
+
+  const forceCartLinkUpdate = () => {
+    if (cartLinkRef.current) {
+      // Access the current property of the ref to get the CartLink component instance
+      cartLinkRef.current.forceUpdate();
+    }
+  };
+
+  useEffect(() => {
+    if (window.location.pathname !== "/") {
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   return (
@@ -66,10 +83,7 @@ const NavBar = () => {
         }
       >
         <div className="navbar-left">
-          <Link to="/CartPage" className="nav-link">
-            <img src={cos} alt="cos" />
-            <span className="cart-quantity">{cartQuantity}</span>
-          </Link>
+          <CartLink key={refreshKey} ref={cartLinkRef} cartQuantity={cartQuantity} />
         </div>
         <div className="navbar-middle">
           <a href="/" className="navbar-brand">

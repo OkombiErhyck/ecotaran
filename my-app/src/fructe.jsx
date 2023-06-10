@@ -1,14 +1,18 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 import "./IndexPage.css";
 import { UserContext } from "./UserContext";
+import { CartContext } from "./CartContext";
+import CartLink from "./CartLink";
 
 function Fructe() {
+  const { cart, setCart } = useContext(UserContext);
+  const { updateCartQuantity } = useContext(CartContext);
+  const cartLinkRef = useRef(null);
+  
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const placesPerPage = 90;
-
-  const { cart, setCart } = useContext(UserContext);
 
   useEffect(() => {
     axios.get("/places").then((response) => {
@@ -16,11 +20,10 @@ function Fructe() {
         (place) => place.marca === "Fructe"
       );
       setPlaces(filteredPlaces);
-      setLoading(false);
     });
   }, []);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [loadingPlaceId, setLoadingPlaceId] = useState(null);
 
   const lastPlaceIndex = currentPage * placesPerPage;
@@ -57,11 +60,13 @@ function Fructe() {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     setCart(updatedCart);
 
-    setLoading(false);
-    setLoadingPlaceId(null);
+    // Call updateCartQuantity with the new cart quantity
+    updateCartQuantity(updatedCart.length);
 
-    // Refresh the page
-    window.location.reload();
+    setTimeout(() => {
+      setLoading(false);
+      setLoadingPlaceId(null);
+    }, 1000);
   };
 
   const handleDecreaseQuantity = (place) => {
@@ -75,6 +80,12 @@ function Fructe() {
     place.quantity = (place.quantity || 1) + 1;
     setPlaces([...places]);
   };
+
+  useEffect(() => {
+    if (cartLinkRef.current) {
+      cartLinkRef.current.forceUpdate();
+    }
+  }, [cart]);
 
   return (
     <>
@@ -104,7 +115,7 @@ function Fructe() {
                         <div className="row pl-2 pr-2">
                           {loadingPlaceId === place._id ? (
                             <div className="loading-animation">
-                              Loading...
+                              Se adauga produsul..
                             </div>
                           ) : (
                             <div className="quantity-control">

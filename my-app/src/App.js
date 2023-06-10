@@ -2,7 +2,7 @@ import React, { useState, useEffect, lazy, Suspense, startTransition } from 'rea
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { UserContextProvider } from './UserContext';
-
+import { CartProvider } from "./CartContext";
 import './App.css';
 
 const Navbar = lazy(() => import('./navbar'));
@@ -35,6 +35,7 @@ const CartPage = lazy(() => import('./CartPage'));
 const Checkout = lazy(() => import('./checkout'));
 const Orders = lazy(() => import('./orders'));
 const Details2 = lazy(() => import('./details2'));
+const CartLink = lazy(() => import('./CartLink'));
 
 axios.defaults.baseURL = 'https://ecotaran-nigs.vercel.app';
 axios.defaults.withCredentials = true;
@@ -67,10 +68,12 @@ function App() {
     <div className='App'>
       <UserContextProvider>
         <Router>
+        <CartProvider>
           <Navbar cartItems={cart} />
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
               <Route path='/details' element={<Details />} />
+              <Route path='/CartLink' element={<CartLink />} />
               <Route path='/Write' element={<Write />} />
               <Route path='/Write/:id' element={<Write />} />
               <Route path='/' element={<Home />} />
@@ -106,6 +109,7 @@ function App() {
             </Routes>
             <Footer />
           </Suspense>
+          </CartProvider>
         </Router>
       </UserContextProvider>
     </div>
