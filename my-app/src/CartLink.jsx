@@ -25,14 +25,19 @@ const CartLink = () => {
 
   return (
     <div className="navbar-left" key={refreshKey}>
+     {isLoading ? (
+            <div className="loading-animation">
+                              <img  className="spinner1" src={cos} alt="cos" /> 
+                            
+                            </div>              
+        ) : (
       <Link to="/CartPage" className="nav-link">
         <img src={cos} alt="cos" />
-        {isLoading ? (
-          <span className="cart-loading">Adaugat...</span>
-        ) : (
+        
           <span className="cart-quantity">{cartQuantity}</span>
-        )}
+        
       </Link>
+      )}
     </div>
   );
 };

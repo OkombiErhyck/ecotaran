@@ -113,11 +113,7 @@ function Fructe() {
                       <div className="box_content">
                         <h4>{place.title}</h4>
                         <div className="row pl-2 pr-2">
-                          {loadingPlaceId === place._id ? (
-                            <div className="loading-animation">
-                              Se adauga produsul..
-                            </div>
-                          ) : (
+                           
                             <div className="quantity-control">
                               <div
                                 className="quantity-btn-container"
@@ -180,6 +176,8 @@ function Fructe() {
                               >
                                 {place.km} lei
                               </div>
+
+                               
                               <button
                                 style={{
                                   padding: " 4px",
@@ -188,10 +186,18 @@ function Fructe() {
                                 className="btn1"
                                 onClick={() => addToCart(place, place.quantity)}
                               >
-                                Adauga in cos
-                              </button>
+                              {loadingPlaceId === place._id ? (
+                            <div className="loading-animation">
+                            <div className="spinner"></div>
+                          
                             </div>
-                          )}
+                          ) : (
+                               <span>Adauga in cos</span> 
+                                )}
+                              </button>
+                              
+                            </div>
+                          
                         </div>
                       </div>
                     </div>

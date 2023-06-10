@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, startTransition } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { UserContextProvider } from './UserContext';
@@ -64,51 +64,99 @@ function App() {
     setPreviousOrders(orders);
   };
 
+  useEffect(() => {
+    // Preload components here
+    Promise.all([
+      import('./navbar'),
+      import('./footer/footer'),
+      import('./home'),
+      import('./about'),
+      import('./login'),
+      import('./signup'),
+      import('./userpage'),
+      import('./write/Write'),
+      import('./PlacesPage'),
+      import('./IndexPage'),
+      import('./PlacePage'),
+      import('./reset-password'),
+      import('./despre'),
+      import('./CookiePolicyPopup'),
+      import('./details'),
+      import('./categorii'),
+      import('./legume'),
+      import('./fructe'),
+      import('./lactate'),
+      import('./Carne'),
+      import('./vegan'),
+      import('./camaraeco'),
+      import('./bauturi'),
+      import('./miere'),
+      import('./fainoase'),
+      import('./plescoi'),
+      import('./CartPage'),
+      import('./checkout'),
+      import('./orders'),
+      import('./details2'),
+      import('./CartLink')
+    ]).catch((error) => {
+      console.error('Error preloading components:', error);
+    });
+  }, []);
+
   return (
     <div className='App'>
       <UserContextProvider>
         <Router>
-        <CartProvider>
-          <Navbar cartItems={cart} />
-          <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-              <Route path='/details' element={<Details />} />
-              <Route path='/CartLink' element={<CartLink />} />
-              <Route path='/Write' element={<Write />} />
-              <Route path='/Write/:id' element={<Write />} />
-              <Route path='/' element={<Home />} />
-              <Route path='/userpage' element={<Userpage />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/signup' element={<Signup />} />
-              <Route path='/details2' element={<Details2 />} />
-              <Route path='/PlacesPage' element={<PlacesPage />} />
-              <Route path='/IndexPage' element={<IndexPage />} />
-              <Route
-                path='/place/:id'
-                element={<PlacePage addToCart={addToCart} />}
-              />
-              <Route path='/reset-password' element={<ResetPassword />} />
-              <Route path='/despre' element={<Despre />} />
-              <Route path='/categorii' element={<Categorii />} />
-              <Route path='/legume' element={<Legume />} />
-              <Route path='/fructe' element={<Fructe />} />
-              <Route path='/lactate' element={<Lactate />} />
-              <Route path='/Carne' element={<Carne />} />
-              <Route path='/vegan' element={<Vegan />} />
-              <Route path='/camaraeco' element={<CamaraEco />} />
-              <Route path='/bauturi' element={<Bauturi />} />
-              <Route path='/miere' element={<Miere />} />
-              <Route path='/fainoase' element={<Fainoase />} />
-              <Route path='/plescoi' element={<Plescoi />} />
-              <Route path='/CartPage' element={<CartPage cart={cart} />} />
-              <Route
-                path="/checkout"
-                element={<Checkout setPreviousOrders={handleSetPreviousOrders} />}
-              />
-              <Route path="/orders" element={<Orders orders={previousOrders} />} />
-            </Routes>
-            <Footer />
-          </Suspense>
+          <CartProvider>
+            <Suspense fallback={<div className="splash-screen">
+     <h1>eco<span style={{color:"white"}}>Taran</span> </h1>
+      <div className="road">
+        <div className="center-line"></div>
+      </div>
+      
+     
+      
+    </div>
+    }>
+              <Navbar cartItems={cart} />
+              <Routes>
+                <Route path='/details' element={<Details />} />
+                <Route path='/CartLink' element={<CartLink />} />
+                <Route path='/Write' element={<Write />} />
+                <Route path='/Write/:id' element={<Write />} />
+                <Route path='/' element={<Home />} />
+                <Route path='/userpage' element={<Userpage />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/signup' element={<Signup />} />
+                <Route path='/details2' element={<Details2 />} />
+                <Route path='/PlacesPage' element={<PlacesPage />} />
+                <Route path='/IndexPage' element={<IndexPage />} />
+                <Route
+                  path='/place/:id'
+                  element={<PlacePage addToCart={addToCart} />}
+                />
+                <Route path='/reset-password' element={<ResetPassword />} />
+                <Route path='/despre' element={<Despre />} />
+                <Route path='/categorii' element={<Categorii />} />
+                <Route path='/legume' element={<Legume />} />
+                <Route path='/fructe' element={<Fructe />} />
+                <Route path='/lactate' element={<Lactate />} />
+                <Route path='/Carne' element={<Carne />} />
+                <Route path='/vegan' element={<Vegan />} />
+                <Route path='/camaraeco' element={<CamaraEco />} />
+                <Route path='/bauturi' element={<Bauturi />} />
+                <Route path='/miere' element={<Miere />} />
+                <Route path='/fainoase' element={<Fainoase />} />
+                <Route path='/plescoi' element={<Plescoi />} />
+                <Route path='/CartPage' element={<CartPage cart={cart} />} />
+                <Route
+                  path="/checkout"
+                  element={<Checkout setPreviousOrders={handleSetPreviousOrders} />}
+                />
+                <Route path="/orders" element={<Orders orders={previousOrders} />} />
+              </Routes>
+              <Footer />
+            </Suspense>
           </CartProvider>
         </Router>
       </UserContextProvider>

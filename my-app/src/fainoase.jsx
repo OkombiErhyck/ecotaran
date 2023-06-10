@@ -1,14 +1,18 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 import "./IndexPage.css";
 import { UserContext } from "./UserContext";
+import { CartContext } from "./CartContext";
+import CartLink from "./CartLink";
 
-function Fructe() {
+function Fainoase() {
+  const { cart, setCart } = useContext(UserContext);
+  const { updateCartQuantity } = useContext(CartContext);
+  const cartLinkRef = useRef(null);
+  
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const placesPerPage = 90;
-
-  const { cart, setCart } = useContext(UserContext);
 
   useEffect(() => {
     axios.get("/places").then((response) => {
@@ -16,37 +20,28 @@ function Fructe() {
         (place) => place.marca === "Fainoase"
       );
       setPlaces(filteredPlaces);
-      setLoading(false); 
     });
   }, []);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingPlaceId, setLoadingPlaceId] = useState(null);
 
   const lastPlaceIndex = currentPage * placesPerPage;
   const firstPlaceIndex = lastPlaceIndex - placesPerPage;
   const currentPlaces = places.slice(firstPlaceIndex, lastPlaceIndex);
   const totalPages = Math.ceil(places.length / placesPerPage);
-  const [cartQuantity, setCartQuantity] = useState(0); // Add cartQuantity state variable
 
-  useEffect(() => {
-    axios.get("/places").then((response) => {
-      const filteredPlaces = response.data.filter(
-        (place) => place.marca === "Fainoase"
-      );
-      setPlaces(filteredPlaces);
-      setLoading(false);
-    });
-  }, []);
-
-  useEffect(() => {
-    const cartData = localStorage.getItem("cart");
-    if (cartData) {
-      const parsedCartItems = JSON.parse(cartData);
-      setCartQuantity(parsedCartItems.length); // Update cartQuantity based on the length of parsedCartItems
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    if (window.pageYOffset > 0) {
+      window.scrollTo(0, 0);
     }
-  }, []);
+  };
 
   const addToCart = (place, quantity) => {
+    setLoadingPlaceId(place._id);
+    setLoading(true);
+
     const updatedPlace = { ...place, quantity: quantity || 1 }; // Set default quantity to 1 if not provided
     let updatedCart = localStorage.getItem("cart");
     if (!updatedCart) {
@@ -63,10 +58,17 @@ function Fructe() {
     }
 
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCartQuantity(updatedCart.length); // Update cartQuantity after adding item to the cart
+    setCart(updatedCart);
+
+    // Call updateCartQuantity with the new cart quantity
+    updateCartQuantity(updatedCart.length);
+
+    setTimeout(() => {
+      setLoading(false);
+      setLoadingPlaceId(null);
+    }, 1000);
   };
 
-  
   const handleDecreaseQuantity = (place) => {
     if (place.quantity > 1) {
       place.quantity -= 1;
@@ -79,17 +81,17 @@ function Fructe() {
     setPlaces([...places]);
   };
 
+  useEffect(() => {
+    if (cartLinkRef.current) {
+      cartLinkRef.current.forceUpdate();
+    }
+  }, [cart]);
+
   return (
     <>
       <div className="top"></div>
       <div className="main2">
         <div className="container">
-        {loading ? (
-          <div className="loader">
-        <div className="spinner"> </div>
-        <span className="loading-text">Lenes Automobile</span>
-      </div>
-       ) : (
           <div className="details container">
             <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
               {currentPlaces.length > 0 &&
@@ -112,81 +114,101 @@ function Fructe() {
                         <h4>{place.title}</h4>
                         <div className="row pl-2 pr-2">
                            
-                          <div className="quantity-control" >
-  <div className="quantity-btn-container" style={{
-    display:"flex",
-    flexWrap:" nowrap",
-    alignContent: "flex-end",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    background: "#d3d3d3",
-    borderRadius: '10%',
-    alignItems: "center",}}>
-    <button
-      className="quantity-btn"
-      style={{
-        backgroundColor: 'rgb(154 154 154)',
-        color: 'white',
-        padding: '5px',
-        border: 'none',
-        borderRadius: '10%',
-        cursor: 'pointer',
-        marginRight: '5px',
-      }}
-      onClick={() => handleDecreaseQuantity(place)}
-    >
-      -
-    </button>
-    <div className="quantity">{place.quantity || 1}</div>
-    
-    <button
-      className="quantity-btn"
-      style={{
-        backgroundColor: 'rgb(154 154 154)',
-        color: 'white',
-        padding: '5px',
-        border: 'none',
-        borderRadius: '10%',
-        cursor: 'pointer',
-        marginLeft: '5px',
-      }}
-      onClick={() => handleIncreaseQuantity(place)}
-    >
-      +
-    </button>
-  </div>
-  <div  style={{display:"flex",
-    flexWrap:" wrap",
-    alignContent: "flex-end",
-    justifyContent: "space-around",
-    alignItems: "center",}}>{place.km  } lei</div>
-  <button
-    style={{
-      
-      padding: ' 4px',
-      width: '300px',
-      
-    }}
-    className="btn1"
-    onClick={() => addToCart(place, place.quantity)}
-  >
-    Adauga in cos
-  </button>
-</div>
+                            <div className="quantity-control">
+                              <div
+                                className="quantity-btn-container"
+                                style={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  alignContent: "flex-end",
+                                  justifyContent: "space-between",
+                                  background: "#d3d3d3",
+                                  borderRadius: "10%",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <button
+                                  className="quantity-btn"
+                                  style={{
+                                    backgroundColor: "rgb(154 154 154)",
+                                    color: "white",
+                                    padding: "5px",
+                                    border: "none",
+                                    borderRadius: "10%",
+                                    cursor: "pointer",
+                                    marginRight: "5px",
+                                  }}
+                                  onClick={() =>
+                                    handleDecreaseQuantity(place)
+                                  }
+                                >
+                                  -
+                                </button>
+                                <div className="quantity">
+                                  {place.quantity || 1}
+                                </div>
+                                <button
+                                  className="quantity-btn"
+                                  style={{
+                                    backgroundColor: "rgb(154 154 154)",
+                                    color: "white",
+                                    padding: "5px",
+                                    border: "none",
+                                    borderRadius: "10%",
+                                    cursor: "pointer",
+                                    marginLeft: "5px",
+                                  }}
+                                  onClick={() =>
+                                    handleIncreaseQuantity(place)
+                                  }
+                                >
+                                  +
+                                </button>
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  alignContent: "flex-end",
+                                  justifyContent: "space-around",
+                                  alignItems: "center",
+                                }}
+                              >
+                                {place.km} lei
+                              </div>
 
-                       
+                               
+                              <button
+                                style={{
+                                  padding: " 4px",
+                                  width: "300px",
+                                }}
+                                className="btn1"
+                                onClick={() => addToCart(place, place.quantity)}
+                              >
+                              {loadingPlaceId === place._id ? (
+                            <div className="loading-animation">
+                            <div className="spinner"></div>
+                          
+                            </div>
+                          ) : (
+                               <span>Adauga in cos</span> 
+                                )}
+                              </button>
+                              
+                            </div>
+                          
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                ))}
+            </div>
+          </div>
         </div>
       </div>
-       )}
-    </div>
-  </div>
-</>
-);
+    </>
+  );
 }
 
-export default Fructe;
+export default Fainoase;
