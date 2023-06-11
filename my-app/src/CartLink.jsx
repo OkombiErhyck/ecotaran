@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import cos from "./images/cos.png";
+import cos2 from "./images/cos2.png";
 import { UserContext } from "./UserContext";
 
 const CartLink = () => {
@@ -27,12 +27,12 @@ const CartLink = () => {
     <div className="navbar-left" key={refreshKey}>
      {isLoading ? (
             <div className="loading-animation">
-                              <img  className="spinner1" src={cos} alt="cos" /> 
+                              <img  className="spinner1" src={cos2} alt="cos" /> 
                             
                             </div>              
         ) : (
       <Link to="/CartPage" className="nav-link">
-        <img src={cos} alt="cos" />
+        <img style={{height:"4vh", width:"auto"}} src={cos2} alt="cos" />
         
           <span className="cart-quantity">{cartQuantity}</span>
         

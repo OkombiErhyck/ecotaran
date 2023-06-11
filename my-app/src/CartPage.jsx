@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Image from './image';
 import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
+import carp from "./images/shopping-cart.png";
 
 const CartPage = () => {
   const { cart, setCart } = useContext(UserContext);
@@ -39,11 +40,15 @@ const CartPage = () => {
   }, []);
 
   return (
+    <> 
     <div style={containerStyle}>
-      <h1 style={headerStyle}>Cos de Cumparaturi</h1>
-      {cart.length === 0 ? (
-        <p style={emptyCartStyle}>Cosul tau este gol.</p>
-      ) : (
+                <h1 style={headerStyle}>Cos de Cumparaturi</h1>
+                {cart.length === 0 ? (
+                  <div style={emptyCartStyle}>
+                    <p>Cosul tau este gol.</p>
+                    <img style={{height:"44vh", width:"auto"}} src={carp} alt="carp" /> 
+                  </div>
+                ) : (
         <div>
           {cart.map((place) => (
             <div key={place.id} style={cartItemStyle}>
@@ -98,6 +103,7 @@ const CartPage = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

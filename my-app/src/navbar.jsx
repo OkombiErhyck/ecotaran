@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
-import cos from "./images/cos.png";
+import cos2 from "./images/cos2.png";
 import CartLink from "./CartLink";
 
 import "./navbar.css";

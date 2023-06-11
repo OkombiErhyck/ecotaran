@@ -73,7 +73,7 @@ export default function Details() {
   <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/fructe" }  className="link-no-underline" >
           <img
             src={fruits}
@@ -83,11 +83,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>Fructe</h4>
@@ -100,7 +100,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/legume" }  className="link-no-underline" >
           <img
             src={legume}
@@ -110,11 +110,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>Legume</h4>
@@ -129,7 +129,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/lactate" }  className="link-no-underline" >
           <img
             src={fruits}
@@ -139,11 +139,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"  }}
             className="btn1"
           >
             <h4>Lactate</h4>
@@ -158,7 +158,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/carne" }  className="link-no-underline" >
           <img
             src={meat}
@@ -168,11 +168,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>Carne si preparate din carne</h4>
@@ -187,7 +187,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/plescoi" }  className="link-no-underline" >
           <img
             src={fruits}
@@ -197,11 +197,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>Produse Plescoi</h4>
@@ -216,7 +216,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/miere" }  className="link-no-underline" >
           <img
             src={fruits}
@@ -226,11 +226,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>Miere</h4>
@@ -246,7 +246,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/fainoase" }  className="link-no-underline" >
           <img
             src={fruits}
@@ -256,11 +256,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>Fainoase</h4>
@@ -276,7 +276,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/bauturi" }  className="link-no-underline" >
           <img
             src={fruits}
@@ -286,11 +286,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>Bauturi</h4>
@@ -306,7 +306,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/camaraeco" }  className="link-no-underline" >
           <img
             src={fruits}
@@ -316,11 +316,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>CamaraEco</h4>
@@ -336,7 +336,7 @@ export default function Details() {
     <div className="details container">
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
-        <div className="box_content">
+       <div className="box_content" style={{padding:"0px"}}>
         <Link to={"/vegan" }  className="link-no-underline" >
           <img
             src={fruits}
@@ -346,11 +346,11 @@ export default function Details() {
               height: "270px",
               width: "100%",
               objectFit: "cover",
-              borderRadius: "5px",
+              borderRadius: "0px",
             }}
           />
           <button
-            style={{ background: "#cccccc00", color: "black" }}
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
             <h4>Vegan</h4>
