@@ -153,27 +153,24 @@ export default function PlacePage() {
                   marginBottom: 0,
                 }}
               >
-                {place.km} lei kg
+                {place.km} lei 
               </span>{" "}
               {place.title}
             </h2>
             <div style={{ color: "wheat" }}>
             {place.marca} | {place.model}|  
-              
-              <button
-                onClick={addToCart}
-                style={{
-                  marginLeft: "10px",
-                  padding: "-1px",
-                  backgroundColor: "wheat",
-                  color: "black",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                Add to Cart
-              </button>
+            <button
+                                style={{
+                                  padding: " 4px",
+                                  width: "300px",
+                                }}
+                                className="btn1"
+                                onClick={() => addToCart(place, place.quantity)}
+                              >
+                              
+                               <span>Adauga in cos</span> 
+                             
+                              </button>
             </div>
           </div>
           <br />

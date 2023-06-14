@@ -4,6 +4,8 @@ import "./IndexPage.css";
 import { UserContext } from "./UserContext";
 import { CartContext } from "./CartContext";
 import CartLink from "./CartLink";
+import { Link } from "react-router-dom";
+
 
 function Fructe() {
   const { cart, setCart } = useContext(UserContext);
@@ -98,6 +100,7 @@ function Fructe() {
                 currentPlaces.map((place) => (
                   <div className="col" key={place._id}>
                     <div className="box card-body p-0 shadow-sm mb-5">
+                    <Link to={"/place/" + place._id} key={place._id} className="link-no-underline"> 
                       {place.photos.length > 0 && (
                         <img
                           src={place.photos[0]}
@@ -110,6 +113,7 @@ function Fructe() {
                           }}
                         />
                       )}
+                      </Link>
                       <div className="box_content">
                         <h4>{place.title}</h4>
                         <div className="row pl-2 pr-2">
