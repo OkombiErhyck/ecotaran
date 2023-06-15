@@ -122,7 +122,7 @@ export default function PlacesPage() {
                       {place.photos.length > 0 && (
                         <Image src={place.photos[0]} className="img-fluid" style={{height: "270px", width: "100%", objectFit: "cover"}}/>
                       )}
-                      <div className="box_content">
+                      <div className="box_content" style={{display:"contain"}}>
                      <h4> {place.title}</h4>
                      <div className="row pl-2 pr-2">
     <div > 
