@@ -21,7 +21,7 @@ if (!ready) {
 }
 
 if (ready && !user) {
-    return <Navigate to={"/"}/>
+    return <Navigate to={"/login"}/>
 }
 
 async function logout() {

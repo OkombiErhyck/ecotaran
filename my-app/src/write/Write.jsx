@@ -128,11 +128,11 @@ if (id) {
     id, ...placeData
      
   });
-  setRedirect("/");
+  setRedirect("/userpage");
 } else {
   //new place
   await axios.post("/places", placeData);
-  setRedirect("/");
+  setRedirect("/userpage");
 }
 }
 
