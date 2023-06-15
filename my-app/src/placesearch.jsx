@@ -119,7 +119,7 @@ const PlaceSearch = () => {
         onChange={handleChange}
       />
 
-      <div className="top"></div>
+      <div className="top" style={{background:"white"}}></div>
       <div className="main2">
         <div className="container">
           <div className="details container">
