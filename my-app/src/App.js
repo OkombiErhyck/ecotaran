@@ -36,8 +36,9 @@ const Checkout = lazy(() => import('./checkout'));
 const Orders = lazy(() => import('./orders'));
 const Details2 = lazy(() => import('./details2'));
 const CartLink = lazy(() => import('./CartLink'));
+const Placesearch = lazy(() => import('./placesearch'));
 
-axios.defaults.baseURL = 'https://ecotaran-nigs.vercel.app';
+axios.defaults.baseURL = 'http://localhost:4000';
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -97,7 +98,8 @@ function App() {
       import('./checkout'),
       import('./orders'),
       import('./details2'),
-      import('./CartLink')
+      import('./CartLink'),
+      import('./placesearch')
     ]).catch((error) => {
       console.error('Error preloading components:', error);
     });
@@ -149,6 +151,7 @@ function App() {
                 <Route path='/fainoase' element={<Fainoase />} />
                 <Route path='/plescoi' element={<Plescoi />} />
                 <Route path='/CartPage' element={<CartPage cart={cart} />} />
+                <Route path='/placesearch' element={<Placesearch />} />
                 <Route
                   path="/checkout"
                   element={<Checkout setPreviousOrders={handleSetPreviousOrders} />}

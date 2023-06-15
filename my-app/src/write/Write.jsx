@@ -143,7 +143,7 @@ if (redirect) {
 const generateModelOptions = () => {
   const selectedCar = cars.find(car => car.brand === marca);
   if (!selectedCar) {
-    return <option  value="">Selecteaza model-ul</option>;
+    return <option  value="">Selecteaza </option>;
   }
   return (
     <>
@@ -168,7 +168,7 @@ const generateModelOptions = () => {
           <h5>nume</h5>
           <input
               className="writeInput"
-              placeholder="30000"
+              placeholder="nume si gramaj(ex:400g)"
               type="text"
               autoFocus={true}
               value={title} onChange={ev => setTitle(ev.target.value)}
@@ -217,7 +217,7 @@ const generateModelOptions = () => {
           <h4>Descriere</h4>
           <textarea
   className="writeInput writeText"
-  placeholder="Detalii despre vehicul"
+  placeholder="Detalii despre produs"
   type="text"
   value={description}
   onChange={ev => setDescription(ev.target.value)}

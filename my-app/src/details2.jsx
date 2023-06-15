@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./IndexPage.css"
+import PlaceSearch from './placesearch'; //
 import { Link } from "react-router-dom";
 import Image from "./image";
 import meat from "./images/mez.jpg";
@@ -36,6 +37,7 @@ export default function Details() {
       })
       .catch(error => console.error(error));
   }, []);
+  
 
   // Function to filter places based on search query
   const filterPlaces = (query) => {
@@ -61,14 +63,7 @@ export default function Details() {
   return(
     <div className="main2 container" style={{marginTop:"100px",}}>
 
-<input
-            type="text"
-            className="form-control"
-            placeholder="Search places"
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-          /> 
-
+<PlaceSearch  /> 
   <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4" style={{padding:"20px"}}>
   <div className="details container">
     <div className="col">
