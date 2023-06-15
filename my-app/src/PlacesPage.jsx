@@ -34,13 +34,13 @@ export default function PlacesPage() {
 
   return (
     <>
-      <div className="top"></div>
+      <div className="top" style={{marginTop:"80px"}}></div>
 
       <div className="main2"> 
       <div className="filter-container">
         
 
-        <div className="marca-buttons">
+        <div className="marcas-buttons">
   <button
     onClick={() => setSelectedMarca('Fructe')}
     className={`marca-button ${selectedMarca === 'Fructe' ? 'active' : ''}`}
@@ -54,10 +54,40 @@ export default function PlacesPage() {
     Legume
   </button>
   <button
-    onClick={() => setSelectedMarca('Mezeluri')}
-    className={`marca-button ${selectedMarca === 'Mezeluri' ? 'active' : ''}`}
+    onClick={() => setSelectedMarca('Carne')}
+    className={`marca-button ${selectedMarca === 'Carne' ? 'active' : ''}`}
   >
-    Mezeluri
+    Carne 
+  </button>
+  <button
+    onClick={() => setSelectedMarca('Bauturi')}
+    className={`marca-button ${selectedMarca === 'Bauturi' ? 'active' : ''}`}
+  >
+    Bauturi
+  </button>
+  <button
+    onClick={() => setSelectedMarca('Pleascoi')}
+    className={`marca-button ${selectedMarca === 'Pleascoi' ? 'active' : ''}`}
+  >
+    Pleascoi
+  </button>
+  <button
+    onClick={() => setSelectedMarca('Vegan')}
+    className={`marca-button ${selectedMarca === 'Vegan' ? 'active' : ''}`}
+  >
+    Vegan
+  </button>
+  <button
+    onClick={() => setSelectedMarca('Fainoase')}
+    className={`marca-button ${selectedMarca === 'Fainoase' ? 'active' : ''}`}
+  >
+    Fainoase
+  </button>
+  <button
+    onClick={() => setSelectedMarca('CamaraEco')}
+    className={`marca-button ${selectedMarca === 'CamaraEco' ? 'active' : ''}`}
+  >
+    Camaraeco
   </button>
   <button
     onClick={() => setSelectedMarca('Lactate')}

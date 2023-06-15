@@ -1,10 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams } from "react-router-dom";
 import "./PlacePlage.css";
 import Carousel from "react-bootstrap/Carousel";
 import Image from "./image";
 import Details from './details';
+
+import { UserContext } from "./UserContext";
+import { CartContext } from "./CartContext";
 import Carvertical from "./images/menu.png";
 
 export default function PlacePage() {
@@ -12,8 +15,11 @@ export default function PlacePage() {
   const [place, setPlace] = useState(null);
   const [showPerks, setShowPerks] = useState(false);
   const [showMore, setShowMore] = useState(false);
-
+  const { cart, setCart } = useContext(UserContext);
+  const { updateCartQuantity } = useContext(CartContext);
+  const cartLinkRef = useRef(null);
   const [vin, setVin] = useState('');
+  const [quantity, setQuantity] = useState(1); // Track the quantity
 
   const handleVinChange = (event) => {
     setVin(event.target.value);
@@ -24,9 +30,6 @@ export default function PlacePage() {
     window.location.href = `https://www.carvertical.com/ro/landing/v3?utm_source=aff&a=LSAuto&b=0eb206ae`;
   };
 
-  // Add place to cart
-   
-  
   useEffect(() => {
     if (!id) {
       return;
@@ -87,7 +90,7 @@ export default function PlacePage() {
   const handleShare = async () => {
     try {
       await navigator.share({
-        title: place.title ,
+        title: place.title,
         text: place.description,
         url: window.location.href,
       });
@@ -96,18 +99,30 @@ export default function PlacePage() {
     }
   };
 
-
   const addToCart = () => {
-    let cart = localStorage.getItem('cart');
-    if (!cart) {
-      cart = [];
+    let updatedCart = localStorage.getItem('cart');
+    if (!updatedCart) {
+      updatedCart = [];
     } else {
-      cart = JSON.parse(cart);
+      updatedCart = JSON.parse(updatedCart);
     }
 
-    cart.push(place);
+    // Check if the place is already in the cart
+    const existingPlace = updatedCart.find((item) => item.id === place.id);
 
-    localStorage.setItem('cart', JSON.stringify(cart));
+    if (existingPlace) {
+      // If the place already exists in the cart, update its quantity
+      existingPlace.quantity += quantity;
+    } else {
+      // If the place is not in the cart, add it with the specified quantity
+      place.quantity = quantity;
+      updatedCart.push(place);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+    // Update the cart context with the new cart data
+    setCart(updatedCart);
 
     alert('Place added to cart!');
   };
@@ -115,25 +130,25 @@ export default function PlacePage() {
   if (!place) {
     return null;
   }
-   
+
   return (
     <>
       <div className="main3">
         <div className="carousel-container">
-        <Carousel className="carousel" style={{borderBottom: "solid 1px var(--main)"}}>
+          <Carousel className="carousel" style={{ borderBottom: "solid 1px var(--main)" }}>
             {place.photos?.map((photo, index) => (
               <Carousel.Item key={index}>
                 <Image
                   className="d-block w-100"
                   src={photo}
                   alt={"Slide " + (index + 1)}
-                  style={{ objectFit: "contain",maxHeight: "546px" }}
+                  style={{ objectFit: "contain", maxHeight: "546px" }}
                 />
               </Carousel.Item>
             ))}
           </Carousel>
         </div>
-        
+
         <div className="m2">
           <div id="price" className="container">
             <h2
@@ -153,48 +168,85 @@ export default function PlacePage() {
                   marginBottom: 0,
                 }}
               >
-                {place.km} lei 
+                {place.km} lei
               </span>{" "}
               {place.title}
             </h2>
             <div style={{ color: "wheat" }}>
-            {place.marca} | {place.model}|  
-            <button
+              {place.marca} | {place.model}|
+              <div className="quantity-container" >
+              <div
+                                className="quantity-btn-container"
                                 style={{
-                                  padding: " 4px",
-                                  width: "300px",
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  color:"black",
+                                  alignContent: "flex-end",
+                                  justifyContent: "space-between",
+                                  background: "#fffff",
+                                  borderRadius: "10%",
+                                  alignItems: "center",
                                 }}
-                                className="btn1"
-                                onClick={() => addToCart(place, place.quantity)}
                               >
-                              
-                               <span>Adauga in cos</span> 
-                             
-                              </button>
+                <button
+                style={{
+                                    backgroundColor: "rgb(154 154 154)",
+                                    color: "white",
+                                    padding: "5px",
+                                    border: "none",
+                                    borderRadius: "10%",
+                                    cursor: "pointer",
+                                    marginLeft: "0px",
+                                  }}
+                  className="quantity-btn"
+                  onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
+                >
+                  -
+                </button>
+                <span className="quantity">{quantity}</span>
+                <button
+                style={{
+                                    backgroundColor: "rgb(154 154 154)",
+                                    color: "white",
+                                    padding: "5px",
+                                    border: "none",
+                                    borderRadius: "10%",
+                                    cursor: "pointer",
+                                    marginLeft: "5px",
+                                  }}
+                  className="quantity-btn"
+                  onClick={() => setQuantity(quantity + 1)}
+                >
+                  +
+                </button>
+              </div>
+              </div>
+              <button
+                style={{
+                  padding: " 4px",
+                  width: "300px",
+                }}
+                className="btn1"
+                onClick={addToCart}
+              >
+                <span>Adauga in cos</span>
+              </button>
             </div>
           </div>
           <br />
           <div className="containere"></div>
           <div className="desContainer">
             <h3>
-             
-               
-              
-            </h3>
-            <br />
-            
               <ul className="perksList noDotList">
                 {place.perks.map((perk, index) => (
                   <li key={index}>{perk}</li>
                 ))}
               </ul>
-          
+            </h3>
             <h3>DESCRIERE</h3>
             <div className="descriptionContainer">
               <p style={{ whiteSpace: "pre-line" }}>
-                {showMore
-                  ? place.description
-                  : trimDescription(place.description)}
+                {showMore ? place.description : trimDescription(place.description)}
               </p>
               {place.description.length > 400 && !showMore && (
                 <button onClick={handleShowMore}>Show more</button>
@@ -208,4 +260,4 @@ export default function PlacePage() {
       </div>
     </>
   );
-};
+}
