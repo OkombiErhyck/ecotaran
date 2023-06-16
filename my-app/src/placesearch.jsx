@@ -118,11 +118,13 @@ const PlaceSearch = () => {
   value={searchTerm}
   onChange={handleChange}
   style={{
-    padding: '8px 12px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
+    padding: '10px 15px',
+    borderRadius: '25px',
+    border: '2px solid #ebebeb',
+    fontSize: '18px',
     outline: 'none',
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+    transition: 'box-shadow 0.3s ease-in-out',
     width: '300px',
     maxWidth: '100%',
   }}
