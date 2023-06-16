@@ -36,8 +36,8 @@ const PlaceSearch = () => {
   };
 
   const hasThreeConsecutiveLetters = (title, searchTerm) => {
-    for (let i = 0; i <= title.length - 3; i++) {
-      if (title.slice(i, i + 3).includes(searchTerm)) {
+    for (let i = 0; i <= title.length - 8; i++) {
+      if (title.slice(i, i + 8).includes(searchTerm)) {
         return true;
       }
     }
