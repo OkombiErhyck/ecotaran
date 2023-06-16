@@ -112,12 +112,22 @@ const PlaceSearch = () => {
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search by title..."
-        value={searchTerm}
-        onChange={handleChange}
-      />
+     <input
+  type="text"
+  placeholder="Search by title..."
+  value={searchTerm}
+  onChange={handleChange}
+  style={{
+    padding: '8px 12px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+    fontSize: '16px',
+    outline: 'none',
+    width: '300px',
+    maxWidth: '100%',
+  }}
+/>
+
 
       <div className="top" style={{background:"white"}}></div>
       <div className="main2">
