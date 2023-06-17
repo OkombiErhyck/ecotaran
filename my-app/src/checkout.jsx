@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import sendEmail from './sendEmail';
 import './checkout.css';
 
 const CheckoutPage = ({ cartItems, total }) => {
@@ -11,6 +10,7 @@ const CheckoutPage = ({ cartItems, total }) => {
     address: '',
     city: '',
     zipCode: '',
+   
   });
 
   const handleChange = (e) => {
@@ -23,10 +23,10 @@ const CheckoutPage = ({ cartItems, total }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const storedCartItems = JSON.parse(window.localStorage.getItem('cart'));
-
+  
       const response = await axios.post('/orders', {
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -34,19 +34,18 @@ const CheckoutPage = ({ cartItems, total }) => {
         address: formData.address,
         city: formData.city,
         zipCode: formData.zipCode,
+       
         cartItems: storedCartItems ? [...storedCartItems] : [],
       });
-
-      // Send email
-      await sendEmail(formData);
-
+  
       window.localStorage.removeItem('cart');
-
+  
       window.location.href = '/';
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   return (
     <div className="checkout-container">
@@ -97,6 +96,7 @@ const CheckoutPage = ({ cartItems, total }) => {
             onChange={handleChange}
           />
         </label>
+       
         <label>
           nr. tel.:
           <input
