@@ -111,7 +111,11 @@ const PlaceSearch = () => {
   }, [searchTerm]);
 
   return (
-    <div>
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end"
+  }}>
      <input
   type="text"
   placeholder="Search by title..."
