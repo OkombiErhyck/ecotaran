@@ -114,7 +114,8 @@ const PlaceSearch = () => {
     <div style={{
       display: "flex",
       alignItems: "center",
-      justifyContent: "flex-end"
+      justifyContent: "center",
+      height: '100vh'
   }}>
      <input
   type="text"
