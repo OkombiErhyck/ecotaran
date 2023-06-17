@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import sendEmail from './sendEmail';
 import './checkout.css';
 
 const CheckoutPage = ({ cartItems, total }) => {
@@ -20,26 +21,13 @@ const CheckoutPage = ({ cartItems, total }) => {
     }));
   };
 
-  const sendSMS = async () => {
-    try {
-      await axios.post('/send-sms', {
-        phoneNumber: '+40754251033',
-        message: 'o noua comanda a fost plasata!',
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const storedCartItems = JSON.parse(
-        window.localStorage.getItem('cart')
-      );
+      const storedCartItems = JSON.parse(window.localStorage.getItem('cart'));
 
-      await axios.post('/orders', {
+      const response = await axios.post('/orders', {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -49,9 +37,10 @@ const CheckoutPage = ({ cartItems, total }) => {
         cartItems: storedCartItems ? [...storedCartItems] : [],
       });
 
-      window.localStorage.removeItem('cart');
+      // Send email
+      await sendEmail(formData);
 
-      await sendSMS();
+      window.localStorage.removeItem('cart');
 
       window.location.href = '/';
     } catch (error) {
@@ -63,9 +52,62 @@ const CheckoutPage = ({ cartItems, total }) => {
     <div className="checkout-container">
       <h1 className="checkout-title">Checkout</h1>
       <form onSubmit={handleSubmit} className="checkout-form">
-        {/* Rest of your form */}
+        <label>
+          Nume:
+          <input
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Prenume:
+          <input
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Adresa:
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Oras:
+          <input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          nr. tel.:
+          <input
+            type="text"
+            name="zipCode"
+            value={formData.zipCode}
+            onChange={handleChange}
+          />
+        </label>
         <button type="submit" className="place-order-button">
-          Place Order
+          Plaseaza Comanda
         </button>
       </form>
     </div>

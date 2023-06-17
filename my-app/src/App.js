@@ -5,6 +5,8 @@ import { UserContextProvider } from './UserContext';
 import { CartProvider } from "./CartContext";
 import './App.css';
 
+
+
 const Navbar = lazy(() => import('./navbar'));
 const Footer = lazy(() => import('./footer/footer'));
 const Home = lazy(() => import('./home'));
