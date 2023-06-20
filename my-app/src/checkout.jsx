@@ -53,7 +53,7 @@ const CheckoutPage = ({ cartItems, total }) => {
       <form onSubmit={handleSubmit} className="checkout-form">
         <label>
           Nume:
-          <input
+          <input style={{borderRadius:"10px"}}
             type="text"
             name="firstName"
             value={formData.firstName}
@@ -62,7 +62,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         </label>
         <label>
           Prenume:
-          <input
+          <input style={{borderRadius:"10px"}}
             type="text"
             name="lastName"
             value={formData.lastName}
@@ -71,7 +71,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         </label>
         <label>
           Email:
-          <input
+          <input style={{borderRadius:"10px"}}
             type="email"
             name="email"
             value={formData.email}
@@ -80,7 +80,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         </label>
         <label>
           Adresa:
-          <input
+          <input  style={{borderRadius:"10px"}}
             type="text"
             name="address"
             value={formData.address}
@@ -89,7 +89,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         </label>
         <label>
           Oras:
-          <input
+          <input  style={{borderRadius:"10px"}}
             type="text"
             name="city"
             value={formData.city}
@@ -99,7 +99,7 @@ const CheckoutPage = ({ cartItems, total }) => {
        
         <label>
           nr. tel.:
-          <input
+          <input style={{borderRadius:"10px"}}
             type="text"
             name="zipCode"
             value={formData.zipCode}
