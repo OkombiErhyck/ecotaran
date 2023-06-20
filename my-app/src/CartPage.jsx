@@ -104,7 +104,7 @@ const CartPage = () => {
                 </div>
               </div>
             ))}
-            <div style={{fontSize:"1.5rem" }} >
+             
             <div style= {totalContainerStyle}>
               <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
               <p style={totalStyle}>Total Produse: {calculateTotalItems()}</p>
@@ -113,7 +113,7 @@ const CartPage = () => {
               <Link to="/checkout">
                 <button style={checkoutButtonStyle}>Checkout</button>
               </Link>
-            </div>
+            
             </div>
           </div>
         )}
@@ -184,7 +184,7 @@ const removeButtonStyle = {
 };
 
 const totalContainerStyle = {
-  marginTop: '2rem',
+  marginTop: '1.5rem',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-end',
