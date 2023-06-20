@@ -19,7 +19,7 @@ const Footer2 = () => {
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <i className="fa fa-youtube" aria-hidden="true"></i>
               <span> - YouTube</span>
             </a>
