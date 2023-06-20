@@ -6,6 +6,7 @@ import carp from "./images/shopping-cart.png";
 
 const CartPage = () => {
   const { cart, setCart } = useContext(UserContext);
+  const [deliveryCost, setDeliveryCost] = useState(19); // Default delivery cost is 19
 
   const removeFromCart = (title) => {
     const updatedCartItems = cart.filter((place) => place.title !== title);
@@ -39,75 +40,85 @@ const CartPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    // Update delivery cost based on the total value
+    const totalKm = calculateTotalKm();
+    if (totalKm >= 350) {
+      setDeliveryCost(0);
+    } else {
+      setDeliveryCost(19);
+    }
+  }, [cart]);
+
   return (
-    <> 
-    <div style={containerStyle}>
-                <h1 style={headerStyle}>Cos de Cumparaturi</h1>
-                {cart.length === 0 ? (
-                  <div style={emptyCartStyle}>
-                    <p>Cosul tau este gol.</p>
-                    <img style={{height:"44vh", width:"auto"}} src={carp} alt="carp" /> 
+    <>
+      <div style={containerStyle}>
+        <h1 style={headerStyle}>Cos de Cumparaturi</h1>
+        {cart.length === 0 ? (
+          <div style={emptyCartStyle}>
+            <p>Cosul tau este gol.</p>
+            <img style={{ height: "44vh", width: "auto" }} src={carp} alt="carp" />
+          </div>
+        ) : (
+          <div>
+            {cart.map((place) => (
+              <div key={place.id} style={cartItemStyle}>
+                <div style={imageContainerStyle}>
+                  {place.photos.length > 0 && (
+                    <Image
+                      src={place.photos[0]}
+                      alt={place.title}
+                      className="img-fluid"
+                      style={imageStyle}
+                    />
+                  )}
+                </div>
+                <div style={detailsContainerStyle}>
+                  <h3>{place.title}</h3>
+                  <p style={priceStyle}>Price: Lei {place.km}</p>
+                  <div style={quantityContainerStyle}>
+                    <button style={quantityButtonStyle} onClick={() => increaseQuantity(place.title)}>
+                      +
+                    </button>
+                    <span style={quantityStyle}>{place.quantity}</span>
+                    <button
+                      style={quantityButtonStyle}
+                      onClick={() => {
+                        if (place.quantity > 1) {
+                          setCart((prevCart) =>
+                            prevCart.map((prevItem) =>
+                              prevItem.title === place.title ? { ...prevItem, quantity: prevItem.quantity - 1 } : prevItem
+                            )
+                          );
+                        } else {
+                          removeFromCart(place.title);
+                        }
+                      }}
+                    >
+                      -
+                    </button>
                   </div>
-                ) : (
-        <div>
-          {cart.map((place) => (
-            <div key={place.id} style={cartItemStyle}>
-              <div style={imageContainerStyle}>
-                {place.photos.length > 0 && (
-                  <Image
-                    src={place.photos[0]}
-                    alt={place.title}
-                    className="img-fluid"
-                    style={imageStyle}
-                  />
-                )}
-              </div>
-              <div style={detailsContainerStyle}>
-                <h3>{place.title}</h3>
-                <p style={priceStyle}>Price: Lei {place.km}</p>
-                <div style={quantityContainerStyle}>
-                  <button style={quantityButtonStyle} onClick={() => increaseQuantity(place.title)}>
-                    +
-                  </button>
-                  <span style={quantityStyle}>{place.quantity}</span>
-                  <button
-                    style={quantityButtonStyle}
-                    onClick={() => {
-                      if (place.quantity > 1) {
-                        setCart((prevCart) =>
-                          prevCart.map((prevItem) =>
-                            prevItem.title === place.title ? { ...prevItem, quantity: prevItem.quantity - 1 } : prevItem
-                          )
-                        );
-                      } else {
-                        removeFromCart(place.title);
-                      }
-                    }}
-                  >
-                    -
+                  <button style={removeButtonStyle} onClick={() => removeFromCart(place.title)}>
+                    Sterge din cos
                   </button>
                 </div>
-                <button style={removeButtonStyle} onClick={() => removeFromCart(place.title)}>
-                  Sterge din cos
-                </button>
               </div>
+            ))}
+            <div style={totalContainerStyle}>
+              <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
+              <p style={totalStyle}>Total Produse: {calculateTotalItems()}</p>
+              <p style={totalStyle}>Cost Livrare: {deliveryCost} Lei</p>
+              <h3 style={totalStyle}>Total Plata: {calculateTotalKm() + deliveryCost} Lei</h3>
+              <Link to="/checkout">
+                <button style={checkoutButtonStyle}>Checkout</button>
+              </Link>
             </div>
-          ))}
-          <div style={totalContainerStyle}>
-            <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
-            <p style={totalStyle}>Total Produse: {calculateTotalItems()}</p>
-            <Link to="/checkout">
-              <button style={checkoutButtonStyle}>Checkout</button>
-            </Link>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </>
   );
 };
-
-
 // Styles
 
 const containerStyle = {
