@@ -104,7 +104,8 @@ const CartPage = () => {
                 </div>
               </div>
             ))}
-            <div style={totalContainerStyle}>
+            <div style={{fontSize:"1.5rem" }} >
+            <div style= {totalContainerStyle}>
               <h3 style={totalStyle}>Total: {calculateTotalKm()} Lei</h3>
               <p style={totalStyle}>Total Produse: {calculateTotalItems()}</p>
               <p style={totalStyle}>Cost Livrare: {deliveryCost} Lei</p>
@@ -112,6 +113,7 @@ const CartPage = () => {
               <Link to="/checkout">
                 <button style={checkoutButtonStyle}>Checkout</button>
               </Link>
+            </div>
             </div>
           </div>
         )}
