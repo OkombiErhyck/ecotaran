@@ -191,7 +191,7 @@ const totalContainerStyle = {
 };
 
 const totalStyle = {
-  fontSize: '2rem',
+  fontSize: '1.5rem',
   fontWeight: 'bold',
   marginBottom: '10px',
 };
