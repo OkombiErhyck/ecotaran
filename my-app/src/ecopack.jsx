@@ -214,4 +214,4 @@ function Ecopack() {
   );
 }
 
-export default Fainoase;
+export default Ecopack;
