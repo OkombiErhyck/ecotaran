@@ -51,7 +51,7 @@ export default function Write() {
                       },
                       {
                         brand: "EcoPack",
-                        models: ["", ""]
+                        models: ["bucket", "pachet"]
                         },
       
   // Add more car brands and models here...
