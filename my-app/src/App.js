@@ -29,7 +29,7 @@ const Lactate = lazy(() => import('./lactate'));
 const Carne = lazy(() => import('./Carne'));
 const Vegan = lazy(() => import('./vegan'));
 const CamaraEco = lazy(() => import('./camaraeco'));
-const EcoPack = lazy(() => import('./ecopack'));
+const Ecopack = lazy(() => import('./ecopack'));
 const Bauturi = lazy(() => import('./bauturi'));
 const Miere = lazy(() => import('./miere'));
 const Fainoase = lazy(() => import('./fainoase'));
