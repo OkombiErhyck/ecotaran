@@ -49,6 +49,10 @@ export default function Write() {
                       brand: "Vegan",
                       models: ["Branza", "Lapte"]
                       },
+                      {
+                        brand: "EcoPack",
+                        models: ["", ""]
+                        },
       
   // Add more car brands and models here...
 ]
@@ -185,7 +189,7 @@ const generateModelOptions = () => {
       ))}
     </select>
             <h5>subcategorie</h5>
-            <select
+            <select 
       className="writeInput"
       value={model}
       onChange={ev => setModel(ev.target.value)}

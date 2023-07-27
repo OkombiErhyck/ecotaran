@@ -357,6 +357,35 @@ export default function Details() {
     </div>
 
 
+    <div className="details container">
+    <div className="col">
+      <div className="box card-body p-0 shadow-sm mb-5">
+       <div className="box_content" style={{padding:"0px"}}>
+        <Link to={"/ecopack" }  className="link-no-underline" >
+          <img
+            src={fruits}
+            alt=""
+            className="img-fluid"
+            style={{
+              height: "270px",
+              width: "100%",
+              objectFit: "cover",
+              borderRadius: "0px",
+            }}
+          />
+          <button
+            style={{ background: "#cccccc00", color: "black",height:"70px"}}
+            className="btn1"
+          >
+            <h4>EcoPack</h4>
+          </button>
+          </Link>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
 
 
   </div>
