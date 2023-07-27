@@ -143,7 +143,7 @@ function App() {
                 />
                 <Route path='/reset-password' element={<ResetPassword />} />
                 <Route path='/despre' element={<Despre />} />
-                <Route path='/ecopack' element={<EcoPack />} />
+                <Route path='/ecopack' element={<Ecopack />} />
                 <Route path='/categorii' element={<Categorii />} />
                 <Route path='/legume' element={<Legume />} />
                 <Route path='/fructe' element={<Fructe />} />

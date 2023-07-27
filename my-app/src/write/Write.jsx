@@ -50,7 +50,7 @@ export default function Write() {
                       models: ["Branza", "Lapte"]
                       },
                       {
-                        brand: "EcoPack",
+                        brand: "ecopack",
                         models: ["bucket", "pachet"]
                         },
       
