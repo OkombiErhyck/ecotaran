@@ -49,6 +49,10 @@ export default function Write() {
                       brand: "Vegan",
                       models: ["Branza", "Lapte"]
                       },
+                      {
+                        brand: "EcoPack",
+                        models: ["Branza", "Lapte"]
+                        },
                      
       
   // Add more car brands and models here...
