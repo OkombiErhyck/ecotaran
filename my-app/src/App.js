@@ -29,7 +29,7 @@ const Lactate = lazy(() => import('./lactate'));
 const Carne = lazy(() => import('./Carne'));
 const Vegan = lazy(() => import('./vegan'));
 const CamaraEco = lazy(() => import('./camaraeco'));
-const Ecopack = lazy(() => import('./ecopack'));
+
 const Bauturi = lazy(() => import('./bauturi'));
 const Miere = lazy(() => import('./miere'));
 const Fainoase = lazy(() => import('./fainoase'));
@@ -75,7 +75,7 @@ function App() {
       import('./footer/footer'),
       import('./home'),
       import('./about'),
-      import('./ecopack'),
+    
       import('./login'),
       import('./signup'),
       import('./userpage'),
@@ -143,7 +143,7 @@ function App() {
                 />
                 <Route path='/reset-password' element={<ResetPassword />} />
                 <Route path='/despre' element={<Despre />} />
-                <Route path='/ecopack' element={<Ecopack />} />
+           
                 <Route path='/categorii' element={<Categorii />} />
                 <Route path='/legume' element={<Legume />} />
                 <Route path='/fructe' element={<Fructe />} />
