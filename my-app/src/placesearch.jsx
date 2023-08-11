@@ -114,7 +114,7 @@ const PlaceSearch = () => {
     <div>
      <input
   type="text"
-  placeholder="Search by title..."
+  placeholder="Gaseste gusturile copilariei"
   value={searchTerm}
   onChange={handleChange}
   style={{

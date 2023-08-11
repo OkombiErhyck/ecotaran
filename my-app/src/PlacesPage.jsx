@@ -95,6 +95,14 @@ export default function PlacesPage() {
   >
     Lactate
   </button>
+
+
+<button
+    onClick={() => setSelectedMarca('ecopack')}
+    className={`marca-button ${selectedMarca === 'ecopack' ? 'active' : ''}`}
+  >
+    ecoPack
+  </button>
 </div>
 
 

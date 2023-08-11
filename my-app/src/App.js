@@ -8,6 +8,7 @@ import './App.css';
 
 
 const Navbar = lazy(() => import('./navbar'));
+const Footer2 = lazy(() => import('./footer2'));
 const Footer = lazy(() => import('./footer/footer'));
 const Home = lazy(() => import('./home'));
 const About = lazy(() => import('./about'));
@@ -74,6 +75,7 @@ function App() {
       import('./navbar'),
       import('./footer/footer'),
       import('./home'),
+      import('./footer2'),
       import('./about'),
       import('./ecopack'),
       import('./login'),
@@ -164,6 +166,7 @@ function App() {
                 />
                 <Route path="/orders" element={<Orders orders={previousOrders} />} />
               </Routes>
+              <Footer2 />
               <Footer />
             </Suspense>
           </CartProvider>
