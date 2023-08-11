@@ -51,7 +51,7 @@ export default function Write() {
                       },
                       {
                         brand: "ecopack",
-                        models: ["Branza", "Lapte"]
+                        models: ["", ""]
                         },
                         
                      
