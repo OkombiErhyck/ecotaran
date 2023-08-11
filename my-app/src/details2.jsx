@@ -362,7 +362,7 @@ export default function Details() {
     <div className="col">
       <div className="box card-body p-0 shadow-sm mb-5">
        <div className="box_content" style={{padding:"0px"}}>
-        <Link to={"/vegan" }  className="link-no-underline" >
+        <Link to={"/ecopack" }  className="link-no-underline" >
           <img
             src={fruits}
             alt=""
@@ -378,7 +378,7 @@ export default function Details() {
             style={{ background: "#cccccc00", color: "black",height:"70px"}}
             className="btn1"
           >
-            <h4>Ecopack</h4>
+            <h4>ecoPack</h4>
           </button>
           </Link>
         </div>
