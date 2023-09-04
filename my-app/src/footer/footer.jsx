@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-column">
           <h4>Meniu</h4>
-          <a href="/home" className="nav-link">Home</a>
+          <a href="/" className="nav-link">Acasa</a>
           <a href="/details2" className="nav-link">Magazin</a>
           <a href="/contact" className="nav-link">Contact</a>
           <a href="/despre" className="nav-link">
