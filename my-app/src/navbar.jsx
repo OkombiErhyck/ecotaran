@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import MenuImg from "./images/menu.png";
-import cos2 from "./images/cos2.png";
+
 import CartLink from "./CartLink";
 
 import "./navbar.css";
-
+ 
 const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
   const [cartItems, setCartItems] = useState(
@@ -112,6 +112,9 @@ const NavBar = () => {
               <a href="/details2" className="nav-link">
                 Magazin
               </a>
+              </div>
+              <div className="nav-item"> 
+              <a href="/contact"  className="nav-link">Contact</a>
             </div>
           </div>
         </div>
