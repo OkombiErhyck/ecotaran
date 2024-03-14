@@ -94,7 +94,7 @@ const OrdersPage = () => {
               <strong>Detalii:</strong>
               <p>Nume: {order.firstName}</p>
               <p>Perioada: {order.lastName}</p>
-              <p>Tip: {order.email}</p>
+              <p>Tip: {order.motiv}</p>
               <p>Angajat al: {order.address}</p>
               <p>Functia: {order.city}</p>
               <p>Telefon: {order.zipCode}</p>
