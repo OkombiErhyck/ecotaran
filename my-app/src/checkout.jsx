@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import './checkout.css';
+import { UserContext } from './UserContext'; // Assuming you have access to the logged-in user's ID via UserContext
 
 const CheckoutPage = ({ cartItems, total }) => {
+  const { user } = useContext(UserContext); // Access the logged-in user's ID
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: '',
+    motiv: '',
     address: '',
     city: '',
     zipCode: '',
-   
   });
 
   const handleChange = (e) => {
@@ -23,35 +24,30 @@ const CheckoutPage = ({ cartItems, total }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const storedCartItems = JSON.parse(window.localStorage.getItem('cart'));
-  
+
       const response = await axios.post('/orders', {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        address: formData.address,
-        city: formData.city,
-        zipCode: formData.zipCode,
-       
+        ...formData, // Include all form data
+        status: 'Pending',
         cartItems: storedCartItems ? [...storedCartItems] : [],
+        owner: user.id, // Include the logged-in user's ID as the owner of the order
       });
-  
+
       window.localStorage.removeItem('cart');
-  
+
       window.location.href = '/';
     } catch (error) {
       console.error(error);
     }
   };
-  
 
   return (
     <div className="checkout-container">
-      <h1 className="checkout-title">Checkout</h1>
+      <h1 className="checkout-title">Formular concediu</h1>
       <form onSubmit={handleSubmit} className="checkout-form">
-        <label>
+      <label>
           Nume:
           <input style={{borderRadius:"10px"}}
             type="text"
@@ -61,7 +57,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-          Prenume:
+          Perioada:
           <input style={{borderRadius:"10px"}}
             type="text"
             name="lastName"
@@ -70,16 +66,22 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-          Email:
-          <input style={{borderRadius:"10px"}}
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </label>
+  Tip:
+  <select
+    style={{ borderRadius: "10px" }}
+    name="motiv"
+    value={formData.motiv}
+    onChange={handleChange}
+  >
+    <option value="">Selecteaza motivul cererii</option>
+    <option value="Concediu de odihna">Concediu de odihna </option>
+    <option value="Concediu fără plata">Concediu fără plata</option>
+    <option value="Concediu pentru evenimente speciale">Concediu pentru evenimente speciale</option>
+  </select>
+</label>
+
         <label>
-          Adresa:
+          Angajat al:
           <input  style={{borderRadius:"10px"}}
             type="text"
             name="address"
@@ -88,7 +90,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-          Oras:
+          Functia:
           <input  style={{borderRadius:"10px"}}
             type="text"
             name="city"
@@ -98,7 +100,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         </label>
        
         <label>
-          nr. tel.:
+          Telefon:
           <input style={{borderRadius:"10px"}}
             type="text"
             name="zipCode"
@@ -107,7 +109,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <button type="submit" className="place-order-button">
-          Plaseaza Comanda
+          Trimite cererea
         </button>
       </form>
     </div>

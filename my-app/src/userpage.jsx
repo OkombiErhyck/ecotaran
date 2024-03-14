@@ -44,31 +44,10 @@ if (redirect) {
           <div className="details container">
                 <div className="row">
                     
-                    <div className="col-lg-4 col-xs-6">
-                       <div className="box card-body p-0  shadow-sm mb-5">
-                           
-                           <div className="box_content">
-                           <a href="/placespage">
-                           <img src={PlacesPage} className="img-fluid" alt=""/>
-                            <button  className="btn1">Produsele Mele</button>
-                            </a>
-                           </div>
-                       </div>
-                    </div>
+                     
 
 
-                    <div className="col-lg-4 col-xs-6">
-                       <div className="box card-body p-0  shadow-sm mb-5">
-                          
-                           <div className="box_content">
-                           <a href="/write">
-                           <img src={Anunt} className="img-fluid" alt=""/>
-                          
-                               <button className="btn1">Adauga un produs</button>
-                           </a>
-                           </div>
-                       </div>
-                    </div>
+                    
 
                     <div className="col-lg-4 col-xs-6">
                        <div className="box card-body p-0  shadow-sm mb-5">
@@ -77,7 +56,7 @@ if (redirect) {
                            <a href="/orders">
                            <img src={toate} className="img-fluid" alt=""/>
                           
-                               <button className="btn1">Comenzi</button>
+                               <button className="btn1">Cereri de concediu</button>
                            </a>
                            </div>
                        </div>

@@ -11,6 +11,8 @@ const Navbar = lazy(() => import('./navbar'));
 
 const Footer = lazy(() => import('./footer/footer'));
 const Home = lazy(() => import('./home'));
+const Login2 = lazy(() => import('./login2'));
+const Userpage2 = lazy(() => import('./userpage2'));
 const About = lazy(() => import('./about'));
 const Login = lazy(() => import('./login'));
 const Signup = lazy(() => import('./signup'));
@@ -33,6 +35,7 @@ const CamaraEco = lazy(() => import('./camaraeco'));
 const Ecopack = lazy(() => import('./ecopack'));
 const Bauturi = lazy(() => import('./bauturi'));
 const Miere = lazy(() => import('./miere'));
+const orders2 = lazy(() => import('./orders2'));
 const Fainoase = lazy(() => import('./fainoase'));
 const Plescoi = lazy(() => import('./plescoi'));
 const CartPage = lazy(() => import('./CartPage'));
@@ -75,6 +78,8 @@ function App() {
       import('./navbar'),
       import('./footer/footer'),
       import('./home'),
+      import('./login2'),
+      import('./userpage2'),
       import('./about'),
       import('./ecopack'),
       import('./login'),
@@ -97,6 +102,7 @@ function App() {
       import('./camaraeco'),
       import('./bauturi'),
       import('./miere'),
+      import('./orders2'),
       import('./fainoase'),
       import('./plescoi'),
       import('./CartPage'),
@@ -137,6 +143,9 @@ function App() {
                 <Route path='/signup' element={<Signup />} />
                 <Route path='/details2' element={<Details2 />} />
                 <Route path='/PlacesPage' element={<PlacesPage />} />
+                <Route path='/Login2' element={<Login2 />} />
+                <Route path='/orders2' element={<orders2 />} />
+                <Route path='/Userpage2' element={<Userpage2 />} />
                 <Route path='/IndexPage' element={<IndexPage />} />
                 <Route
                   path='/place/:id'
@@ -165,7 +174,7 @@ function App() {
                 />
                 <Route path="/orders" element={<Orders orders={previousOrders} />} />
               </Routes>
-              <Footer />
+              
             </Suspense>
           </CartProvider>
         </Router>

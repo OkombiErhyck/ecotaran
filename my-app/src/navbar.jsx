@@ -82,41 +82,20 @@ const NavBar = () => {
             : "navbar navbar-expand-lg navbar-expand-md fixed-top"
         }
       >
-        <div className="navbar-left">
-          <CartLink key={refreshKey} ref={cartLinkRef} cartQuantity={cartQuantity} />
-        </div>
+       
         <div className="navbar-middle">
           <a href="/" className="navbar-brand">
-            <span>eco</span>Taran
+            <span>UP</span>Recruitment
           </a>
         </div>
-        <button
-          className={`navbar-toggler ${mobileMenuOpen ? "active" : ""}`}
-          type="button"
-          onClick={toggleNavbar}
-        >
-          <img src={MenuImg} alt="menu" />
-        </button>
+        
         <div
           className={`${
             mobileMenuOpen ? "show " : ""
           }collapse navbar-collapse justify-content-end`}
         >
-          <div className="navbar-nav">
-            <div className="nav-item">
-              <a href="/" className="nav-link">
-                Acasa
-              </a>
-            </div>
-            <div className="nav-item">
-              <a href="/details2" className="nav-link">
-                Magazin
-              </a>
-              </div>
-              <div className="nav-item"> 
-              <a href="/contact"  className="nav-link">Contact</a>
-            </div>
-          </div>
+          
+          
         </div>
       </nav>
     </>

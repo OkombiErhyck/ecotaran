@@ -1,5 +1,5 @@
-import HeaderImg from "./images/eco.jpeg";
-import LogoImg from "./images/New_Project_17.png";
+import HeaderImg from "./images/green.jpg";
+import LogoImg from "./images/logo up.png";
 import "./header.css";
 import { Link } from "react-router-dom";
 const Header = () => {
@@ -15,16 +15,16 @@ const Header = () => {
                 </div>
                 <div className="logo">
 
-                <img src={LogoImg} alt="" className="img-fluid" style={{height: "190px", width: "100%", objectFit: "cover"}}/>
+                <img src={LogoImg} alt="" className="img-fluid" style={{height: "190px", width: "100%", objectFit: "cover", borderRadius: "70%"}}/>
                   
                 </div>
                 <div className="Content">
                   <h2> 
                    
-                  Gusturi din <span>copilarie</span> !
+                  Suntem aici pentu  <span>tine</span> !
                   </h2>
-                  <Link to="/details2" className="btn">
-        Hai in <span>Magazin</span>
+                  <Link to="/checkout" className="btn">
+        Creaza cererea <span>de concediu</span>
       </Link>
                 </div>
             </div>

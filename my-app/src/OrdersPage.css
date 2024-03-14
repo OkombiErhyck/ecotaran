@@ -3,8 +3,10 @@
   }
   
   .order {
-    border: 1px solid #ccc;
+    border: 1px solid rgb(10, 10, 10);
     padding: 20px;
+    background-color: beige;
+    border-radius: 10px;
     margin-bottom: 20px;
   }
   
@@ -15,6 +17,10 @@
   
   .delivery-details {
     margin-bottom: 10px;
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid black;
+    background-color: rgb(226, 226, 204);
   }
   
   .cart-places {
@@ -57,3 +63,60 @@
     margin: 20px;
   }
   
+
+ /* OrdersPage.css */
+
+.status-buttons {
+  margin-top: 10px;
+}
+
+.status-buttons button {
+  margin-right: 10px;
+  background-color: #ffbb00;
+  color: #160202;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.status-buttons button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.filter-button1 {
+  background-color: #eeae00;
+  margin: 10px;
+  border-radius: 4px;
+  border: none;
+    padding: 5px 10px;
+}
+
+.filter-button1:hover {
+  background-color: #ffbb00; /* Change the background color on hover */
+  
+}
+
+.filter-button2 {
+  background-color: rgb(1, 230, 1);
+  border-radius: 4px;
+  border: none;
+    padding: 5px 10px;
+}
+
+.filter-button2:hover {
+  background-color: lime; /* Change the background color on hover */
+}
+
+.filter-button3 {
+  background-color:rgb(219, 0, 0);
+  border-radius: 4px;
+    padding: 5px 10px;
+    border: none;
+  margin: 10px;
+}
+
+.filter-button3:hover {
+  background-color: rgb(255, 10, 10); /* Change the background color on hover */
+}

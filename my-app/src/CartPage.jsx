@@ -53,11 +53,11 @@ const CartPage = () => {
   return (
     <>
       <div style={containerStyle}>
-        <h1 style={headerStyle}>Cos de Cumparaturi</h1>
+        <h1 style={headerStyle}></h1>
         {cart.length === 0 ? (
           <div style={emptyCartStyle}>
-            <p>Cosul tau este gol.</p>
-            <img style={{ height: "44vh", width: "auto" }} src={carp} alt="carp" />
+            <p>Cererea a fost trimisa cu succes!</p>
+            
           </div>
         ) : (
           <div>
