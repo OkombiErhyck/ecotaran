@@ -8,6 +8,8 @@ const OrdersPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState(null);
   const [monthFilter, setMonthFilter] = useState(null);
+  const [showAllOrders, setShowAllOrders] = useState(false);
+  const [statusChangeMessage, setStatusChangeMessage] = useState(null);
 
   useEffect(() => {
     axios
@@ -28,6 +30,11 @@ const OrdersPage = () => {
       const response = await axios.get('/orders');
       console.log(response.data); // Check updated orders data
       setOrders(response.data);
+      setStatusChangeMessage(`Statusul cererii #${orderId} a fost modificat cu succes!`);
+      // Clear the message after a delay
+      setTimeout(() => {
+        setStatusChangeMessage(null);
+      }, 5000);
     } catch (error) {
       console.error('Failed to update order status: ', error);
     }
@@ -47,6 +54,10 @@ const OrdersPage = () => {
     setMonthFilter(parseInt(month));
   };
 
+  const handleShowAllOrders = () => {
+    setShowAllOrders(true);
+  };
+
   return (
     <div className="orders-container">
       <br></br>
@@ -63,7 +74,6 @@ const OrdersPage = () => {
         <button className="filter-button1" onClick={() => handleFilter('Pending')}>In asteptare</button>
         <button className="filter-button2" onClick={() => handleFilter('Accepted')}>Aprobate</button>
         <button className="filter-button3" onClick={() => handleFilter('Rejected')}>Respinse</button>
-     
         <select onChange={(e) => handleMonthFilter(e.target.value)}>
           <option value="">Selecteaza luna</option>
           <option value={1}>Ianuarie</option>
@@ -79,46 +89,70 @@ const OrdersPage = () => {
           <option value={11}>Noembrie</option>
           <option value={12}>Decembrie</option>
         </select>
+        <button onClick={handleShowAllOrders}>Afiseaza toate cererile</button>
       </div>
-      {filteredOrders.length === 0 ? (
-        <h1>Nu a fost gasita nici o cerere</h1>
-      ) : (
-        filteredOrders.map((order, index) => (
-          <div
-            key={index}
-            className={`order ${order.delivered ? 'order-delivered' : ''}`}
-          >
-            <h3>Cererea #{index + 1}</h3>
-            <p>Creata la: {new Date(order.createdAt).toLocaleString()}</p>
-            <div className="delivery-details">
-              <strong>Detalii:</strong>
-              <p>Nume: {order.firstName}</p>
-              <p>Perioada: {order.lastName}</p>
-              <p>Tip: {order.motiv}</p>
-              <p>Angajat al: {order.address}</p>
-              <p>Functia: {order.city}</p>
-              <p>Telefon: {order.zipCode}</p>
-            </div>
-            <div className="status-buttons">
-              {order.status === 'Pending' && (
-                <div className="status-buttons">
-                  <button onClick={() => handleStatusChange(order._id, 'Accepted')}>
-                    Aproba
-                  </button>
-                  <button onClick={() => handleStatusChange(order._id, 'Rejected')}>
-                    Respinge
-                  </button>
+      {showAllOrders && (
+        <>
+          {filteredOrders.length === 0 ? (
+            <h1>Nu a fost gasita nici o cerere</h1>
+          ) : (
+            filteredOrders.map((order, index) => (
+              <div
+                key={index}
+                className={`order ${order.delivered ? 'order-delivered' : ''}`}
+              >
+                <h3>Cererea #{index + 1}</h3>
+                <p>Creata la: {new Date(order.createdAt).toLocaleString()}</p>
+                <div className="delivery-details">
+                  <strong>Detalii:</strong>
+                  <p>Nume: {order.firstName}</p>
+                  <p>Perioada: {order.lastName}</p>
+                  <p>
+                    Tip:
+                    <select
+                      value={order.motiv}
+                      disabled // Disable the select input to show the selected value
+                    >
+                      <option value="Concediu de odihna">Concediu de odihna</option>
+                      <option value="Concediu fără plata">Concediu fără plata</option>
+                      <option value="Concediu pentru evenimente speciale">Concediu pentru evenimente speciale</option>
+                    </select>
+                  </p>
+                  <p>Angajat al: {order.address}</p>
+                  <p>Functia: {order.city}</p>
+                  <p>Telefon: {order.zipCode}</p>
                 </div>
-              )}
-              {order.status === 'Accepted' && (
-                <button style={{ backgroundColor: 'lime' }} disabled>Cerere Aprobata</button>
-              )}
-              {order.status === 'Rejected' && (
-                <button style={{ backgroundColor: 'red' }} disabled>Cerere Respinsa</button>
-              )}
-            </div>
-          </div>
-        ))
+                <div className="status-buttons">
+                  {order.status === 'Pending' && (
+                    <div className="status-buttons">
+                      <button
+                        onClick={() => handleStatusChange(order._id, 'Accepted')}
+                        onMouseEnter={() => setStatusChangeMessage(null)}
+                      >
+                        Aproba
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(order._id, 'Rejected')}
+                        onMouseEnter={() => setStatusChangeMessage(null)}
+                      >
+                        Respinge
+                      </button>
+                    </div>
+                  )}
+                  {order.status === 'Accepted' && (
+                    <button style={{ backgroundColor: 'lime' }} disabled>Cerere Aprobata</button>
+                  )}
+                  {order.status === 'Rejected' && (
+                    <button style={{ backgroundColor: 'red' }} disabled>Cerere Respinsa</button>
+                  )}
+                </div>
+                {statusChangeMessage && (
+                  <p className="status-change-message">{statusChangeMessage}</p>
+                )}
+              </div>
+            ))
+          )}
+        </>
       )}
     </div>
   );
