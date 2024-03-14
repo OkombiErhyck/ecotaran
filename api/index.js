@@ -75,6 +75,10 @@ const orderSchema = new mongoose.Schema({
   zipCode: String,
   cartItems: [],
   createdAt:  Date,
+  status: {
+    type: String,
+    default: 'Pending' // Set default status to 'Pending'
+  },
 });
 
 
@@ -192,7 +196,7 @@ app.post("/upload", photosMiddleware.single('photo'), async (req, res) => {
 app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
   res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
-  const { firstName, lastName, email, address, city, zipCode, cartItems } = req.body;
+  const { firstName, lastName, email, address, city, zipCode, cartItems,status } = req.body;
 
   const newOrder = new Order({
     firstName,
@@ -203,6 +207,7 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
     zipCode,
     cartItems,
     createdAt: new Date(),
+    status,
  
   });
 
@@ -432,6 +437,31 @@ app.delete("/places/:id", (req,res) => {
     }
   });
 });
+
+app.put('/orders/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error('Failed to update order status: ', error);
+    res.status(500).json({ message: 'Failed to update order status' });
+  }
+});
+
+
+
+
+
+
+
 
 app.put('/orders/:orderId/markDelivered', (req, res) => {
   const orderId = req.params.orderId;
