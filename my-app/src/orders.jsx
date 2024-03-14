@@ -94,7 +94,18 @@ const OrdersPage = () => {
               <strong>Detalii:</strong>
               <p>Nume: {order.firstName}</p>
               <p>Perioada: {order.lastName}</p>
-              <p>Tip: {order.motiv}</p>
+             <p>
+  Tip:
+  <select
+    value={order.motiv}
+    disabled // Disable the select input to show the selected value
+  >
+    <option value="Concediu de odihna">Concediu de odihna</option>
+    <option value="Concediu fără plata">Concediu fără plata</option>
+    <option value="Concediu pentru evenimente speciale">Concediu pentru evenimente speciale</option>
+  </select>
+</p>
+
               <p>Angajat al: {order.address}</p>
               <p>Functia: {order.city}</p>
               <p>Telefon: {order.zipCode}</p>
