@@ -14,7 +14,12 @@
     background-color: green;
   }
   
-  
+.status-buttons button:hover {
+      background-color: rgb(158, 156, 156); /* Change the background color on hover */
+      color: black; /* Change the text color on hover */
+      cursor: pointer; /* Change the cursor to a pointer on hover */
+    }
+
   .delivery-details {
     margin-bottom: 10px;
     border-radius: 15px;
