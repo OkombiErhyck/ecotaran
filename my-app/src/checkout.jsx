@@ -1,9 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import './checkout.css';
 
 const CheckoutPage = ({ cartItems, total }) => {
-  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -12,6 +11,9 @@ const CheckoutPage = ({ cartItems, total }) => {
     city: '',
     zipCode: '',
   });
+
+  const [submissionMessage, setSubmissionMessage] = useState('');
+  const [countdown, setCountdown] = useState(5);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,13 +33,26 @@ const CheckoutPage = ({ cartItems, total }) => {
         ...formData, // Include all form data
         status: 'Pending',
         cartItems: storedCartItems ? [...storedCartItems] : [],
-        });
+      });
 
       window.localStorage.removeItem('cart');
 
-      window.location.href = '/';
+      setSubmissionMessage('Cererea a fost trimisa cu succes. Multumim!');
+
+      // Start the countdown timer
+      const timer = setInterval(() => {
+        setCountdown((prevCount) => prevCount - 1);
+      }, 1000);
+
+      // Redirect to home page after countdown
+      setTimeout(() => {
+        clearInterval(timer);
+        window.location.href = '/';
+      }, countdown * 1000);
+
     } catch (error) {
       console.error(error);
+      setSubmissionMessage('There was an error submitting your request. Please try again later.');
     }
   };
 
@@ -45,9 +60,9 @@ const CheckoutPage = ({ cartItems, total }) => {
     <div className="checkout-container">
       <h1 className="checkout-title">Formular concediu</h1>
       <form onSubmit={handleSubmit} className="checkout-form">
-      <label>
+        <label>
           Nume:
-          <input style={{borderRadius:"10px"}}
+          <input style={{ borderRadius: "10px" }}
             type="text"
             name="firstName"
             value={formData.firstName}
@@ -109,6 +124,10 @@ const CheckoutPage = ({ cartItems, total }) => {
         <button type="submit" className="place-order-button">
           Trimite cererea
         </button>
+        {submissionMessage && <p className="submission-message">{submissionMessage}</p>}
+        {submissionMessage && countdown > 0 && (
+          <p>In {countdown} ve-ti fi redirectionat catre pagina principala</p>
+        )}
       </form>
     </div>
   );
