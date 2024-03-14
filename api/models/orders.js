@@ -4,20 +4,21 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true },
+  motiv: { type: String, enum: ['Concediu de odihna ', 'Concediu fără plata', 'Concediu pentru evenimente speciale'], required: true },
   address: { type: String, required: true },
   city: { type: String, required: true },
   zipCode: { type: String, required: true },
+  
  
   cartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CartItem' }],
   delivered: {
     type: Boolean,
     default: false
   },
-  status: { type: String, default: 'Pending' }, // new field for status
+  status: { type: String, default: 'Pending' },
   createdAt: {
     type: Date,
-    default: Date.now // Automatically set the field to the current date and time when an order is created
+    default: Date.now
   }
 });
 
