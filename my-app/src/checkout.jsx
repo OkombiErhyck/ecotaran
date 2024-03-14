@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import './checkout.css';
-import { UserContext } from './UserContext'; // Assuming you have access to the logged-in user's ID via UserContext
 
 const CheckoutPage = ({ cartItems, total }) => {
-  const { user } = useContext(UserContext); // Access the logged-in user's ID
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -32,8 +31,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         ...formData, // Include all form data
         status: 'Pending',
         cartItems: storedCartItems ? [...storedCartItems] : [],
-        owner: user.id, // Include the logged-in user's ID as the owner of the order
-      });
+        });
 
       window.localStorage.removeItem('cart');
 
