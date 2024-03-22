@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
 import './OrdersPage.css';
 
 const OrdersPage = () => {
@@ -31,6 +32,12 @@ const OrdersPage = () => {
       console.log(response.data); // Check updated orders data
       setOrders(response.data);
       setStatusChangeMessage(`Statusul cererii #${orderId} a fost modificat cu succes!`);
+  
+      // Generate and download the document if status is 'Accepted'
+      if (status === 'Accepted') {
+        generateDocument(orderId); // Call function to generate document
+      }
+  
       // Clear the message after a delay
       setTimeout(() => {
         setStatusChangeMessage(null);
@@ -39,6 +46,119 @@ const OrdersPage = () => {
       console.error('Failed to update order status: ', error);
     }
   };
+
+  
+
+  const generateDocument = (orderId) => {
+    // Fetch order data for the specific orderId
+    const order = orders.find(order => order._id === orderId);
+    
+    // Create a document content based on the order data
+    const documentContent = `
+      <html>
+      <head>
+          <style>
+              body {
+                font-family: Arial, sans-serif;
+              }
+
+              /* Additional styles for content */
+              .document-content {
+                margin: 0 auto;
+                max-width: 600px;
+                text-align: left;
+                line-height: 1.5;
+                font-size: 16px;
+              }
+
+              h1 {
+                font-size: 18px;
+                text-align: center;
+                margin-bottom: 60px;
+                margin-top: 20px;
+              }
+
+              .signature-section {
+                margin-top: 50px;
+                text-align: left;
+              }
+
+              .signature-section p {
+                margin: 30;
+                display: inline-block;
+                vertical-align: top;
+              }
+
+              .indented {
+                text-indent: 2em; /* Adjust the indentation as needed */
+              }
+              .h2 {
+                font-size:130px;
+                color:#667gff;
+                margin-buttom:140px;
+              }
+          </style>
+      </head>
+      <body>
+
+     
+
+          <div class="document-content">
+            
+          
+         <h2>${order.address}</h2>
+          
+          
+          <br>
+          <br>
+
+          
+          <h1>CERERE PRIVIND EFECTUAREA CONCEDIULUI</h1>
+            
+            
+            
+            
+            <p class="indented">
+                Subsemnatul/a ${order.firstName} angajat/ă al/a SC ${order.address} SRL, în funcția de ${order.city}, vă rog să-mi aprobați efectuarea a ${order.lastName} zile libere de la data de ${order.x} până în data de ${order.y}.
+            </p>
+            <p class="indented">
+                Menționez că zilele libere solicitate reprezintă: ${order.email}
+            </p>
+            <p class="indented">
+                Mentionez că pe durata desfășurării concediului, persoana care îmi va ţine locul în această perioadă este: d-nul /d-na ${order.rep} <br />
+                (numele persoanei înlocuitoare va fi specificat numai dupa aprobarea șefului de departament, dacă este cazul).
+            </p>
+             
+            <div class="signature-section">
+              <p>Departament Resurse:</p>   <br>    <p> Semnătură angajat:</p>                           
+             
+            </div>
+            <p>Data: ${order.createdAt}</p>
+          </div>
+      </body>
+      </html>
+    `;
+  
+    // Create a Blob containing the document content
+    const blob = new Blob([documentContent], { type: 'text/html' });
+  
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
+  
+    // Create a temporary <a> element to initiate the download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Order_${orderId}.html`;
+    document.body.appendChild(a);
+  
+    // Initiate the download
+    a.click();
+  
+    // Clean up
+    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+  
 
   const filteredOrders = orders.filter(order =>
     order.firstName.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -106,17 +226,12 @@ const OrdersPage = () => {
                 <div className="delivery-details">
                   <strong>Detalii:</strong>
                   <p>Nume: {order.firstName}</p>
-                  <p>Perioada: {order.lastName}</p>
+                  <p>Nr. zile: {order.lastName}</p>
+                  <p>De la : {order.x}</p>
+                  <p>Pana la : {order.y}</p>
+                  <p>Inlocuitor: {order.rep}</p>
                   <p>
-                    Tip:
-                    <select
-                      value={order.motiv}
-                      disabled // Disable the select input to show the selected value
-                    >
-                      <option value="Concediu de odihna">Concediu de odihna</option>
-                      <option value="Concediu fără plata">Concediu fără plata</option>
-                      <option value="Concediu pentru evenimente speciale">Concediu pentru evenimente speciale</option>
-                    </select>
+                    Tip: {order.email}
                   </p>
                   <p>Angajat al: {order.address}</p>
                   <p>Functia: {order.city}</p>
