@@ -72,6 +72,9 @@ const orderSchema = new mongoose.Schema({
   email: String,
   address: String,
   city: String,
+    x: String,
+    y: String,
+    rep: String,
   zipCode: String,
   cartItems: [],
   createdAt:  Date,
@@ -196,7 +199,7 @@ app.post("/upload", photosMiddleware.single('photo'), async (req, res) => {
 app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
   res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
-  const { firstName, lastName, email, address, city, zipCode, cartItems,status } = req.body;
+  const { firstName, lastName, email, address, city, zipCode, x, y, rep, cartItems,status } = req.body;
 
   const newOrder = new Order({
     firstName,
@@ -204,6 +207,9 @@ app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
     email,
     address,
     city,
+      x,
+      y,
+      rep,
     zipCode,
     cartItems,
     createdAt: new Date(),
