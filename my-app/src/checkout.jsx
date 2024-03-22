@@ -6,9 +6,12 @@ const CheckoutPage = ({ cartItems, total }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    motiv: '',
+    email: '',
     address: '',
     city: '',
+    x: '',
+    y: '',
+    rep: '', // Include the rep field in the initial state
     zipCode: '',
   });
 
@@ -56,34 +59,68 @@ const CheckoutPage = ({ cartItems, total }) => {
     }
   };
 
+
   return (
     <div className="checkout-container">
       <h1 className="checkout-title">Formular concediu</h1>
       <form onSubmit={handleSubmit} className="checkout-form">
         <label>
-          Nume:
+          Numele complet conform Buletin /Pasaport
           <input style={{ borderRadius: "10px" }}
             type="text"
             name="firstName"
+            placeholder='EX. John Doe'
             value={formData.firstName}
             onChange={handleChange}
           />
         </label>
         <label>
-          Perioada:
+           Numarul total de zile in care ve ti fi plecat:
+
           <input style={{borderRadius:"10px"}}
             type="text"
             name="lastName"
+            placeholder='EX. 8'
             value={formData.lastName}
             onChange={handleChange}
           />
         </label>
         <label>
-  Tip:
+           Introdu data de la care vei incepe concediul:
+          <input style={{borderRadius:"10px"}}
+            type="text"
+            name="x"
+            placeholder='EX. 10.03.2024'
+            value={formData.x}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+         Introduceti data de incheiere a concediului:
+          <input style={{borderRadius:"10px"}}
+            type="text"
+            name="y"
+            placeholder='Ex. 14.04.2024'
+            value={formData.y}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+         Cine iti va tine locul?
+          <input style={{borderRadius:"10px"}}
+            type="text"
+            name="rep"
+            placeholder='Numele complet'
+            value={formData.rep}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+  Selecteaza tipul cererii de concediu:
   <select
     style={{ borderRadius: "10px" }}
-    name="motiv"
-    value={formData.motiv}
+    name="email"
+    value={formData.email}
     onChange={handleChange}
   >
     <option value="">Selecteaza motivul cererii</option>
@@ -94,18 +131,20 @@ const CheckoutPage = ({ cartItems, total }) => {
 </label>
 
         <label>
-          Angajat al:
+          Numele angajatorului
           <input  style={{borderRadius:"10px"}}
             type="text"
             name="address"
+            placeholder='EX . Capital Clean'
             value={formData.address}
             onChange={handleChange}
           />
         </label>
         <label>
-          Functia:
+         Numele postului pe care lucrati
           <input  style={{borderRadius:"10px"}}
             type="text"
+            placeholder='EX. Supervizor'
             name="city"
             value={formData.city}
             onChange={handleChange}
@@ -113,10 +152,11 @@ const CheckoutPage = ({ cartItems, total }) => {
         </label>
        
         <label>
-          Telefon:
+          Numarul de telefon la care puteti fi contactat
           <input style={{borderRadius:"10px"}}
             type="text"
             name="zipCode"
+            placeholder='07XXXXXX23'
             value={formData.zipCode}
             onChange={handleChange}
           />
