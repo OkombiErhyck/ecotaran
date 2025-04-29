@@ -98,6 +98,9 @@ const OrdersPage = () => {
                 color:#667gff;
                 margin-buttom:140px;
               }
+              .white-dots {
+  color: white;
+}
           </style>
       </head>
       <body>
@@ -134,7 +137,7 @@ const OrdersPage = () => {
             </p>
              
             <div class="signature-section">
-              <p>Departament Resurse:                                                                Semnătură angajat:</p>                           
+              <p>Departament Resurse:<span class="white-dots">................................................</span>Semnătură angajat:</p>                           
              
             </div>
             <p>Data: ${order.createdAt}</p>
