@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import concediuccg from './images/concediuccg.png';
 
 import './OrdersPage.css';
 
@@ -106,7 +106,8 @@ const OrdersPage = () => {
           <div class="document-content">
             
           
-         <h2>${order.address}</h2>
+         <img src="${concediuccg}" alt="Header Image" style="max-width: 100%; height: auto;" />
+          
           
           
           <br>
