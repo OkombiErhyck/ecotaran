@@ -91,6 +91,7 @@ const OrdersPage = () => {
 
               .indented {
                 text-indent: 2em; /* Adjust the indentation as needed */
+                 font-weight: bold;
               }
               .h2 {
                 font-size:130px;
