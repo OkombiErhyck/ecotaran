@@ -81,6 +81,7 @@ const OrdersPage = () => {
               .signature-section {
                 margin-top: 50px;
                 text-align: left;
+                 font-weight: bold;
               }
 
               .signature-section p {
@@ -140,7 +141,7 @@ const OrdersPage = () => {
             </p>
              
             <div class="signature-section">
-              <p>Departament Resurse:<span class="white-dots">................................................</span>Semnătură angajat:</p>                           
+              <p>Departament Resurse<span class="white-dots">................................................</span>Semnătură angajat</p>                           
              
             </div>
             <br>
