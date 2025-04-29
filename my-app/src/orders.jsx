@@ -134,7 +134,7 @@ const OrdersPage = () => {
             </p>
              
             <div class="signature-section">
-              <p>Departament Resurse:</p>   <br>    <p> Semnătură angajat:</p>                           
+              <p>Departament Resurse:                                                                Semnătură angajat:</p>                           
              
             </div>
             <p>Data: ${order.createdAt}</p>
