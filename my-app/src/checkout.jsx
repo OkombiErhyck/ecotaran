@@ -131,15 +131,20 @@ const CheckoutPage = ({ cartItems, total }) => {
 </label>
 
         <label>
-          Numele angajatorului
-          <input  style={{borderRadius:"10px"}}
-            type="text"
-            name="address"
-            placeholder='EX . Capital Clean'
-            value={formData.address}
-            onChange={handleChange}
-          />
-        </label>
+  Numele angajatorului
+  <select
+    name="address"
+    value={formData.address}
+    onChange={handleChange}
+    style={{ borderRadius: "15px" }}
+  >
+    <option value="">Selectează angajatorul din lista</option>
+    <option value="Capital Clean">Capital Clean</option>
+    <option value="Complete Recruitment">Complete Recruitment</option>
+    
+    
+  </select>
+</label>
         <label>
          Numele postului pe care lucrati
           <input  style={{borderRadius:"10px"}}
