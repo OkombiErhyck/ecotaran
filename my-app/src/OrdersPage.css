@@ -3,11 +3,13 @@
   }
   
   .order {
+   
     border: 1px solid rgb(10, 10, 10);
     padding: 20px;
-    background-color: beige;
-    border-radius: 10px;
+    background-color: #3f3f3f;
+    border-radius: 5px;
     margin-bottom: 20px;
+    color: #efeded;
   }
   
   .order-delivered {
@@ -22,10 +24,10 @@
 
   .delivery-details {
     margin-bottom: 10px;
-    border-radius: 15px;
+    border-radius: 5px;
     padding: 10px;
-    border: 1px solid black;
-    background-color: rgb(226, 226, 204);
+    border: 1px solid #ffffff;
+    background-color:rgb(49 141 31);
   }
   
   .cart-places {
