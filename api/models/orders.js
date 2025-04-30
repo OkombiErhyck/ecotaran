@@ -5,7 +5,7 @@ const orderSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   motiv: { type: String, enum: ['Concediu de odihna ', 'Concediu fără plata', 'Concediu pentru evenimente speciale'], required: true },
-  address: { type: String, required: true },
+  address: { type: String, enum: ['Capital Clean','Complete Recruitment'] ,required: true },
   city: { type: String, required: true },
   zipCode: { type: String, required: true },
   x: { type: String, required: true },
