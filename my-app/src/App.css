@@ -8,7 +8,7 @@
  }
  
 *{
-    font-family:  'Alkatra', Alkatra, monospace;
+   font-family: system-ui;
     transition: 0.2s;
 }
 *::section {
