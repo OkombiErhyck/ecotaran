@@ -65,7 +65,7 @@ const CheckoutPage = ({ cartItems, total }) => {
       <h1 className="checkout-title">Formular concediu</h1>
       <form onSubmit={handleSubmit} className="checkout-form">
         <label>
-          Numele complet conform Buletin /Pasaport
+          Numele complet conform Buletin
           <input style={{ borderRadius: "10px" }}
             type="text"
             name="firstName"
@@ -75,7 +75,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-           Numarul total de zile in care ve ti fi plecat:
+           Numarul total de zile :
 
           <input style={{borderRadius:"10px"}}
             type="text"
@@ -86,7 +86,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-           Introdu data de la care vei incepe concediul:
+           Introdu data de la care vei incepere:
           <input style={{borderRadius:"10px"}}
             type="text"
             name="x"
@@ -96,7 +96,7 @@ const CheckoutPage = ({ cartItems, total }) => {
           />
         </label>
         <label>
-         Introduceti data de incheiere a concediului:
+         Introduceti data de incheiere:
           <input style={{borderRadius:"10px"}}
             type="text"
             name="y"
@@ -121,7 +121,7 @@ const CheckoutPage = ({ cartItems, total }) => {
     style={{ borderRadius: "10px" }}
     name="email"
     value={formData.email}
-    onChange={handleChange}
+    onChange={handleChange} 
   >
     <option value="">Selecteaza motivul cererii</option>
     <option value="Concediu de odihna">Concediu de odihna </option>
@@ -130,7 +130,7 @@ const CheckoutPage = ({ cartItems, total }) => {
   </select>
 </label>
 
-        <label>
+<label>
   Numele angajatorului
   <select
     name="address"
@@ -158,6 +158,7 @@ const CheckoutPage = ({ cartItems, total }) => {
        
         <label>
           Numarul de telefon la care puteti fi contactat
+          
           <input style={{borderRadius:"10px"}}
             type="text"
             name="zipCode"
