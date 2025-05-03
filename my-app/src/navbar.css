@@ -1,32 +1,37 @@
-.navbar{
+/* General Navbar Styles */
+.navbar {
     padding: 10px;
     background: #000000;
+    
     display: flex;
     overflow: hidden;
-    border-bottom: 2px solid  #757575;
+    border-bottom: 2px solid #757575;
 }
 
 @media (max-width: 768px) {
     body {
-      overflow-x: hidden;
+        overflow-x: hidden;
     }
-    .navbar{
-       
+    .navbar {
         background: #000000;
-        
     }
-  }
-  
+}
 
-.navbar.active{
+.navbar.active {
     background: #00000094;
     backdrop-filter: blur(10px);
     padding: 0px;
     border-bottom: 2px solid #757575;
-
 }
+
 .navbar-brand {
     font-size: 2em;
+    color: rgb(255, 255, 255);
+    padding: 0px 60px;
+}
+
+.navbar-brand2{
+    font-size: 1em;
     color: rgb(255, 255, 255);
     padding: 0px 60px;
 }
@@ -35,34 +40,50 @@
         font-size: 1.5em;
         padding: 0px 20px;
     }
-  }
-  .navbar-toggler{
-    margin: 10px;
-  }
-  
-.navbar-brand:hover {
-    
-    color:var(--main);
-   
 }
+
+.navbar-toggler {
+    margin: 10px;
+}
+
+.navbar-brand:hover {
+    color: var(--main);
+}
+
 .navbar-brand span {
     font-size: 1.5em;
     color: var(--main);
-   
 }
-.navbar-nav{
-    
+
+.navbar-nav {
     padding: 0px 60px;
     margin-top: 5px;
 }
-.nav-link{
+
+.nav-link {
     color: rgb(255, 255, 255) !important;
     margin-left: 5px;
 }
+
 .nav-link:hover {
     color: var(--main) !important;
 }
-.navbar-toggler{
-color: #00000000;
 
+.navbar-toggler {
+    color: #00000000;
+}
+
+/* Mobile Navbar - Sliding Effect */
+.navbar-collapse {
+    display: none; /* Hidden by default */
+    opacity: 0;
+    transform: translateY(-100%); /* Initially position it above the screen */
+    transition: transform 0.5s ease, opacity 0.5s ease; /* Add transition effects */
+}
+
+/* When the mobile menu is open, slide it down and fade it in */
+.navbar-collapse.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0); /* Slide it down to its original position */
 }
