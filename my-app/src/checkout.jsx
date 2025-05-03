@@ -157,7 +157,7 @@ const CheckoutPage = ({ cartItems, total }) => {
         </label>
        
         <label>
-          Numarul de telefon 
+         Numarul de telefon la care puteti fi contactat
           
           <input style={{borderRadius:"10px"}}
             type="text"
