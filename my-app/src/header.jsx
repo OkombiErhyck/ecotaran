@@ -1,6 +1,6 @@
 import HeaderImg from "./images/green.jpg";
 import LogoImg from "./images/logo up.png";
-import Logoccg from "./images/logo ccg.jpg";
+ 
 import "./header.css";
 import { Link } from "react-router-dom";
 
