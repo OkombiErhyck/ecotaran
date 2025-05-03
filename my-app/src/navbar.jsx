@@ -92,7 +92,7 @@ const NavBar = () => {
             </li>
             <li className={`nav-item ${location.pathname === "/contact" ? "active" : ""}`}>
               <Link to="/contact" className="navbar-brand" onClick={() => setMobileMenuOpen(false)}>
-                Contact
+                
               </Link>
             </li>
              
