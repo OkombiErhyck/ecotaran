@@ -1,7 +1,9 @@
 import HeaderImg from "./images/green.jpg";
 import LogoImg from "./images/logo up.png";
+import Logoccg from "./images/logo ccg.jpg";
 import "./header.css";
 import { Link } from "react-router-dom";
+
 const Header = () => {
     return (
         <>
@@ -11,24 +13,28 @@ const Header = () => {
                          <img src={HeaderImg} alt=""/>
                     </div>
                     <div className="Overlay"></div>   
-                   
                 </div>
                 <div className="logo">
-
-                <img src={LogoImg} alt="" className="img-fluid" style={{height: "190px", width: "100%", objectFit: "cover", borderRadius: "70%"}}/>
-                  
+                    <div className="logo-container">
+                        <div className="logo-side front">
+                            <img src={LogoImg} alt="Logo" className="logo-img" />
+                        </div>
+                        <div className="logo-side back">
+                           
+                        </div>
+                    </div>
                 </div>
                 <div className="Content">
                   <h2> 
-                   
-                  Suntem aici pentu  <span>tine</span> !
+                    Suntem aici pentru <span>tine</span> !
                   </h2>
                   <Link to="/checkout" className="btn">
-        Creaza cererea <span>de concediu</span>
-      </Link>
+                    Creeaza cererea <span>de concediu</span>
+                  </Link>
                 </div>
             </div>
         </>
     );
 };
+
 export default Header;
