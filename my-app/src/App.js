@@ -122,7 +122,7 @@ function App() {
         <Router>
           <CartProvider>
             <Suspense fallback={<div className="splash-screen">
-     <h1>eco<span style={{color:"white"}}>Taran</span> </h1>
+    <h1><span style={{color:"green"}}>UP </span><span style={{color:"green"}}>Recruitment</span> </h1>
       <div className="road">
         <div className="center-line"></div>
       </div>
