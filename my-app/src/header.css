@@ -1,13 +1,27 @@
+/* Animation for rotating logo */
+@keyframes flipLogo {
+    0% {
+        transform: rotateY(0deg); /* Start at 0 degrees (front) */
+    }
+    50% {
+        transform: rotateY(0deg); /* Flip halfway, show the back logo */
+    }
+    100% {
+        transform: rotateY(0deg); /* Complete flip, show the front logo again */
+    }
+}
+
 .header {
     position: relative;
 }
+
 .header img {
     height: 100vh;
     width: 100%;
     object-fit: cover;
-    
 }
-.Overlay{
+
+.Overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -16,11 +30,12 @@
     background: #000;
     opacity: 0.7;
 }
-.header .Content{
+
+.header .Content {
     position: absolute;
     top: 80%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     color: aliceblue !important;
     background: #000000db;
     backdrop-filter: blur(10px);
@@ -28,33 +43,66 @@
     padding: 20px;
     text-align: center;
 }
+
 .header .Content h2 {
-   font-size: 40px;
-   font-weight: 700;
-   color: beige;
+    font-size: 40px;
+    font-weight: 700;
+    color: beige;
 }
+
 .header .Content h2 span {
     font-weight: 500;
     color: var(--main);
     font-size: 45px;
- }
- .logo{
+}
+
+.logo {
     position: absolute;
     top: 43%;
     left: 50%;
-    transform: translate(-50%,-50%);
-    color: aliceblue !important;
-    background: #00000000;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: transparent;
     padding: 1px;
-    text-align: center;
-    
- }
- .logo h1 {
-    font-size: 170px;
-    text-align: center;
-    color: var(--main);
-    border-bottom: 5px solid #ffffff;
-    border-top: 5px solid #ffffff;
-    width: 350px;
-    
- }
+    perspective: 1000px;  /* Enable 3D space for the flipping effect */
+}
+
+.logo-container {
+    width: 190px;  /* Define fixed width for the circular container */
+    height: 190px; /* Set height equal to width for a circular container */
+    border-radius: 50%; /* Circular container */
+    overflow: hidden;  /* Prevent image from overflowing */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Relative positioning for the front/back layers */
+    transform-style: preserve-3d; /* Enable 3D transformations */
+    animation: flipLogo 5s linear infinite; /* Apply the flip animation */
+}
+
+.logo-side {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backface-visibility: hidden; /* Hide the back when flipped */
+}
+
+.front {
+    transform: rotateY(0deg); /* Front face at 0 degrees */
+}
+
+.back {
+    transform: rotateY(180deg); /* Back face at 180 degrees */
+}
+
+.logo-img {
+    max-width: 100%;  /* Ensure the logo fits within the circle */
+    max-height: 100%; /* Ensure the logo fits within the circle */
+    width: auto;      /* Maintain the original aspect ratio of the logo */
+    height: auto;     /* Maintain the original aspect ratio of the logo */
+}
