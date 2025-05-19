@@ -97,7 +97,7 @@ if (redirect) {
                           
                            <div className="box_content">
                            <a href="/IndexPage">
-                           <img src={Anunt} className="img-fluid" alt=""/>
+                           <img src={toate} className="img-fluid" alt=""/>
                           
                                <button className="btn1"> Vezi Cazari </button>
                            </a>
