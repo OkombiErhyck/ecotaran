@@ -308,7 +308,7 @@
 
 .car-vertical-banner-container img {
   display: inline-block;
-  animation: marquee 10s linear infinite;
+  animation: marquee 140s linear infinite;
 }
 
 @keyframes marquee {
