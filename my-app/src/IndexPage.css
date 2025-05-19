@@ -39,7 +39,8 @@
 
 .filter-container {
     display: flex;
-    margin-top: 10px ;
+    
+    margin-top: 80px ;
     justify-content: center;
     align-items: center;
     background: #f8f8f8;
@@ -273,11 +274,7 @@ padding: 20px;
   margin-bottom: 10px;
   /* Add any other styles you need for the button */
 }
-.marca1-buttons {
-  display: inline-block;
-  animation: scroll-marca-buttons 30s linear infinite;
-}
-
+ 
 .news-banner {
   overflow: hidden;
   white-space: nowrap;
