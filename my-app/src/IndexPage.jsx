@@ -217,7 +217,7 @@ export default function IndexPage() {
         <button onClick={resetFilters}>Reset</button>
       </div>
     </div>
-    <Categorii />
+    
         </div>
         <div className="details container">
           <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
