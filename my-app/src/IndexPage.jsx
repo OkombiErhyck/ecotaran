@@ -207,15 +207,7 @@ export default function IndexPage() {
 </div>
 
 
-          <div className="filter-item">
-          <label htmlFor="model-select">Tipuri</label>
-      <select id="model-select" value={selectedModel} onChange={handleModelSelect}>
-        <option value="">Toate</option>
-        {filteredPlaces.map(place => (
-          <option key={place.id} value={place.model}>{place.model}</option>
-        ))}
-      </select>
-    </div>
+           
           
 
 
