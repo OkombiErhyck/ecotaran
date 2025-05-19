@@ -170,27 +170,14 @@ const generateModelOptions = () => {
         <option key={car.brand} value={car.brand}>{car.brand}</option>
       ))}
     </select>
-            <h5>subcategorie</h5>
-            <select 
-      className="writeInput"
-      value={model}
-      onChange={ev => setModel(ev.target.value)}
-    >
-      {generateModelOptions()}
-    </select>
+            
             
 
-             <h5>pret</h5>
-             <input
-              className="writeInput"
-              placeholder="10000"
-              type="text"
-              value={km} onChange={ev => setKm(ev.target.value)}
-            />
+              
              
              <PhotosUpLoader addedPhotos={addedPhotos} onChange={setAddedPhotos}/>
              <br></br>
-            <Perks selected={perks} onChange={setPerks}/>
+            
           
           </div>
              
