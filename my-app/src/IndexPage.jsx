@@ -161,39 +161,47 @@ export default function IndexPage() {
         
 
         <div className="marca1-buttons">
+
+
+           <button
+    onClick={() => setSelectedMarca('Sector 6')}
+    className={`marca1-button ${selectedMarca === 'Sector 6' ? 'active' : ''}`}
+  >
+    Sector 6
+  </button>
         <button
-        onClick={() => handleMarcaClick('Fructe')}
-        className={`marca1-button ${selectedMarca === 'Fructe' ? 'active' : ''}`}
+        onClick={() => handleMarcaClick('Sector 5')}
+        className={`marca1-button ${selectedMarca === 'Sector 5' ? 'active' : ''}`}
       >
-        Fructe
+        Sector 5
        
       </button>
-
-
-
   <button
-    onClick={() => setSelectedMarca('Legume')}
-    className={`marca1-button ${selectedMarca === 'Legume' ? 'active' : ''}`}
-  >
-    Legume
-  </button>
-  
-
-
-  <button
-    onClick={() => setSelectedMarca('Mezeluri')}
+    onClick={() => setSelectedMarca('Sector 4')}
     className={`marca1-button ${selectedMarca === 'Mezeluri' ? 'active' : ''}`}
   >
-    Mezeluri
+    Sector 4
   </button>
   
 
 
   <button
-    onClick={() => setSelectedMarca('Lactate')}
-    className={`marca1-button ${selectedMarca === 'Lactate' ? 'active' : ''}`}
+    onClick={() => setSelectedMarca('Sector 3')}
+    className={`marca1-button ${selectedMarca === 'Sector 3' ? 'active' : ''}`}
   >
-    Lactate
+    Sector 3
+  </button>
+  <button
+    onClick={() => setSelectedMarca('Sector 2')}
+    className={`marca1-button ${selectedMarca === 'Sector 2' ? 'active' : ''}`}
+  >
+    Sector 2
+  </button>
+   <button
+    onClick={() => setSelectedMarca('Sector 1')}
+    className={`marca1-button ${selectedMarca === 'Sector 1' ? 'active' : ''}`}
+  >
+    Sector 1
   </button>
   
 </div>
@@ -230,7 +238,7 @@ export default function IndexPage() {
                       <Image src={ place.photos[0]} className="img-fluid" style={{height: "270px", width: "100%", objectFit: "cover"}}/>
                     )}
                     <div className="box_content">
-                     <h4> {place.title} {place.km}    lei </h4>
+                     <h4> {place.title} {place.km}     </h4>
                      <div className="row pl-2 pr-2">
     <div > 
       
@@ -249,9 +257,9 @@ export default function IndexPage() {
    
   }}
   className="btn1"
-  onClick={() => addToCart(place)}
+  
 >
-  Adauga in Cos
+ Vezi locatia
 </button>
 
 
