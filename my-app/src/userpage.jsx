@@ -70,7 +70,7 @@ if (redirect) {
                            <a href="/IndexPage">
                            <img src={PlacesPage} className="img-fluid" alt=""/>
                           
-                               <button className="btn1">Evidenta angajati</button>
+                               <button className="btn1"> Cazari</button>
                            </a>
                            </div>
                        </div>
@@ -81,10 +81,10 @@ if (redirect) {
                        <div className="box card-body p-0  shadow-sm mb-5">
                           
                            <div className="box_content">
-                           <a href="/placespage">
+                           <a href="/write">
                            <img src={Anunt} className="img-fluid" alt=""/>
                           
-                               <button className="btn1"> Locatie angajati</button>
+                               <button className="btn1"> Adauga Cazare </button>
                            </a>
                            </div>
                        </div>
