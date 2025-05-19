@@ -168,12 +168,12 @@ export default function PlacePage() {
                   marginBottom: 0,
                 }}
               >
-                {place.km} lei
+                {place.km} 
               </span>{" "}
               {place.title}
             </h2>
             <div style={{ color: "wheat" }}>
-              {place.marca} | {place.model}|
+              {place.marca} 
               <div className="quantity-container" >
               <div
                                 className="quantity-btn-container"
@@ -188,49 +188,11 @@ export default function PlacePage() {
                                   alignItems: "center",
                                 }}
                               >
-                <button
-                style={{
-                                    backgroundColor: "rgb(154 154 154)",
-                                    color: "white",
-                                    padding: "5px",
-                                    border: "none",
-                                    borderRadius: "10%",
-                                    cursor: "pointer",
-                                    marginLeft: "0px",
-                                  }}
-                  className="quantity-btn"
-                  onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
-                >
-                  -
-                </button>
-                <span className="quantity">{quantity}</span>
-                <button
-                style={{
-                                    backgroundColor: "rgb(154 154 154)",
-                                    color: "white",
-                                    padding: "5px",
-                                    border: "none",
-                                    borderRadius: "10%",
-                                    cursor: "pointer",
-                                    marginLeft: "5px",
-                                  }}
-                  className="quantity-btn"
-                  onClick={() => setQuantity(quantity + 1)}
-                >
-                  +
-                </button>
+                 
+                 
               </div>
               </div>
-              <button
-                style={{
-                  padding: " 4px",
-                  width: "300px",
-                }}
-                className="btn1"
-                onClick={addToCart}
-              >
-                <span>Adauga in cos</span>
-              </button>
+              
             </div>
           </div>
           <br />
