@@ -10,50 +10,30 @@ import { Navigate, useParams } from "react-router-dom";
 export default function Write() {
   const cars = [
     {
-      brand: "Legume",
+      brand: "Sector 6",
       models: ["Morcovi", "Cartofi", "Rosi", "Varza", "Dovleac","Salata", "Vinete", "Ghimbir","Ceapa","Usturoi","Ciuperci","Pastarnac","Telina","Loboda","Ardei Gras","Castravete","Mazare","Stevie","Ridiche","Ardei Iute",]
     } ,
     {
-      brand: "Fructe",
+      brand: "Sector 5",
       models: ["Mere", "Pere", "Pepene", "Portocale" ,"Capsuni" ,"Alune","Cirese", "Grepfrut","Clementine","Lime","Lamaie","Caise","Nectarine",]
       },
       {
-        brand: "Carne",
+        brand: "Sector 4",
         models: ["Carnati", "Sunca"]
         },
         {
-          brand: "Lactate",
+          brand: "Sector 3",
           models: ["Branza", "Lapte", "Oua"]
           },
           {
-            brand: "Bauturi",
+            brand: "Sector 2",
             models: ["Vin", "Acidulate", "Neacidulate"]
             },
             {
-              brand: "Miere",
+              brand: "Sector 1",
               models: ["Tei", "Rapita"]
               },
-              {
-                brand: "CamaraEco",
-                models: ["Hrean Ras", "Dulceata", "Zarzavat", "Ceai", "Sirop", "Apa","Zacusca",]
-                },
-                {
-                  brand: "Fainoase",
-                  models: ["Paste", "Malai"]
-                  },
-                  {
-                    brand: "Plescoi",
-                    models: ["Sunca", "Carnati", ]
-                    },
-                    {
-                      brand: "Vegan",
-                      models: ["Branza", "Lapte"]
-                      },
-                      {
-                        brand: "ecopack",
-                        models: ["", ""]
-                        },
-                        
+              
                      
       
   // Add more car brands and models here...
@@ -171,15 +151,15 @@ const generateModelOptions = () => {
         
           <div className="writeFormGroup ">
            
-          <h5>nume</h5>
+          <h5>Addresa</h5>
           <input
               className="writeInput"
-              placeholder="nume si gramaj(ex:400g)"
+              placeholder="ex: Sector 1 Bd. Iuliu Maniu nr 1"
               type="text"
               autoFocus={true}
               value={title} onChange={ev => setTitle(ev.target.value)}
             />
-             <h5>categorie</h5>
+             <h5>Sector</h5>
              <select
       className="writeInput"
       value={marca}
