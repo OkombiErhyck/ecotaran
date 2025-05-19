@@ -1,6 +1,8 @@
 import React from "react";
 import Anunt from "./images/add.png";
 import toate from "./images/grid.png";
+import display from "./images/display.png";
+import businessman from "./images/businessman.png";
 import PlacesPage from "./images/approved.png";
 import Logout from "./images/logout.png";
 import "./userpage.css";
@@ -67,7 +69,7 @@ if (redirect) {
                           
                            <div className="box_content">
                            <a href="/despre">
-                           <img src={toate} className="img-fluid" alt=""/>
+                           <img src={businessman} className="img-fluid" alt=""/>
                           
                                <button className="btn1">Personal</button>
                            </a>
@@ -97,7 +99,7 @@ if (redirect) {
                            <a href="/write">
                            <img src={Anunt} className="img-fluid" alt=""/>
                           
-                               <button className="btn1"> Adauga  </button>
+                               <button className="btn1"> Adauga </button>
                            </a>
                            </div>
                        </div>
@@ -110,7 +112,7 @@ if (redirect) {
                           
                            <div className="box_content">
                            <a href="/IndexPage">
-                           <img src={toate} className="img-fluid" alt=""/>
+                           <img src={display} className="img-fluid" alt=""/>
                           
                                <button className="btn1"> Vezi Cazari </button>
                            </a>
