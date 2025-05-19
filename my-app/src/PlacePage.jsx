@@ -217,7 +217,7 @@ export default function PlacePage() {
           </div>
 
           <br />
-          <Details onOpen={handleScrollToTop} />
+          
         </div>
       </div>
     </>
