@@ -74,11 +74,7 @@ const NavBar = () => {
             )}
 
             {/* Alte link-uri din navbar */}
-            <li className={`nav-item ${location.pathname === "/about" ? "active" : ""}`}>
-              <Link to="/about" className="navbar-brand" onClick={() => setMobileMenuOpen(false)}>
-                About
-              </Link>
-            </li>
+            
 
             {/* ... restul link-urilor */}
           </ul>
