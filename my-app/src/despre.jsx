@@ -126,7 +126,7 @@ export default function IndexPage() {
                             }}
                             className="btn1"
                           >
-                            Vezi locatia
+                            Vezi detalii
                           </button>
                         </div>
                       </div>
