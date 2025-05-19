@@ -146,7 +146,7 @@ const generateModelOptions = () => {
     <div className="top"></div>
      
       <div className="write">
-      <h2 style={{color:"var(--main)"}}>Adauga un produs</h2>
+      <h2 style={{color:"var(--main)"}}>Adauga o cazare</h2>
         <form onSubmit={savePlace} className="writeForm">
         
           <div className="writeFormGroup ">
