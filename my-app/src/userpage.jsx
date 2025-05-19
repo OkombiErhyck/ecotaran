@@ -97,7 +97,7 @@ if (redirect) {
                            <a href="/write">
                            <img src={Anunt} className="img-fluid" alt=""/>
                           
-                               <button className="btn1"> Adauga Cazare </button>
+                               <button className="btn1"> Adauga  </button>
                            </a>
                            </div>
                        </div>
