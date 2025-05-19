@@ -42,78 +42,47 @@ export default function PlacesPage() {
 
         <div className="marcas-buttons">
   <button
-    onClick={() => setSelectedMarca('Fructe')}
-    className={`marca-button ${selectedMarca === 'Fructe' ? 'active' : ''}`}
+    onClick={() => setSelectedMarca('Sector 6')}
+    className={`marca-button ${selectedMarca === 'Sector 6' ? 'active' : ''}`}
   >
-    Fructe
+    Sector 6
   </button>
   <button
-    onClick={() => setSelectedMarca('Legume')}
-    className={`marca-button ${selectedMarca === 'Legume' ? 'active' : ''}`}
+    onClick={() => setSelectedMarca('Sector 5')}
+    className={`marca-button ${selectedMarca === 'Sector 5' ? 'active' : ''}`}
   >
-    Legume
+    Sector 5
   </button>
   <button
-    onClick={() => setSelectedMarca('Carne')}
-    className={`marca-button ${selectedMarca === 'Carne' ? 'active' : ''}`}
+    onClick={() => setSelectedMarca('Sector 4')}
+    className={`marca-button ${selectedMarca === 'Sector 4' ? 'active' : ''}`}
   >
-    Carne 
+    Sector 4
   </button>
   <button
-    onClick={() => setSelectedMarca('Bauturi')}
-    className={`marca-button ${selectedMarca === 'Bauturi' ? 'active' : ''}`}
+    onClick={() => setSelectedMarca('Sector 3')}
+    className={`marca-button ${selectedMarca === 'Sector 3' ? 'active' : ''}`}
   >
-    Bauturi
+    Sector 3
   </button>
   <button
-    onClick={() => setSelectedMarca('Pleascoi')}
-    className={`marca-button ${selectedMarca === 'Pleascoi' ? 'active' : ''}`}
+    onClick={() => setSelectedMarca('Sector 2')}
+    className={`marca-button ${selectedMarca === 'Sector 2' ? 'active' : ''}`}
   >
-    Pleascoi
+    Sector 2
   </button>
   <button
-    onClick={() => setSelectedMarca('Vegan')}
-    className={`marca-button ${selectedMarca === 'Vegan' ? 'active' : ''}`}
+    onClick={() => setSelectedMarca('Sector 1')}
+    className={`marca-button ${selectedMarca === 'Sector 1' ? 'active' : ''}`}
   >
-    Vegan
+    Sector 1
   </button>
-  <button
-    onClick={() => setSelectedMarca('Fainoase')}
-    className={`marca-button ${selectedMarca === 'Fainoase' ? 'active' : ''}`}
-  >
-    Fainoase
-  </button>
-  <button
-    onClick={() => setSelectedMarca('CamaraEco')}
-    className={`marca-button ${selectedMarca === 'CamaraEco' ? 'active' : ''}`}
-  >
-    Camaraeco
-  </button>
-  <button
-    onClick={() => setSelectedMarca('Lactate')}
-    className={`marca-button ${selectedMarca === 'Lactate' ? 'active' : ''}`}
-  >
-    Lactate
-  </button>
-
-
-<button
-    onClick={() => setSelectedMarca('ecopack')}
-    className={`marca-button ${selectedMarca === 'ecopack' ? 'active' : ''}`}
-  >
-    ecoPack
-  </button>
+  
 </div>
 
 
           <div className="filter-item">
-          <label htmlFor="model-select">Tipuri</label>
-      <select id="model-select" value={selectedModel} onChange={handleModelSelect}>
-        <option value="">Toate</option>
-        {filteredPlaces.map(place => (
-          <option key={place.id} value={place.model}>{place.model}</option>
-        ))}
-      </select>
+           
     </div>
     <div className="filter-item">
         <button onClick={resetFilters}>Reset</button>
