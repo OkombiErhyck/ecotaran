@@ -67,7 +67,7 @@ if (redirect) {
                        <div className="box card-body p-0  shadow-sm mb-5">
                           
                            <div className="box_content">
-                           <a href="/IndexPage">
+                           <a href="/Placespage">
                            <img src={PlacesPage} className="img-fluid" alt=""/>
                           
                                <button className="btn1"> Cazari</button>
