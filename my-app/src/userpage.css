@@ -34,7 +34,7 @@
  
  .userbox {
 
-height: 1370px;
+height: 1770px;
 background: #3b3b3b;
 
  }
@@ -47,7 +47,7 @@ position:relative
  @media (min-width: 768px){
  .userbox {
 
-    height: 800px;
+    height: 1100px;
     background: #3b3b3b;
     
      }
