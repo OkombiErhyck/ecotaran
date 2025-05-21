@@ -27,7 +27,7 @@ app.use(CookieParser());
 app.use("/uploads", express.static(__dirname+"/uploads"));
 app.use(cors({
     credentials: true,
-    origin: "https://ecotaran.vercel.app", 
+    origin: "http://localhost:3000", 
 }));
 
 
@@ -112,7 +112,7 @@ mongoose.connection.once('open', () => {
 app.post("/register", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     const {name,email,password} = req.body;
 
     try { 
@@ -134,7 +134,7 @@ res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
 app.post("/login", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     const { email, password } = req.body;
     const userDoc = await User.findOne({ email });
     if (userDoc) {
@@ -160,7 +160,7 @@ app.post("/login", async (req, res) => {
   
   app.get("/profile", (req,res) => {
     res.header("Access-Control-Allow-Credentials", "true");
-    res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+    res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     mongoose.connect(process.env.MONGO_URL);
     const {token} = req.cookies;
     if (token) {
@@ -198,7 +198,7 @@ app.post("/upload", photosMiddleware.single('photo'), async (req, res) => {
 
 app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const { firstName, lastName, email, address, city, zipCode, x, y, rep, cartItems,status } = req.body;
 
   const newOrder = new Order({
@@ -265,7 +265,7 @@ app.get('/orders', async (req, res) => {
 app.post("/places", (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {token} = req.cookies;
   const {title, marca, model, km, anul, addedPhotos, description, perks,
     culoare,
@@ -317,7 +317,7 @@ app.post("/places", (req,res) => {
 app.get("/user-places", (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {token} = req.cookies;
   jwt.verify(token, jwtSecret, {}, async (err,userData) => {
     const {id} = userData;
@@ -329,74 +329,118 @@ app.get("/user-places", (req,res) => {
 app.get("/places/:id", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {id} = req.params;
   res.json( await Place.findById(id));
 });
 
 
-app.put("/places" , async (req,res) => {
+app.put("/places", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
-  const {token} = req.cookies;
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
+  const { token } = req.cookies;
+
   const {
-    id, title, marca, model, km, anul, addedPhotos, description, perks,culoare,
-    cilindre,
-    tractiune,
-    transmisie,
-    seriesasiu,
-    caroserie,
-    putere,
-    normaeuro,
-    combustibil,
-    nume,
-    mail,
-    telefon,
+    id, title, marca, model, km, anul, addedPhotos, description, perks, culoare,
+    cilindre, tractiune, transmisie, seriesasiu, caroserie, putere, normaeuro,
+    combustibil, nume, mail, telefon,
   } = req.body;
+
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) throw err;
+    if (err) return res.status(401).json({ error: 'Unauthorized' });
+
     const placeDoc = await Place.findById(id);
-    if (userData.id === placeDoc.owner.toString()) {
-      placeDoc.set({
-        
-        title,
-        marca,
-        anul,
-        model,
-        km,
-        photos:addedPhotos,
-        description,
-        perks,
-        culoare,
-        cilindre,
-        tractiune,
-        transmisie,
-        nume,
-    mail,
-    telefon,
-        seriesasiu,
-        caroserie,
-        putere,
-        normaeuro,
-        combustibil
-      });
-      await placeDoc.save();
-      res.json("ok");
+    if (!placeDoc) return res.status(404).json({ error: 'Place not found' });
+
+    if (userData.id !== placeDoc.owner.toString()) {
+      return res.status(403).json({ error: 'Forbidden' });
     }
+
+    // Prepare updated fields object
+    const updatedFields = {
+      title,
+      marca,
+      anul,
+      model,
+      km,
+      photos: addedPhotos,
+      description,
+      perks,
+      culoare,
+      cilindre,
+      tractiune,
+      transmisie,
+      nume,
+      mail,
+      telefon,
+      seriesasiu,
+      caroserie,
+      putere,
+      normaeuro,
+      combustibil,
+    };
+
+    // Track changes
+    const changes = [];
+
+    for (const key of Object.keys(updatedFields)) {
+      // Compare old and new values (handle arrays and strings/numbers)
+      const oldVal = JSON.stringify(placeDoc[key] || null);
+      const newVal = JSON.stringify(updatedFields[key] || null);
+
+      if (oldVal !== newVal) {
+        changes.push({
+          user: userData.id,
+          field: key,
+          oldValue: placeDoc[key],
+          newValue: updatedFields[key],
+          timestamp: new Date(),
+        });
+      }
+    }
+
+    // Apply updates
+    placeDoc.set(updatedFields);
+
+    // Initialize modificationHistory array if not present
+    if (!placeDoc.modificationHistory) {
+      placeDoc.modificationHistory = [];
+    }
+
+    // Append changes
+    placeDoc.modificationHistory.push(...changes);
+
+    // Save the document
+    await placeDoc.save();
+
+    res.json("ok");
   });
 });
+
 
 
 app.get("/places", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   res.json( await Place.find() );
 });
 
 
 
+app.get("/places/:id", async (req, res) => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    const place = await Place.findById(req.params.id)
+      .populate("modificationHistory.user", "username email"); // populate user with username and email
+
+    if (!place) return res.status(404).json("Place not found");
+    res.json(place);
+  } catch (error) {
+    res.status(500).json("Server error");
+  }
+});
 
 
 
@@ -405,7 +449,7 @@ app.get("/places", async (req,res) => {
 app.post('/reset-password', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const { email, newPassword } = req.body;
 
   // Find user by email
@@ -431,7 +475,7 @@ app.post('/reset-password', async (req, res) => {
 app.delete("/places/:id", (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
   const {id} = req.params;
   Place.findByIdAndDelete(id, (err, deletedPlace) => {
     if (err) {
