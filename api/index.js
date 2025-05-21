@@ -326,16 +326,21 @@ app.get("/user-places", (req,res) => {
 });
 
 
-app.get("/places/:id", async (req,res) => {
+app.get("/places/:id", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
   res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
-  const {id} = req.params;
-  res.json( await Place.findById(id));
+
+  const { id } = req.params;
+
+  const place = await Place.findById(id)
+    .populate("modificationHistory.user", "username email"); // ⬅️ Add this line
+
+  res.json(place);
 });
 
 
-app.put("/places", async (req, res) => {
+ app.put("/places", async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
   res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
@@ -417,8 +422,6 @@ app.put("/places", async (req, res) => {
     res.json("ok");
   });
 });
-
-
 
 app.get("/places", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
