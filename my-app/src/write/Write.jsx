@@ -32,7 +32,24 @@ export default function Write() {
         "Ardei Iute",
       ],
     },
-    { brand: "Sector 5", models: ["Mere", "Pere", "Pepene", "Portocale", "Capsuni", "Alune", "Cirese", "Grepfrut", "Clementine", "Lime", "Lamaie", "Caise", "Nectarine"] },
+    {
+      brand: "Sector 5",
+      models: [
+        "Mere",
+        "Pere",
+        "Pepene",
+        "Portocale",
+        "Capsuni",
+        "Alune",
+        "Cirese",
+        "Grepfrut",
+        "Clementine",
+        "Lime",
+        "Lamaie",
+        "Caise",
+        "Nectarine",
+      ],
+    },
     { brand: "Sector 4", models: ["Carnati", "Sunca"] },
     { brand: "Sector 3", models: ["Branza", "Lapte", "Oua"] },
     { brand: "Sector 2", models: ["Vin", "Acidulate", "Neacidulate"] },
@@ -81,7 +98,11 @@ export default function Write() {
   function formatModifications(modHistory) {
     if (!modHistory || modHistory.length === 0) return "";
     let text = "\n\n=== Istoricul modificarilor ===\n";
-    modHistory.forEach((entry, i) => {
+
+    // Filter out owner changes
+    const filteredHistory = modHistory.filter(entry => entry.field !== "owner");
+
+    filteredHistory.forEach((entry, i) => {
       const userName =
         entry.user?.username ||
         entry.user?.email ||
@@ -89,8 +110,14 @@ export default function Write() {
       const date = new Date(entry.timestamp).toLocaleString();
 
       text += `\n[${i + 1}] ${userName} a modificat câmpul "${entry.field}":\n`;
-      text += `   Veche valoare:\n     ${prettyPrint(entry.oldValue).replace(/\n/g, "\n     ")}\n`;
-      text += `   Noua valoare:\n     ${prettyPrint(entry.newValue).replace(/\n/g, "\n     ")}\n`;
+      text += `   Veche valoare:\n     ${prettyPrint(entry.oldValue).replace(
+        /\n/g,
+        "\n     "
+      )}\n`;
+      text += `   Noua valoare:\n     ${prettyPrint(entry.newValue).replace(
+        /\n/g,
+        "\n     "
+      )}\n`;
       text += `   La data: ${date}\n`;
     });
     return text;
@@ -165,7 +192,7 @@ export default function Write() {
       setDescription(data.description || "");
       setPerks(data.perks || []);
 
-      // Append formatted modifications text (plain text)
+      // Append formatted modifications text (plain text) - owner changes filtered out
       setModificationText(formatModifications(data.modificationHistory));
     });
   }, [id]);
@@ -242,7 +269,11 @@ export default function Write() {
               onChange={(ev) => setTitle(ev.target.value)}
             />
             <h5>Sector</h5>
-            <select className="writeInput" value={marca} onChange={(ev) => setMarca(ev.target.value)}>
+            <select
+              className="writeInput"
+              value={marca}
+              onChange={(ev) => setMarca(ev.target.value)}
+            >
               <option style={{ color: "#000" }} value="">
                 selecteaza
               </option>
@@ -281,7 +312,9 @@ export default function Write() {
                       : "Arată istoricul modificarilor ▼"}
                   </button>
                   {showModifications && (
-                    <div className="modification-history">{formatModificationsForDisplay(modificationText)}</div>
+                    <div className="modification-history">
+                      {formatModificationsForDisplay(modificationText)}
+                    </div>
                   )}
                 </div>
               )}
