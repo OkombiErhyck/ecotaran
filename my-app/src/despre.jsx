@@ -18,27 +18,40 @@ export default function IndexPage() {
   const [selectedTitleMin, setSelectedTitleMin] = useState("");
   const [selectedTitleMax, setSelectedTitleMax] = useState("");
 
+  // New states for filtering description keywords
+  const [showOnlyCapital, setShowOnlyCapital] = useState(false);
+  const [showOnlyComplete, setShowOnlyComplete] = useState(false);
+  const [showOnlyAMT, setShowOnlyAMT] = useState(false);
+
   useEffect(() => {
-    axios.get("/places").then(response => {
+    axios.get("/places").then((response) => {
       setPlaces(response.data);
     });
   }, []);
 
-  // Filtrare locuri care au marca ce conține "personal"
-  const filteredPlaces = places.filter(place =>
-    place.marca?.toLowerCase().includes("personal") &&
-    (selectedMarca === "" || place.marca === selectedMarca) &&
-    (selectedModel === "" || place.model === selectedModel) &&
-    (selectedAnul === "" || place.anul === selectedAnul) &&
-    (selectedCombustibil === "" || place.combustibil === selectedCombustibil) &&
-    (selectedPutere === "" ||
-      (Number(place.putere) >= Number(selectedPutere) &&
-       Number(place.putere) < Number(selectedPutere) + 100)) &&
-    (selectedKmMin === "" || place.km >= Number(selectedKmMin)) &&
-    (selectedKmMax === "" || place.km <= Number(selectedKmMax)) &&
-    (selectedTitleMin === "" || place.title >= Number(selectedTitleMin)) &&
-    (selectedTitleMax === "" || place.title <= Number(selectedTitleMax))
-  );
+  const filteredPlaces = places.filter((place) => {
+    if (!place.marca?.toLowerCase().includes("personal")) return false;
+    if (selectedMarca && place.marca !== selectedMarca) return false;
+    if (selectedModel && place.model !== selectedModel) return false;
+    if (selectedAnul && place.anul !== selectedAnul) return false;
+    if (selectedCombustibil && place.combustibil !== selectedCombustibil) return false;
+    if (
+      selectedPutere &&
+      !(Number(place.putere) >= Number(selectedPutere) && Number(place.putere) < Number(selectedPutere) + 100)
+    )
+      return false;
+    if (selectedKmMin && !(place.km >= Number(selectedKmMin))) return false;
+    if (selectedKmMax && !(place.km <= Number(selectedKmMax))) return false;
+    if (selectedTitleMin && !(place.title >= Number(selectedTitleMin))) return false;
+    if (selectedTitleMax && !(place.title <= Number(selectedTitleMax))) return false;
+
+    // Description keyword filters (AND logic)
+    if (showOnlyCapital && !place.description?.toLowerCase().includes("capital")) return false;
+    if (showOnlyComplete && !place.description?.toLowerCase().includes("complete")) return false;
+    if (showOnlyAMT && !place.description?.toLowerCase().includes("amt")) return false;
+
+    return true;
+  });
 
   const lastPlaceIndex = currentPage * placesPerPage;
   const firstPlaceIndex = lastPlaceIndex - placesPerPage;
@@ -66,6 +79,9 @@ export default function IndexPage() {
     setSelectedKmMax("");
     setSelectedTitleMin("");
     setSelectedTitleMax("");
+    setShowOnlyCapital(false);
+    setShowOnlyComplete(false);
+    setShowOnlyAMT(false);
   };
 
   return (
@@ -84,7 +100,32 @@ export default function IndexPage() {
                   {marca}
                 </button>
               ))}
+
+              {/* Capital filter button */}
+              <button
+                onClick={() => setShowOnlyCapital((prev) => !prev)}
+                className={`marca1-button ${showOnlyCapital ? "active" : ""}`}
+              >
+                Capital Clean Group
+              </button>
+
+              {/* Complete filter button */}
+              <button
+                onClick={() => setShowOnlyComplete((prev) => !prev)}
+                className={`marca1-button ${showOnlyComplete ? "active" : ""}`}
+              >
+                Complete Recruitment
+              </button>
+
+              {/* AMT filter button */}
+              <button
+                onClick={() => setShowOnlyAMT((prev) => !prev)}
+                className={`marca1-button ${showOnlyAMT ? "active" : ""}`}
+              >
+                AMT
+              </button>
             </div>
+
             <div className="filter-item">
               <button onClick={resetFilters}>Reset</button>
             </div>
@@ -92,7 +133,7 @@ export default function IndexPage() {
 
           <div className="details container">
             <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
-              {currentPlaces.length > 0 &&
+              {currentPlaces.length > 0 ? (
                 currentPlaces.map((place) => (
                   <Link
                     to={"/place/" + place._id}
@@ -132,7 +173,10 @@ export default function IndexPage() {
                       </div>
                     </div>
                   </Link>
-                ))}
+                ))
+              ) : (
+                <p>Nu s-au găsit rezultate.</p>
+              )}
             </div>
           </div>
         </div>
