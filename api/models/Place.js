@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
 
+const modificationEntrySchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  field: String,
+  oldValue: mongoose.Schema.Types.Mixed,
+  newValue: mongoose.Schema.Types.Mixed,
+  timestamp: { type: Date, default: Date.now }
+}, { _id: false });
+
 const placeSchema = new mongoose.Schema({
-  owner: {type:mongoose.Schema.Types.ObjectId, ref:'User'},
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   title: String,
   marca: String,
   culoare: String,
@@ -19,12 +27,10 @@ const placeSchema = new mongoose.Schema({
   anul: String,
   model: String,
   km: Number,
-  nume:String,
+  nume: String,
   mail: String,
-  telefon: String
-
-
-
+  telefon: String,
+  modificationHistory: [modificationEntrySchema]
 });
 
 const PlaceModel = mongoose.model('Place', placeSchema);
