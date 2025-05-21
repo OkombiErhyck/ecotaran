@@ -34,7 +34,98 @@
 }
 
  
- 
+ .marca1-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Base style for all buttons */
+.marca1-button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: black;
+}
+.marca1-button.personal-ro{
+  background: #6c757d;;
+  color: white;
+}
+/* Personal RO - tricolor red yellow blue background gradient */
+.marca1-button.personal-ro:hover {
+  background: linear-gradient(90deg, red 33%, yellow 33%, yellow 66%, blue 66%);
+  color: rgb(0, 0, 0);
+}
+
+.marca1-button.personal-ro.active {
+  box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.7);
+}
+
+/* Personal NON UE - solid yellow */
+.marca1-button.personal-non-ue {
+  background-color:#6c757d;
+  color: rgb(255, 255, 255);
+}
+
+.marca1-button.personal-non-ue.active {
+  box-shadow: 0 0 8px 2px rgba(255, 235, 59, 0.8);
+}
+
+.marca1-button.personal-non-ue:hover {
+  background-color: rgba(215, 198, 49, 0.8); /* aqua blue on hover */
+  color: #000;
+}
+/* Capital Clean Group - green background */
+.marca1-button.capital-clean {
+  background-color:#6c757d; /* bootstrap green */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.marca1-button.capital-clean:hover {
+  background-color: #00d6d6; /* aqua blue on hover */
+  color: #000;
+}
+
+.marca1-button.capital-clean.active {
+  box-shadow: 0 0 8px 2px #00ffff;
+}
+
+/* Complete Recruitment - let's use default styling, or you can customize */
+.marca1-button.complete-recruitment{ 
+  background-color: #6c757d; /* bootstrap gray */
+  color: white;
+
+}
+
+.marca1-button.complete-recruitment.active{ 
+ box-shadow: 0 0 8px 2px #20ad41;
+
+}
+
+.marca1-button.complete-recruitment:hover {
+  background-color: #68bf4d; /* darker gray on hover */
+  color: #000;
+}
+/* AMT - gray background */
+.marca1-button.amt {
+  background-color: #6c757d; /* bootstrap gray */
+  color: white;
+}
+
+.marca1-button.amt.active {
+  box-shadow: 0 0 8px 2px #6c757d;
+}
+
+/* Optional: add hover effect to AMT button */
+.marca1-button.amt:hover {
+  background-color: #749bb7;
+  color: #000;
+}
+
  
 
 .filter-container {
