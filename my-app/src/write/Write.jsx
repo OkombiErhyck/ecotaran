@@ -256,10 +256,10 @@ export default function Write() {
       <div className="top"></div>
 
       <div className="write">
-        <h2 style={{ color: "var(--main)" }}>Adauga o cazare</h2>
+        <h2 style={{ color: "var(--main)" }}>Adauga  </h2>
         <form onSubmit={savePlace} className="writeForm">
           <div className="writeFormGroup ">
-            <h5>Addresa</h5>
+            <h5>Nume sau Addresa</h5>
             <input
               className="writeInput"
               placeholder="ex: Sector 1 Bd. Iuliu Maniu nr 1"
@@ -268,7 +268,7 @@ export default function Write() {
               value={title}
               onChange={(ev) => setTitle(ev.target.value)}
             />
-            <h5>Sector</h5>
+            <h5>Locatia/Origine</h5>
             <select
               className="writeInput"
               value={marca}
