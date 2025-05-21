@@ -340,87 +340,105 @@ app.get("/places/:id", async (req, res) => {
 });
 
 
- app.put("/places", async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
-  const { token } = req.cookies;
+  app.put("/places", async (req, res) => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
 
-  const {
-    id, title, marca, model, km, anul, addedPhotos, description, perks, culoare,
-    cilindre, tractiune, transmisie, seriesasiu, caroserie, putere, normaeuro,
-    combustibil, nume, mail, telefon,
-  } = req.body;
+    const { token } = req.cookies;
+    const {
+      id, title, marca, model, km, anul, addedPhotos, description, perks, culoare,
+      cilindre, tractiune, transmisie, seriesasiu, caroserie, putere, normaeuro,
+      combustibil, nume, mail, telefon,
+    } = req.body;
 
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) return res.status(401).json({ error: 'Unauthorized' });
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.status(401).json({ error: "Unauthorized" });
 
-    const placeDoc = await Place.findById(id);
-    if (!placeDoc) return res.status(404).json({ error: 'Place not found' });
+      const placeDoc = await Place.findById(id);
+      if (!placeDoc) return res.status(404).json({ error: "Place not found" });
 
-    if (userData.id !== placeDoc.owner.toString()) {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
+      // Prepare updated fields object
+      const updatedFields = {
+        title,
+        marca,
+        anul,
+        model,
+        km,
+        photos: addedPhotos,
+        description,
+        perks,
+        culoare,
+        cilindre,
+        tractiune,
+        transmisie,
+        nume,
+        mail,
+        telefon,
+        seriesasiu,
+        caroserie,
+        putere,
+        normaeuro,
+        combustibil,
+      };
 
-    // Prepare updated fields object
-    const updatedFields = {
-      title,
-      marca,
-      anul,
-      model,
-      km,
-      photos: addedPhotos,
-      description,
-      perks,
-      culoare,
-      cilindre,
-      tractiune,
-      transmisie,
-      nume,
-      mail,
-      telefon,
-      seriesasiu,
-      caroserie,
-      putere,
-      normaeuro,
-      combustibil,
-    };
+      // Track changes
+      const changes = [];
 
-    // Track changes
-    const changes = [];
+      for (const key of Object.keys(updatedFields)) {
+        const oldVal = JSON.stringify(placeDoc[key] || null);
+        const newVal = JSON.stringify(updatedFields[key] || null);
+        if (oldVal !== newVal) {
+          changes.push({
+            user: userData.id,
+            field: key,
+            oldValue: placeDoc[key],
+            newValue: updatedFields[key],
+            timestamp: new Date(),
+          });
+        }
+      }
 
-    for (const key of Object.keys(updatedFields)) {
-      // Compare old and new values (handle arrays and strings/numbers)
-      const oldVal = JSON.stringify(placeDoc[key] || null);
-      const newVal = JSON.stringify(updatedFields[key] || null);
+      // Safe check before comparing ownership
+      const currentOwner = placeDoc.owner ? placeDoc.owner.toString() : null;
 
-      if (oldVal !== newVal) {
+      let ownershipTransferred = false;
+      if (userData.id !== currentOwner) {
         changes.push({
           user: userData.id,
-          field: key,
-          oldValue: placeDoc[key],
-          newValue: updatedFields[key],
+          field: "owner",
+          oldValue: currentOwner,
+          newValue: userData.id,
           timestamp: new Date(),
         });
+        placeDoc.owner = userData.id;
+        ownershipTransferred = true;
       }
-    }
 
-    // Apply updates
-    placeDoc.set(updatedFields);
+      // Apply updates
+      placeDoc.set(updatedFields);
 
-    // Initialize modificationHistory array if not present
-    if (!placeDoc.modificationHistory) {
-      placeDoc.modificationHistory = [];
-    }
+      // Ensure modification history exists
+      if (!placeDoc.modificationHistory) {
+        placeDoc.modificationHistory = [];
+      }
 
-    // Append changes
-    placeDoc.modificationHistory.push(...changes);
+      placeDoc.modificationHistory.push(...changes);
+      await placeDoc.save();
 
-    // Save the document
-    await placeDoc.save();
-
-    res.json("ok");
-  });
+      res.json({
+        status: "ok",
+        ownershipTransferred,
+        message: ownershipTransferred
+          ? "Updated and ownership transferred."
+          : "Updated.",
+      });
+    });
+  } catch (error) {
+    console.error("Error updating place:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.get("/places", async (req,res) => {
