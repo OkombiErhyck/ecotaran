@@ -91,40 +91,51 @@ export default function IndexPage() {
         <div className="container">
           <div className="filter-container">
             <div className="marca1-buttons">
-              {["Personal RO", "Personal NON UE"].map((marca) => (
-                <button
-                  key={marca}
-                  onClick={() => handleMarcaClick(marca)}
-                  className={`marca1-button ${selectedMarca === marca ? "active" : ""}`}
-                >
-                  {marca}
-                </button>
-              ))}
+  {["Personal RO", "Personal NON UE"].map((marca) => (
+    <button
+      key={marca}
+      onClick={() => handleMarcaClick(marca)}
+      className={`marca1-button ${
+        selectedMarca === marca ? "active" : ""
+      } ${
+        marca === "Personal RO"
+          ? "personal-ro"
+          : marca === "Personal NON UE"
+          ? "personal-non-ue"
+          : ""
+      }`}
+    >
+      {marca}
+    </button>
+  ))}
 
-              {/* Capital filter button */}
-              <button
-                onClick={() => setShowOnlyCapital((prev) => !prev)}
-                className={`marca1-button ${showOnlyCapital ? "active" : ""}`}
-              >
-                Capital Clean Group
-              </button>
+  {/* Capital filter button */}
+  <button
+    onClick={() => setShowOnlyCapital((prev) => !prev)}
+    className={`marca1-button capital-clean ${showOnlyCapital ? "active" : ""}`}
+  >
+    Capital Clean Group
+  </button>
 
-              {/* Complete filter button */}
-              <button
-                onClick={() => setShowOnlyComplete((prev) => !prev)}
-                className={`marca1-button ${showOnlyComplete ? "active" : ""}`}
-              >
-                Complete Recruitment
-              </button>
+  {/* Complete filter button */}
+  <button
+    onClick={() => setShowOnlyComplete((prev) => !prev)}
+    className={`marca1-button complete-recruitment ${
+      showOnlyComplete ? "active" : ""
+    }`}
+  >
+    Complete Recruitment
+  </button>
 
-              {/* AMT filter button */}
-              <button
-                onClick={() => setShowOnlyAMT((prev) => !prev)}
-                className={`marca1-button ${showOnlyAMT ? "active" : ""}`}
-              >
-                AMT
-              </button>
-            </div>
+  {/* AMT filter button */}
+  <button
+    onClick={() => setShowOnlyAMT((prev) => !prev)}
+    className={`marca1-button amt ${showOnlyAMT ? "active" : ""}`}
+  >
+    AMT
+  </button>
+</div>
+
 
             <div className="filter-item">
               <button onClick={resetFilters}>Reset</button>
