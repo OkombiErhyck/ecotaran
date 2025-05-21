@@ -10,8 +10,9 @@ export default function PlacesPage() {
   const [selectedModel, setSelectedModel] = useState("");
 
   useEffect(() => {
-    axios.get('/user-places').then(({ data }) => {
-      // Filter places that include "Personal" in the 'marca' field
+    // Fetch all places instead of user-specific places
+    axios.get('/places').then(({ data }) => {
+      // Filter places that include "personal" in the 'marca' field (case-insensitive)
       const filtered = data.filter(place =>
         place.marca && place.marca.toLowerCase().includes("personal")
       );
