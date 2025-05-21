@@ -1,303 +1,365 @@
 const express = require('express');
 const cors = require("cors");
-const mongoose = require('mongoose');
+const mongoose  = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const User = require("./models/User.js");
-const Place = require("./models/Place.js");
+require("dotenv").config();
+const app = express();
+const CookieParser = require("cookie-parser");
+const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
+const fs =require("fs");
+const Place =require("./models/Place.js");
 const multer = require('multer');
 const bodyParser = require('body-parser');
-const CookieParser = require("cookie-parser");
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-const fs = require("fs");
-const os = require('os');
-require("dotenv").config();
-
-const app = express();
+const jsonParser = bodyParser.json({ limit: '50mb' });
+app.use(jsonParser);
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = "123456789";
-const bucket = 'ecotaran';
+const bucket = 'ecotaran'
 
-app.use(express.json({ limit: '50mb' }));
+
+
+
+app.use(express.json());
 app.use(CookieParser());
-
-// CORS setup (adjust origin and credentials as needed)
+app.use("/uploads", express.static(__dirname+"/uploads"));
 app.use(cors({
-  credentials: true,
-  origin: "http://localhost:3000",
+    credentials: true,
+    origin: "https://ecotaran.vercel.app", 
 }));
 
-app.use("/uploads", express.static(__dirname + "/uploads"));
 
-// Connect to Mongo once on app startup
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.error("MongoDB connection error:", err));
-
-// Upload to AWS S3 helper
 async function uploadToS3(path, originalFilename, mimetype) {
   const client = new S3Client({
     region: 'eu-north-1',
     credentials: {
+
       accessKeyId: process.env.S3_ACCESS_KEY,
       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     },
+
   });
 
-  const parts = originalFilename.split('.');
+  const parts =originalFilename.split('-');
   const ext = parts[parts.length - 1];
-  const newFilename = Date.now() + '.' + ext;
-
-  await client.send(new PutObjectCommand({
+  const newFilename = Date.now() + '-' + ext;
+ await client.send(new PutObjectCommand({
     Bucket: bucket,
     Body: fs.readFileSync(path),
     Key: newFilename,
     ContentType: mimetype,
     ACL: 'public-read',
   }));
-
   return `https://${bucket}.s3.amazonaws.com/${newFilename}`;
 }
 
-// Multer setup to use OS temp directory
-const photosMiddleware = multer({ dest: os.tmpdir(), limits: { fileSize: 80 * 1024 * 1024 } });
 
-// Order schema & model
+
+
+app.get("/test", (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+    res.json("test ok");
+});
+
+mongoose.connect(process.env.MONGO_URL);
 const orderSchema = new mongoose.Schema({
+  // Define the fields for the order collection
+  // For example:
   firstName: String,
   lastName: String,
   email: String,
   address: String,
   city: String,
-  x: String,
-  y: String,
-  rep: String,
+    x: String,
+    y: String,
+    rep: String,
   zipCode: String,
   cartItems: [],
-  createdAt: Date,
-  status: { type: String, default: 'Pending' },
+  createdAt:  Date,
+  status: {
+    type: String,
+    default: 'Pending' // Set default status to 'Pending'
+  },
 });
 
+
+
+// Create the "orders" model based on the schema
 const Order = mongoose.model('Order', orderSchema);
 
-// Routes
-
-app.get("/test", (req, res) => {
-  res.json("test ok");
-});
-
-app.post("/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const userDoc = await User.create({
-      name,
-      email,
-      password: bcrypt.hashSync(password, bcryptSalt),
-    });
-    res.json(userDoc);
-  } catch (e) {
-    res.status(422).json(e);
-  }
-});
-
-app.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const userDoc = await User.findOne({ email });
-    if (!userDoc) return res.status(404).json("not found");
-
-    const passOk = bcrypt.compareSync(password, userDoc.password);
-    if (!passOk) return res.status(422).json("pass not ok");
-
-    jwt.sign({ email: userDoc.email, id: userDoc._id, name: userDoc.name }, jwtSecret, {}, (err, token) => {
-      if (err) throw err;
-
-      // For local dev http, use sameSite:'lax' and secure:false
-      res.cookie("token", token, { sameSite: 'lax', secure: false }).json(userDoc);
-    });
-  } catch (err) {
-    res.status(500).json("Login error");
-  }
-});
-
-app.get("/profile", (req, res) => {
-  const { token } = req.cookies;
-  if (!token) return res.json(null);
-
-  jwt.verify(token, jwtSecret, {}, async (err, user) => {
-    if (err) return res.json(null);
-    res.json(user);
-  });
-});
-
-app.post("/logout", (req, res) => {
-  res.cookie("token", "", { expires: new Date(0) }).json(true);
-});
-
-app.post("/upload", photosMiddleware.single('photo'), async (req, res) => {
-  try {
-    const { path, originalname, mimetype } = req.file;
-    const url = await uploadToS3(path, originalname, mimetype);
-    res.json(url);
-  } catch (err) {
-    res.status(500).json({ error: 'Upload failed' });
-  }
-});
-
-// Order endpoints
-app.post('/orders', async (req, res) => {
-  try {
-    const { firstName, lastName, email, address, city, zipCode, x, y, rep, cartItems, status } = req.body;
-    const newOrder = new Order({
-      firstName,
-      lastName,
-      email,
-      address,
-      city,
-      x,
-      y,
-      rep,
-      zipCode,
-      cartItems,
-      createdAt: new Date(),
-      status,
-    });
-    await newOrder.save();
-    res.status(200).json({ message: 'Order saved successfully' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to save order' });
-  }
-});
-
-app.put('/orders/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-    const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
-    if (!order) return res.status(404).json({ message: 'Order not found' });
-    res.json(order);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to update order status' });
-  }
-});
-
-app.put('/orders/:orderId/markDelivered', async (req, res) => {
-  try {
-    const orderId = req.params.orderId;
-    const order = await Order.findById(orderId);
-    if (!order) return res.status(404).json({ error: 'Order not found' });
-    order.status = 'Delivered';
-    await order.save();
-    res.status(200).json({ message: 'Order marked as delivered' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to mark order as delivered' });
-  }
-});
-
-app.get('/orders', async (req, res) => {
-  try {
-    const orders = await Order.find();
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve orders' });
-  }
-});
-
-// Places endpoints
-app.post("/places", (req, res) => {
-  const { token } = req.cookies;
-  if (!token) return res.status(401).json("Unauthorized");
-
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) return res.status(401).json("Unauthorized");
-
-    const {
-      title, marca, model, km, anul, addedPhotos, description, perks,
-      culoare, nume, mail, telefon, cilindre, tractiune, transmisie,
-      seriesasiu, caroserie, putere, normaeuro, combustibil,
-    } = req.body;
-
-    try {
-      const placeDoc = await Place.create({
-        owner: userData.id,
-        title,
-        marca,
-        anul,
-        model,
-        km,
-        nume,
-        mail,
-        telefon,
-        photos: addedPhotos,
-        description,
-        perks,
-        culoare,
-        cilindre,
-        tractiune,
-        transmisie,
-        seriesasiu,
-        caroserie,
-        putere,
-        normaeuro,
-        combustibil,
-      });
-      res.json(placeDoc);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to create place' });
+// Make sure the "orders" collection exists in the database
+mongoose.connection.once('open', () => {
+  mongoose.connection.db.listCollections({ name: 'orders' }).toArray((err, collections) => {
+    if (err) {
+      console.error(err);
+    } else {
+      if (collections.length === 0) {
+        mongoose.connection.db.createCollection('orders', (error) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log('The "orders" collection has been created successfully.');
+          }
+        });
+      }
     }
   });
 });
 
-app.get("/user-places", (req, res) => {
-  const { token } = req.cookies;
-  if (!token) return res.status(401).json("Unauthorized");
 
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) return res.status(401).json("Unauthorized");
+app.post("/register", async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+    const {name,email,password} = req.body;
 
-    const places = await Place.find({ owner: userData.id });
-    res.json(places);
+    try { 
+    const userDoc = await User.create({
+        name,
+        email,
+        password:bcrypt.hashSync(password, bcryptSalt),
+    });
+
+
+    res.json(userDoc);
+} catch (e) {
+    res.status(422).json(e);
+}
+
+
+});
+
+app.post("/login", async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+    const { email, password } = req.body;
+    const userDoc = await User.findOne({ email });
+    if (userDoc) {
+      const passOk = bcrypt.compareSync(password, userDoc.password);
+      if (passOk) {
+        jwt.sign({email:userDoc.email, id:userDoc._id, name:userDoc.name}, jwtSecret, {}, (err, token) => {
+             if (err) throw err;
+        
+        res.cookie("token", token, { sameSite: 'none', secure: true }).json(userDoc);
+
+    });
+
+
+
+      } else {
+        res.status(422).json("pass not ok");
+      }
+    } else {
+      res.status(404).json("not found");
+    }
+  });
+
+  
+  app.get("/profile", (req,res) => {
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+    mongoose.connect(process.env.MONGO_URL);
+    const {token} = req.cookies;
+    if (token) {
+        jwt.verify(token, jwtSecret, {}, async (err, user) => {
+               if (err) throw err;
+               
+               res.json(user);
+         });
+    } else {
+        res.json(null);
+    }
+  });
+
+
+app.post("/logout", (req,res) => {
+  
+  res.cookie("token", "").json(true);
+});
+
+
+const photosMiddleware = multer({dest:'/tmp',  limits: { fileSize: 80000000 }});
+app.options("/upload", (req, res) => {
+ res.header("Access-Control-Allow-Origin", "*");
+ res.header("Access-Control-Allow-Methods", "POST");
+ res.header("Access-Control-Allow-Headers", "Content-Type");
+ res.send();
+});
+ 
+app.post("/upload", photosMiddleware.single('photo'), async (req, res) => {
+  const { path, originalname, mimetype } = req.file;
+  const url = await uploadToS3(path, originalname, mimetype);
+  res.json(url);
+});
+
+
+app.post('/orders', (req, res) => {mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
+  const { firstName, lastName, email, address, city, zipCode, x, y, rep, cartItems,status } = req.body;
+
+  const newOrder = new Order({
+    firstName,
+    lastName,
+    email,
+    address,
+    city,
+      x,
+      y,
+      rep,
+    zipCode,
+    cartItems,
+    createdAt: new Date(),
+    status,
+ 
+  });
+
+  newOrder.save()
+    .then(() => {
+      res.status(200).json({ message: 'Order saved successfully' });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Failed to save order' });
+    });
+});
+
+
+app.put('/orders/:orderId', (req, res) => {
+  const orderId = req.params.orderId;
+  const status = req.body.status || 'Processing'; // Use default value if status is not provided
+
+  Order.findByIdAndUpdate(
+    orderId,
+    { delivered: true, status }, // Update delivered and status fields
+    { new: true },
+    (err, order) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Failed to mark order as delivered');
+      } else {
+        res.send(order);
+      }
+    }
+  );
+});
+
+
+
+
+app.get('/orders', async (req, res) => {
+  try {
+    // Retrieve the orders from the database
+    const orders = await Order.find();
+
+    // Send the orders as the response
+    res.json(orders);
+  } catch (error) {
+    console.error('Failed to retrieve orders: ', error);
+    res.status(500).json({ error: 'Failed to retrieve orders' });
+  }
+});
+
+app.post("/places", (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  const {token} = req.cookies;
+  const {title, marca, model, km, anul, addedPhotos, description, perks,
+    culoare,
+    nume,
+    mail,
+    telefon,
+    cilindre,
+    tractiune,
+    transmisie,
+    seriesasiu,
+    caroserie,
+    putere,
+    normaeuro,
+    combustibil} = req.body;
+  jwt.verify(token, jwtSecret, {}, (err, userData) => {
+    if (err) throw err;
+    const placeDoc = Place.create({
+      owner: userData.id,
+      title,
+      marca,
+      anul,
+      model,
+      km,
+      nume,
+    mail,
+    telefon,
+      photos:addedPhotos,
+      description,
+      perks,
+      culoare,
+      cilindre,
+      tractiune,
+      transmisie,
+      seriesasiu,
+      caroserie,
+      putere,
+      normaeuro,
+      combustibil
+
+    });
+    res.json(placeDoc);
   });
 });
 
-app.get("/places", async (req, res) => {
-  try {
-    const places = await Place.find();
-    res.json(places);
-  } catch (error) {
-    res.status(500).json("Server error");
-  }
+
+
+
+
+app.get("/user-places", (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  const {token} = req.cookies;
+  jwt.verify(token, jwtSecret, {}, async (err,userData) => {
+    const {id} = userData;
+    res.json(await Place.find({owner:id}));
+  });
 });
+
 
 app.get("/places/:id", async (req, res) => {
-  try {
-    const place = await Place.findById(req.params.id)
-      .populate("modificationHistory.user", "username email");
-    if (!place) return res.status(404).json("Place not found");
-    res.json(place);
-  } catch (error) {
-    res.status(500).json("Server error");
-  }
+  mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+
+  const { id } = req.params;
+
+  const place = await Place.findById(id)
+    .populate("modificationHistory.user", "username email"); // ⬅️ Add this line
+
+  res.json(place);
 });
 
-app.put("/places", async (req, res) => {
-  const { token } = req.cookies;
-  if (!token) return res.status(401).json({ error: "Unauthorized" });
 
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) return res.status(401).json({ error: "Unauthorized" });
+  app.put("/places", async (req, res) => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
 
+    const { token } = req.cookies;
     const {
       id, title, marca, model, km, anul, addedPhotos, description, perks, culoare,
       cilindre, tractiune, transmisie, seriesasiu, caroserie, putere, normaeuro,
       combustibil, nume, mail, telefon,
     } = req.body;
 
-    try {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.status(401).json({ error: "Unauthorized" });
+
       const placeDoc = await Place.findById(id);
       if (!placeDoc) return res.status(404).json({ error: "Place not found" });
 
+      // Prepare updated fields object
       const updatedFields = {
         title,
         marca,
@@ -321,6 +383,7 @@ app.put("/places", async (req, res) => {
         combustibil,
       };
 
+      // Track changes
       const changes = [];
 
       for (const key of Object.keys(updatedFields)) {
@@ -337,7 +400,9 @@ app.put("/places", async (req, res) => {
         }
       }
 
+      // Safe check before comparing ownership
       const currentOwner = placeDoc.owner ? placeDoc.owner.toString() : null;
+
       let ownershipTransferred = false;
       if (userData.id !== currentOwner) {
         changes.push({
@@ -351,8 +416,10 @@ app.put("/places", async (req, res) => {
         ownershipTransferred = true;
       }
 
+      // Apply updates
       placeDoc.set(updatedFields);
 
+      // Ensure modification history exists
       if (!placeDoc.modificationHistory) {
         placeDoc.modificationHistory = [];
       }
@@ -367,39 +434,129 @@ app.put("/places", async (req, res) => {
           ? "Updated and ownership transferred."
           : "Updated.",
       });
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+    });
+  } catch (error) {
+    console.error("Error updating place:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/places", async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  res.json( await Place.find() );
+});
+
+
+
+app.get("/places/:id", async (req, res) => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    const place = await Place.findById(req.params.id)
+      .populate("modificationHistory.user", "username email"); // populate user with username and email
+
+    if (!place) return res.status(404).json("Place not found");
+    res.json(place);
+  } catch (error) {
+    res.status(500).json("Server error");
+  }
+});
+
+
+
+
+// Endpoint for resetting password
+app.post('/reset-password', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  const { email, newPassword } = req.body;
+
+  // Find user by email
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Hash the new password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // Update user's password
+  await User.updateOne({ email }, { password: hashedPassword });
+
+  res.status(200).json({ message: 'Password reset successful' });
+});
+
+
+
+
+
+app.delete("/places/:id", (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin","https://ecotaran.vercel.app");
+  const {id} = req.params;
+  Place.findByIdAndDelete(id, (err, deletedPlace) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Failed to delete place.");
+    } else {
+      console.log(deletedPlace);
+      res.json(deletedPlace);
     }
   });
 });
 
-app.delete("/places/:id", async (req, res) => {
+app.put('/orders/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
   try {
-    const { id } = req.params;
-    const deletedPlace = await Place.findByIdAndDelete(id);
-    if (!deletedPlace) return res.status(404).send("Place not found");
-    res.json(deletedPlace);
+    const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(order);
   } catch (error) {
-    res.status(500).send("Failed to delete place.");
+    console.error('Failed to update order status: ', error);
+    res.status(500).json({ message: 'Failed to update order status' });
   }
 });
 
-// Password reset endpoint
-app.post('/reset-password', async (req, res) => {
-  try {
-    const { email, newPassword } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await User.updateOne({ email }, { password: hashedPassword });
 
-    res.status(200).json({ message: 'Password reset successful' });
-  } catch (error) {
-    res.status(500).json({ message: 'Password reset failed' });
-  }
+
+
+
+
+
+app.put('/orders/:orderId/markDelivered', (req, res) => {
+  const orderId = req.params.orderId;
+
+  // Find the order in the database by its ID
+  Order.findById(orderId)
+    .then((order) => {
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+
+      // Update the order status to 'Delivered'
+      order.status = 'Delivered';
+
+      // Save the updated order
+      return order.save();
+    })
+    .then(() => {
+      res.status(200).json({ message: 'Order marked as delivered' });
+    })
+    .catch((error) => {
+      console.error('Failed to mark order as delivered: ', error);
+      res.status(500).json({ error: 'Failed to mark order as delivered' });
+    });
 });
 
-app.listen(4000, () => {
-  console.log("Server started on port 4000");
-});
+app.listen(4000);
