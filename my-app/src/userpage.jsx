@@ -6,6 +6,7 @@ import businessman from "./images/businessman.png";
 import PlacesPage from "./images/approved.png";
 import Logout from "./images/logout.png";
 import "./userpage.css";
+import setting from "./images/setting.png";
 import { UserContext } from "./UserContext";
 import { useContext } from "react";
  import axios from "axios";
@@ -110,7 +111,7 @@ if (redirect) {
                           
                            <div className="box_content">
                            <a href="/details">
-                           <img src={PlacesPage} className="img-fluid" alt=""/>
+                           <img src={setting} className="img-fluid" alt=""/>
                           
                                <button className="btn1"> Modifica Angajati</button>
                            </a>
