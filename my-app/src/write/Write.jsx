@@ -96,7 +96,7 @@ export default function Write() {
     return text;
   }
 
-  // Format modifications for display with colored old/new values
+  // Format modifications for display with colored old/new values and separate containers
   function formatModificationsForDisplay(text) {
     if (!text) return null;
 
@@ -119,20 +119,20 @@ export default function Write() {
       const date = dateMatch ? dateMatch[1].trim() : "-";
 
       return (
-        <div key={i} className="mod-entry" style={{ marginBottom: 16 }}>
+        <div key={i} className="mod-entry">
           <strong>
             [{i + 1}] {user}
           </strong>{" "}
           a modificat câmpul <em>"{field}"</em>:
-          <div style={{ color: "#b33", marginTop: 4 }}>
+          <div className="old-value-box">
             <strong>Veche valoare:</strong>
-            <pre style={{ margin: "4px 0", whiteSpace: "pre-wrap" }}>{oldValue}</pre>
+            <pre>{oldValue}</pre>
           </div>
-          <div style={{ color: "#1a7" }}>
+          <div className="new-value-box">
             <strong>Noua valoare:</strong>
-            <pre style={{ margin: "4px 0", whiteSpace: "pre-wrap" }}>{newValue}</pre>
+            <pre>{newValue}</pre>
           </div>
-          <div>
+          <div className="mod-date">
             <small>La data: {date}</small>
           </div>
         </div>
@@ -268,24 +268,24 @@ export default function Write() {
             />
 
             {/* Collapsible modification history */}
-            {modificationText && (
-              <div className="modification-history-container">
-                <button
-                  type="button"
-                  className="toggle-modifications-btn"
-                  onClick={() => setShowModifications((prev) => !prev)}
-                >
-                  {showModifications
-                    ? "Ascunde istoricul modificarilor ▲"
-                    : "Arată istoricul modificarilor ▼"}
-                </button>
-                {showModifications && (
-                  <div className="modification-history">
-                    {formatModificationsForDisplay(modificationText)}
-                  </div>
-                )}
-              </div>
-            )}
+            <div className="istoric-modificari">
+              {modificationText && (
+                <div className="modification-history-container">
+                  <button
+                    type="button"
+                    className="toggle-modifications-btn"
+                    onClick={() => setShowModifications((prev) => !prev)}
+                  >
+                    {showModifications
+                      ? "Ascunde istoricul modificarilor ▲"
+                      : "Arată istoricul modificarilor ▼"}
+                  </button>
+                  {showModifications && (
+                    <div className="modification-history">{formatModificationsForDisplay(modificationText)}</div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
           <button className="writeSubmit" type="submit">
