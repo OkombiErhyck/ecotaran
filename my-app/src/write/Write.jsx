@@ -285,15 +285,7 @@ export default function Write() {
             </select>
 
             
-
-<h5>Firma</h5>
-<input
-  className="writeInput"
-  placeholder="ex: AMT"
-  type="text"
-  value={cilindre}
-  onChange={(ev) => setCilindre(ev.target.value)}
-/>
+ 
 
 
 
