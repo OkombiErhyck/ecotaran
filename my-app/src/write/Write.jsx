@@ -33,7 +33,15 @@ export default function Write() {
               brand: "Sector 1",
               models: ["Tei", "Rapita"]
               },
+              {
+              brand: "Personal Ro",
+              models: ["r", "of"]
+              },
               
+              {
+              brand: "Personal Non UE",
+              models: ["Tei", "Rapita"]
+              },
                      
       
   // Add more car brands and models here...
