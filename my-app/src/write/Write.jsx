@@ -61,6 +61,7 @@ export default function Write() {
   const { id } = useParams();
 
   const [title, setTitle] = useState("");
+  const [documents, setDocuments] = useState([]);
   const [nume, setNume] = useState("");
   const [mail, setMail] = useState("");
   const [telefon, setTelefon] = useState("");
@@ -231,6 +232,7 @@ export default function Write() {
       const data = response.data;
       setCuloare(data.culoare);
       setNume(data.nume);
+      setDocuments(data.documents || []);
       setMail(data.mail);
       setTelefon(data.telefon);
       setTractiune(data.tractiune);
@@ -260,6 +262,7 @@ export default function Write() {
 
     const placeData = {
       title,
+      documents,
       marca,
       model,
       km,
@@ -306,6 +309,25 @@ export default function Write() {
     );
   };
 
+  async function uploadDocument(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("document", file); // <-- use 'document' to match backend
+
+  try {
+    const { data } = await axios.post("/upload-doc", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    setDocuments((prev) => [...prev, data.url]);  // use data.url from backend response
+  } catch (e) {
+    alert("Failed to upload document");
+  }
+}
+
+
+
   return (
     <>
       <div className="top"></div>
@@ -341,6 +363,20 @@ export default function Write() {
 
             <PhotosUpLoader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
             <br />
+            <div className="writeFormGroup">
+  <h5>Document Upload</h5>
+  <input type="file" onChange={uploadDocument} />
+  <ul>
+    {documents.map((doc, idx) => (
+      <li key={idx}>
+        <a href={doc} target="_blank" rel="noopener noreferrer">
+          {doc.split("/").pop()}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
           </div>
 
           <div className="writeFormGroup">
