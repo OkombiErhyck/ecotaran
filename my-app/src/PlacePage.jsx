@@ -19,7 +19,7 @@ export default function PlacePage() {
   const { updateCartQuantity } = useContext(CartContext);
   const cartLinkRef = useRef(null);
   const [vin, setVin] = useState('');
-  const [quantity, setQuantity] = useState(1); // Track the quantity
+  const [quantity, setQuantity] = useState(1);
 
   const handleVinChange = (event) => {
     setVin(event.target.value);
@@ -31,9 +31,7 @@ export default function PlacePage() {
   };
 
   useEffect(() => {
-    if (!id) {
-      return;
-    }
+    if (!id) return;
     axios.get(`/places/${id}`).then((response) => {
       setPlace(response.data);
     });
@@ -51,85 +49,50 @@ export default function PlacePage() {
       }
     }
 
-    // Adjust the carousel image size on mount
     adjustCarouselImageSize();
-
-    // Add a resize event listener to adjust the max-height on window resize
     window.addEventListener('resize', adjustCarouselImageSize);
-
-    // Remove the resize event listener when the component unmounts
-    return () => {
-      window.removeEventListener('resize', adjustCarouselImageSize);
-    }
+    return () => window.removeEventListener('resize', adjustCarouselImageSize);
   }, []);
 
   if (!place) return null;
 
-  function goBack() {
-    window.history.go(-1);
-  };
-
-  const handleShowMore = () => {
-    setShowMore(true);
-  };
+  const handleShowMore = () => setShowMore(true);
 
   const trimDescription = (description) => {
-    if (description.length > 400) {
-      return description.substring(0, 400) + '...';
-    }
-    return description;
-  };
-
-  const handleScrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.share({
-        title: place.title,
-        text: place.description,
-        url: window.location.href,
-      });
-    } catch (error) {
-      console.error(error.message);
-    }
+    return description.length > 400
+      ? description.substring(0, 400) + '...'
+      : description;
   };
 
   const addToCart = () => {
     let updatedCart = localStorage.getItem('cart');
-    if (!updatedCart) {
-      updatedCart = [];
-    } else {
-      updatedCart = JSON.parse(updatedCart);
-    }
+    updatedCart = updatedCart ? JSON.parse(updatedCart) : [];
 
-    // Check if the place is already in the cart
     const existingPlace = updatedCart.find((item) => item.id === place.id);
-
     if (existingPlace) {
-      // If the place already exists in the cart, update its quantity
       existingPlace.quantity += quantity;
     } else {
-      // If the place is not in the cart, add it with the specified quantity
       place.quantity = quantity;
       updatedCart.push(place);
     }
 
     localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-    // Update the cart context with the new cart data
     setCart(updatedCart);
-
     alert('Place added to cart!');
   };
 
-  if (!place) {
-    return null;
-  }
+  // Helper function to extract and clean document name from URL
+  const getDocumentName = (url) => {
+    let filename = url.split("/").pop().split("?")[0].split("#")[0];
+    const parts = filename.split('_');
+    if (parts.length > 2) {
+      // Remove first two parts (assumed to be db ids or codes)
+      filename = parts.slice(2).join('_');
+    }
+    filename = filename.replace(/[-_]+/g, ' ');
+    filename = filename.replace(/\b\w/g, (c) => c.toUpperCase());
+    return filename;
+  };
 
   return (
     <>
@@ -151,50 +114,29 @@ export default function PlacePage() {
 
         <div className="m2">
           <div id="price" className="container">
-            <h2
-              className="h_det"
-              style={{
-                color: "var(--main)",
-                fontWeight: "bold",
-                textAlign: "left",
-                marginBottom: 0,
-              }}
-            >
-              <span
-                style={{
-                  color: "white",
-                  fontWeight: "bold",
-                  textAlign: "left",
-                  marginBottom: 0,
-                }}
-              >
-                {place.km} 
-              </span>{" "}
-              {place.title}
+            <h2 className="h_det" style={{ color: "var(--main)", fontWeight: "bold", textAlign: "left", marginBottom: 0 }}>
+              <span style={{ color: "white", fontWeight: "bold" }}>{place.km}</span> {place.title}
             </h2>
             <div style={{ color: "wheat" }}>
-              {place.marca} 
-              <div className="quantity-container" >
-              <div
-                                className="quantity-btn-container"
-                                style={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  color:"black",
-                                  alignContent: "flex-end",
-                                  justifyContent: "space-between",
-                                  background: "#fffff",
-                                  borderRadius: "10%",
-                                  alignItems: "center",
-                                }}
-                              >
-                 
-                 
+              {place.marca}
+              <div className="quantity-container">
+                <div
+                  className="quantity-btn-container"
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    color: "black",
+                    alignContent: "flex-end",
+                    justifyContent: "space-between",
+                    background: "#fffff",
+                    borderRadius: "10%",
+                    alignItems: "center",
+                  }}
+                />
               </div>
-              </div>
-              
             </div>
           </div>
+
           <br />
           <div className="containere"></div>
           <div className="desContainer">
@@ -205,6 +147,7 @@ export default function PlacePage() {
                 ))}
               </ul>
             </h3>
+
             <h3>DESCRIERE</h3>
             <div className="descriptionContainer">
               <p style={{ whiteSpace: "pre-line" }}>
@@ -214,10 +157,46 @@ export default function PlacePage() {
                 <button onClick={handleShowMore}>Show more</button>
               )}
             </div>
-          </div>
 
-          <br />
-          
+            {/* Uploaded Documents Section */}
+            {place.documents && place.documents.length > 0 && (
+              <div className="document-section" style={{ marginTop: "20px" }}>
+                <h3>Documente atașate</h3>
+                <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+                  {place.documents.map((url, index) => (
+                    <li key={index} style={{ marginBottom: "10px" }}>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: "var(--main)",
+                          textDecoration: "underline",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {getDocumentName(url)}
+                      </a>
+
+                      {/* Optional preview for PDFs */}
+                      {url.endsWith(".pdf") && (
+                        <iframe
+                          src={url}
+                          title={`Document Preview ${index}`}
+                          style={{
+                            width: "100%",
+                            height: "500px",
+                            marginTop: "10px",
+                            border: "1px solid #ccc",
+                          }}
+                        />
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
