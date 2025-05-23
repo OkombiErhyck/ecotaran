@@ -340,7 +340,7 @@ app.get("/places/:id", async (req, res) => {
 });
 
 
-  app.put("/places", async (req, res) => {
+ app.put("/places", async (req, res) => {
   try {
     await mongoose.connect(process.env.MONGO_URL);
     res.header("Access-Control-Allow-Credentials", "true");
@@ -351,6 +351,7 @@ app.get("/places/:id", async (req, res) => {
       id, title, marca, model, km, anul, addedPhotos, description, perks, culoare,
       cilindre, tractiune, transmisie, seriesasiu, caroserie, putere, normaeuro,
       combustibil, nume, mail, telefon,
+      documents  // <-- expect array of URLs here
     } = req.body;
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -359,7 +360,6 @@ app.get("/places/:id", async (req, res) => {
       const placeDoc = await Place.findById(id);
       if (!placeDoc) return res.status(404).json({ error: "Place not found" });
 
-      // Prepare updated fields object
       const updatedFields = {
         title,
         marca,
@@ -381,6 +381,7 @@ app.get("/places/:id", async (req, res) => {
         putere,
         normaeuro,
         combustibil,
+        documents,  // add documents here
       };
 
       // Track changes
@@ -400,9 +401,8 @@ app.get("/places/:id", async (req, res) => {
         }
       }
 
-      // Safe check before comparing ownership
+      // Ownership check (optional)
       const currentOwner = placeDoc.owner ? placeDoc.owner.toString() : null;
-
       let ownershipTransferred = false;
       if (userData.id !== currentOwner) {
         changes.push({
@@ -416,14 +416,11 @@ app.get("/places/:id", async (req, res) => {
         ownershipTransferred = true;
       }
 
-      // Apply updates
       placeDoc.set(updatedFields);
 
-      // Ensure modification history exists
       if (!placeDoc.modificationHistory) {
         placeDoc.modificationHistory = [];
       }
-
       placeDoc.modificationHistory.push(...changes);
       await placeDoc.save();
 
@@ -439,6 +436,49 @@ app.get("/places/:id", async (req, res) => {
     console.error("Error updating place:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+
+// Endpoint for uploading documents
+const docsMiddleware = multer({
+  dest: '/tmp',
+  limits: { fileSize: 80000000 },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain'
+    ];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only PDF, DOC, DOCX, TXT allowed.'));
+    }
+  }
+});
+app.post("/upload-doc", docsMiddleware.single('document'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+    const { path, originalname, mimetype } = req.file;
+    const url = await uploadToS3(path, originalname, mimetype);
+    fs.unlinkSync(path); // remove temp file
+    res.json({ url });
+  } catch (error) {
+    console.error("Document upload error:", error);
+    res.status(500).json({ error: "Failed to upload document" });
+  }
+});
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    // Multer-specific error
+    return res.status(400).json({ error: err.message });
+  } else if (err) {
+    return res.status(500).json({ error: err.message });
+  }
+  next();
 });
 
 app.get("/places", async (req,res) => {
