@@ -30,7 +30,9 @@ const placeSchema = new mongoose.Schema({
   nume: String,
   mail: String,
   telefon: String,
-  modificationHistory: [modificationEntrySchema]
+  modificationHistory: [modificationEntrySchema],
+  documents: [{ type: String }],
+
 });
 
 const PlaceModel = mongoose.model('Place', placeSchema);
