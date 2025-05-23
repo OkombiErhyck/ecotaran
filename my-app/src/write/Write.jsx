@@ -82,11 +82,9 @@ export default function Write() {
   const [modificationText, setModificationText] = useState("");
   const [perks, setPerks] = useState([]);
   const [redirect, setRedirect] = useState("");
-
-  // New state to toggle the collapsible modification history
   const [showModifications, setShowModifications] = useState(false);
 
-  // Helper to pretty-print values (remove quotes around strings)
+  // Helper: pretty print values
   function prettyPrint(value) {
     if (typeof value === "string") return value;
     if (value === null || value === undefined) return "-";
@@ -94,13 +92,55 @@ export default function Write() {
     return String(value);
   }
 
-  // Format modification history cleanly as plain text (for internal use)
+  // Diff highlighting helper — simple word diff
+  function diffHighlight(oldStr, newStr) {
+    // Split by words (space/newline), keep separators
+    const oldWords = oldStr.split(/(\s+)/);
+    const newWords = newStr.split(/(\s+)/);
+
+    // We'll do a very simple diff: highlight words that are in old but not in new as removed
+    // and words that are in new but not in old as added.
+    // For a more robust diff, consider importing 'diff' package, but here is a simple approach.
+
+    // Create sets for quick lookup
+    const oldSet = new Set(oldWords.filter(w => w.trim() !== ""));
+    const newSet = new Set(newWords.filter(w => w.trim() !== ""));
+
+    // Render old with removals highlighted if missing in new
+    const oldRendered = oldWords.map((word, idx) => {
+      if (word.trim() === "") return word; // keep spaces as is
+      if (!newSet.has(word)) {
+        return (
+          <span key={"old_" + idx} className="diff-removed">
+            {word}
+          </span>
+        );
+      }
+      return word;
+    });
+
+    // Render new with additions highlighted if missing in old
+    const newRendered = newWords.map((word, idx) => {
+      if (word.trim() === "") return word;
+      if (!oldSet.has(word)) {
+        return (
+          <span key={"new_" + idx} className="diff-added">
+            {word}
+          </span>
+        );
+      }
+      return word;
+    });
+
+    return { oldRendered, newRendered };
+  }
+
+  // Format modification history plain text, filter out "owner"
   function formatModifications(modHistory) {
     if (!modHistory || modHistory.length === 0) return "";
     let text = "\n\n=== Istoricul modificarilor ===\n";
 
-    // Filter out owner changes
-    const filteredHistory = modHistory.filter(entry => entry.field !== "owner");
+    const filteredHistory = modHistory.filter((entry) => entry.field !== "owner");
 
     filteredHistory.forEach((entry, i) => {
       const userName =
@@ -110,28 +150,20 @@ export default function Write() {
       const date = new Date(entry.timestamp).toLocaleString();
 
       text += `\n[${i + 1}] ${userName} a modificat câmpul "${entry.field}":\n`;
-      text += `   Veche valoare:\n     ${prettyPrint(entry.oldValue).replace(
-        /\n/g,
-        "\n     "
-      )}\n`;
-      text += `   Noua valoare:\n     ${prettyPrint(entry.newValue).replace(
-        /\n/g,
-        "\n     "
-      )}\n`;
+      text += `   Veche valoare:\n     ${prettyPrint(entry.oldValue).replace(/\n/g, "\n     ")}\n`;
+      text += `   Noua valoare:\n     ${prettyPrint(entry.newValue).replace(/\n/g, "\n     ")}\n`;
       text += `   La data: ${date}\n`;
     });
     return text;
   }
 
-  // Format modifications for display with colored old/new values and separate containers
+  // Format modification history for display with exact change highlighting for description field only
   function formatModificationsForDisplay(text) {
     if (!text) return null;
 
-    // Split entries by pattern "\n\n[1]", "\n\n[2]", ...
     const entries = text.split(/\n\n\[\d+\]/).filter(Boolean);
 
     return entries.map((entry, i) => {
-      // Extract user, field, oldValue, newValue, date with regex
       const userMatch = entry.match(/^\s*(.+?) a modificat câmpul "(.+?)":/m);
       const oldValMatch = entry.match(/Veche valoare:\n\s*([\s\S]*?)\n\s*Noua valoare:/m);
       const newValMatch = entry.match(/Noua valoare:\n\s*([\s\S]*?)\n\s*La data:/m);
@@ -145,6 +177,32 @@ export default function Write() {
       const newValue = newValMatch ? newValMatch[1].trim() : "-";
       const date = dateMatch ? dateMatch[1].trim() : "-";
 
+      // If field is description, highlight exact changes inside
+      if (field === "description") {
+        const { oldRendered, newRendered } = diffHighlight(oldValue, newValue);
+
+        return (
+          <div key={i} className="mod-entry">
+            <strong>
+              [{i + 1}] {user}
+            </strong>{" "}
+            a modificat câmpul <em>"{field}"</em>:
+            <div className="old-value-box">
+              <strong>Veche valoare:</strong>
+              <pre>{oldRendered}</pre>
+            </div>
+            <div className="new-value-box">
+              <strong>Noua valoare:</strong>
+              <pre>{newRendered}</pre>
+            </div>
+            <div className="mod-date">
+              <small>La data: {date}</small>
+            </div>
+          </div>
+        );
+      }
+
+      // Default display without diff for other fields
       return (
         <div key={i} className="mod-entry">
           <strong>
@@ -191,8 +249,6 @@ export default function Write() {
       setKm(data.km);
       setDescription(data.description || "");
       setPerks(data.perks || []);
-
-      // Append formatted modifications text (plain text) - owner changes filtered out
       setModificationText(formatModifications(data.modificationHistory));
     });
   }, [id]);
@@ -200,7 +256,6 @@ export default function Write() {
   async function savePlace(ev) {
     ev.preventDefault();
 
-    // Save only the original description (without modifications appended)
     const cleanDescription = description;
 
     const placeData = {
@@ -284,12 +339,6 @@ export default function Write() {
               ))}
             </select>
 
-            
- 
-
-
-
-
             <PhotosUpLoader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
             <br />
           </div>
@@ -304,7 +353,6 @@ export default function Write() {
               onChange={(ev) => setDescription(ev.target.value)}
             />
 
-            {/* Collapsible modification history */}
             <div className="istoric-modificari">
               {modificationText && (
                 <div className="modification-history-container">
@@ -318,7 +366,10 @@ export default function Write() {
                       : "Arată istoricul modificarilor ▼"}
                   </button>
                   {showModifications && (
-                    <div className="modification-history">
+                    <div
+                      className="modification-history"
+                      style={{ overflow: "visible", maxHeight: "none" }}
+                    >
                       {formatModificationsForDisplay(modificationText)}
                     </div>
                   )}
