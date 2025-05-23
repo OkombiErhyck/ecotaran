@@ -207,14 +207,16 @@ const OrdersPage = () => {
       <br></br>
       <br></br>
       <br></br>
-      <h1>Cereri de Concediu</h1>
+      <h1 className="titluc">Cereri de Concediu</h1>
       <div>
+        <div className="filter-container1"> 
         <input
           type="text"
           placeholder="Cauta"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+         
         <button className="filter-button1" onClick={() => handleFilter('Pending')}>In asteptare</button>
         <button className="filter-button2" onClick={() => handleFilter('Accepted')}>Aprobate</button>
         <button className="filter-button3" onClick={() => handleFilter('Rejected')}>Respinse</button>
@@ -279,20 +281,22 @@ const OrdersPage = () => {
                     </div>
                   )}
                   {order.status === 'Accepted' && (
-                    <button style={{ backgroundColor: 'lime' }} disabled>Cerere Aprobata</button>
+                    <button style={{ backgroundColor: '#87ff57' }} disabled>Cerere Aprobata</button>
                   )}
                   {order.status === 'Rejected' && (
-                    <button style={{ backgroundColor: 'red' }} disabled>Cerere Respinsa</button>
+                    <button style={{ backgroundColor: '#d43535' }} disabled>Cerere Respinsa</button>
                   )}
                 </div>
                 {statusChangeMessage && (
                   <p className="status-change-message">{statusChangeMessage}</p>
                 )}
               </div>
+              
             ))
           )}
         </>
       )}
+       </div>
     </div>
   );
 };
