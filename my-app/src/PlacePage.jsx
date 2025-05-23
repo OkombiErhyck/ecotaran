@@ -179,18 +179,7 @@ export default function PlacePage() {
                       </a>
 
                       {/* Optional preview for PDFs */}
-                      {url.endsWith(".pdf") && (
-                        <iframe
-                          src={url}
-                          title={`Document Preview ${index}`}
-                          style={{
-                            width: "100%",
-                            height: "500px",
-                            marginTop: "10px",
-                            border: "1px solid #ccc",
-                          }}
-                        />
-                      )}
+                      
                     </li>
                   ))}
                 </ul>
