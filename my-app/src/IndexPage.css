@@ -47,8 +47,12 @@
   border-radius: 4px;
   font-weight: 600;
   cursor: pointer;
+  background-color: #524d4d;
   transition: background-color 0.3s ease;
   color: black;
+}
+.marca1-button:hover {
+  background-color: #ffffff; /* light gray on hover */
 }
 .marca1-button.personal-ro{
   background: #6c757d;
