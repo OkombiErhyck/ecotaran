@@ -10,8 +10,9 @@ export default function PlacesPage() {
   const [selectedModel, setSelectedModel] = useState("");
 
   useEffect(() => {
-    axios.get('/user-places').then(({ data }) => {
-      // Filter places that have "Sector" in the marca field (case-insensitive)
+    // Fetch all places instead of user-specific places
+    axios.get('/places').then(({ data }) => {
+      // Optionally filter places to only those with "Sector" in marca (case-insensitive)
       const filtered = data.filter(place =>
         place.marca && place.marca.toLowerCase().includes("sector")
       );
