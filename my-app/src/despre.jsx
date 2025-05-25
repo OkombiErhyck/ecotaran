@@ -173,7 +173,7 @@ export default function IndexPage() {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </Link> 
                 ))
               ) : (
                 <p>Nu s-au găsit rezultate.</p>
