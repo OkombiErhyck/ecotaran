@@ -215,6 +215,7 @@ const OrdersPage = () => {
           placeholder="Cauta"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          
         />
          
         <button className="filter-button1" onClick={() => handleFilter('Pending')}>In asteptare</button>
@@ -249,7 +250,21 @@ const OrdersPage = () => {
               >
                 <h3>Cererea #{index + 1}</h3>
                 <p>Creata la: {new Date(order.createdAt).toLocaleString()}</p>
-                <div className="delivery-details">
+               <div
+  className="delivery-details"
+  style={{
+    backgroundColor:
+      order.status === "Accepted"
+        ? "#d0f7be"
+        : order.status === "Pending"
+        ? "#f8f6d0"
+        : order.status === "Rejected"
+        ? "#f8d0d0"
+        : "#f0f0f0",
+    padding: "10px",
+    borderRadius: "8px",
+  }}
+>
                   <strong>Detalii:</strong>
                   <p>Nume: {order.firstName}</p>
                   <p>Nr. zile: {order.lastName}</p>
