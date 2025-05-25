@@ -8,7 +8,8 @@ export default function IndexPage() {
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [placesPerPage, setPlacesPerPage] = useState(9);
-  const [selectedMarca, setSelectedMarca] = useState("");
+
+  // Removed selectedMarca state and marca filter UI
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedAnul, setSelectedAnul] = useState("");
   const [selectedCombustibil, setSelectedCombustibil] = useState("");
@@ -18,7 +19,7 @@ export default function IndexPage() {
   const [selectedTitleMin, setSelectedTitleMin] = useState("");
   const [selectedTitleMax, setSelectedTitleMax] = useState("");
 
-  // New states for filtering description keywords
+  // Description keyword filters
   const [showOnlyCapital, setShowOnlyCapital] = useState(false);
   const [showOnlyComplete, setShowOnlyComplete] = useState(false);
   const [showOnlyAMT, setShowOnlyAMT] = useState(false);
@@ -30,8 +31,10 @@ export default function IndexPage() {
   }, []);
 
   const filteredPlaces = places.filter((place) => {
-    if (!place.marca?.toLowerCase().includes("personal")) return false;
-    if (selectedMarca && place.marca !== selectedMarca) return false;
+    // Always filter only "Personal RO" marca (case-insensitive)
+    if (place.marca?.toLowerCase() !== "personal ro") return false;
+
+    // Other filters
     if (selectedModel && place.model !== selectedModel) return false;
     if (selectedAnul && place.anul !== selectedAnul) return false;
     if (selectedCombustibil && place.combustibil !== selectedCombustibil) return false;
@@ -45,7 +48,7 @@ export default function IndexPage() {
     if (selectedTitleMin && !(place.title >= Number(selectedTitleMin))) return false;
     if (selectedTitleMax && !(place.title <= Number(selectedTitleMax))) return false;
 
-    // Description keyword filters (AND logic)
+    // Description keyword filters
     if (showOnlyCapital && !place.description?.toLowerCase().includes("capital")) return false;
     if (showOnlyComplete && !place.description?.toLowerCase().includes("complete")) return false;
     if (showOnlyAMT && !place.description?.toLowerCase().includes("amt")) return false;
@@ -65,12 +68,7 @@ export default function IndexPage() {
     }
   };
 
-  const handleMarcaClick = (marca) => {
-    setSelectedMarca(selectedMarca === marca ? "" : marca);
-  };
-
   const resetFilters = () => {
-    setSelectedMarca("");
     setSelectedModel("");
     setSelectedAnul("");
     setSelectedCombustibil("");
@@ -91,51 +89,28 @@ export default function IndexPage() {
         <div className="container">
           <div className="filter-container">
             <div className="marca1-buttons">
-  {["Personal RO", "Personal NON UE"].map((marca) => (
-    <button
-      key={marca}
-      onClick={() => handleMarcaClick(marca)}
-      className={`marca1-button ${
-        selectedMarca === marca ? "active" : ""
-      } ${
-        marca === "Personal RO"
-          ? "personal-ro"
-          : marca === "Personal NON UE"
-          ? "personal-non-ue"
-          : ""
-      }`}
-    >
-      {marca}
-    </button>
-  ))}
+              {/* Removed marca buttons completely, only description filters remain */}
+              <button
+                onClick={() => setShowOnlyCapital((prev) => !prev)}
+                className={`marca1-button capital-clean ${showOnlyCapital ? "active" : ""}`}
+              >
+                Capital Clean Group
+              </button>
 
-  {/* Capital filter button */}
-  <button
-    onClick={() => setShowOnlyCapital((prev) => !prev)}
-    className={`marca1-button capital-clean ${showOnlyCapital ? "active" : ""}`}
-  >
-    Capital Clean Group
-  </button>
+              <button
+                onClick={() => setShowOnlyComplete((prev) => !prev)}
+                className={`marca1-button complete-recruitment ${showOnlyComplete ? "active" : ""}`}
+              >
+                Complete Recruitment
+              </button>
 
-  {/* Complete filter button */}
-  <button
-    onClick={() => setShowOnlyComplete((prev) => !prev)}
-    className={`marca1-button complete-recruitment ${
-      showOnlyComplete ? "active" : ""
-    }`}
-  >
-    Complete Recruitment
-  </button>
-
-  {/* AMT filter button */}
-  <button
-    onClick={() => setShowOnlyAMT((prev) => !prev)}
-    className={`marca1-button amt ${showOnlyAMT ? "active" : ""}`}
-  >
-    AMT
-  </button>
-</div>
-
+              <button
+                onClick={() => setShowOnlyAMT((prev) => !prev)}
+                className={`marca1-button amt ${showOnlyAMT ? "active" : ""}`}
+              >
+                AMT
+              </button>
+            </div>
 
             <div className="filter-item">
               <button onClick={resetFilters}>Reset</button>
@@ -146,11 +121,7 @@ export default function IndexPage() {
             <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
               {currentPlaces.length > 0 ? (
                 currentPlaces.map((place) => (
-                  <Link
-                    to={"/place/" + place._id}
-                    key={place._id}
-                    className="link-no-underline"
-                  >
+                  <Link to={"/place/" + place._id} key={place._id} className="link-no-underline">
                     <div className="col">
                       <div className="box card-body p-0 shadow-sm mb-5">
                         {place.photos.length > 0 && (
