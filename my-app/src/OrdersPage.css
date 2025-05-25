@@ -53,6 +53,20 @@
     background-color: rgb(34, 126, 34);
   }
   
+.order-pending {
+  background-color: #f8f6d0; /* Soft yellow for pending */
+}
+
+.order-accepted {
+  background-color: #87ff57; /* Match "Aprobat" button green */
+}
+
+.order-rejected {
+  background-color: #d43535; /* Match "Respins" button red */
+  color: white; /* Ensure good contrast */
+}
+
+
 .status-buttons button:hover {
       background-color: rgb(158, 156, 156); /* Change the background color on hover */
       color: black; /* Change the text color on hover */
