@@ -72,7 +72,21 @@ if (redirect) {
                            <a href="/despre">
                            <img src={businessman} className="img-fluid" alt=""/>
                           
-                               <button className="btn1">Personal</button>
+                               <button className="btn1">Personal Ro</button>
+                           </a>
+                           </div>
+                       </div>
+                    </div>
+
+
+                    <div className="col-lg-4 col-xs-6">
+                       <div className="box card-body p-0  shadow-sm mb-5">
+                          
+                           <div className="box_content">
+                           <a href="/lactate">
+                           <img src={businessman} className="img-fluid" alt=""/>
+                          
+                               <button className="btn1">Personal Strain</button>
                            </a>
                            </div>
                        </div>
