@@ -9,7 +9,8 @@ export default function IndexPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [placesPerPage, setPlacesPerPage] = useState(9);
 
-  // Removed selectedMarca state and marca filter UI
+  // Filters
+  const [searchTitle, setSearchTitle] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedAnul, setSelectedAnul] = useState("");
   const [selectedCombustibil, setSelectedCombustibil] = useState("");
@@ -33,6 +34,13 @@ export default function IndexPage() {
   const filteredPlaces = places.filter((place) => {
     // Always filter only "Personal RO" marca (case-insensitive)
     if (place.marca?.toLowerCase() !== "personal ro") return false;
+
+    // Title search filter (case-insensitive, partial match)
+    if (
+      searchTitle &&
+      !place.title?.toLowerCase().includes(searchTitle.toLowerCase())
+    )
+      return false;
 
     // Other filters
     if (selectedModel && place.model !== selectedModel) return false;
@@ -69,6 +77,7 @@ export default function IndexPage() {
   };
 
   const resetFilters = () => {
+    setSearchTitle("");
     setSelectedModel("");
     setSelectedAnul("");
     setSelectedCombustibil("");
@@ -88,8 +97,18 @@ export default function IndexPage() {
       <div className="main2">
         <div className="container">
           <div className="filter-container">
+            {/* Search bar */}
+           <div className="filter-item" style={{ marginBottom: "10px" }}>
+              <input
+                type="text"
+                placeholder="Search by title..."
+                value={searchTitle}
+                onChange={(e) => setSearchTitle(e.target.value)}
+                style={{ padding: "8px", width: "100%", maxWidth: "300px" }}
+              />
+            </div>
+
             <div className="marca1-buttons">
-              {/* Removed marca buttons completely, only description filters remain */}
               <button
                 onClick={() => setShowOnlyCapital((prev) => !prev)}
                 className={`marca1-button capital-clean ${showOnlyCapital ? "active" : ""}`}
