@@ -56,6 +56,7 @@ export default function Write() {
     { brand: "Sector 1", models: ["Tei", "Rapita"] },
     { brand: "Personal Ro", models: ["r", "of"] },
     { brand: "Personal Non UE", models: ["Tei", "Rapita"] },
+     { brand: "Automobile", models: ["mas", "ina"] },
   ];
 
   const { id } = useParams();
@@ -326,6 +327,18 @@ export default function Write() {
   }
 }
 
+async function deleteDocument(docUrl) {
+  // extrage numele fișierului din URL
+  const filename = docUrl.split('/').pop();
+
+  try {
+    await axios.delete('/upload-doc', { data: { filename } });
+    // elimină din lista documents
+    setDocuments((prev) => prev.filter((doc) => doc !== docUrl));
+  } catch (e) {
+    alert('Failed to delete document');
+  }
+}
 
 
   return (
@@ -366,6 +379,7 @@ export default function Write() {
             <div className="writeFormGroup">
   <h5>Document Upload</h5>
   <input type="file" onChange={uploadDocument} />
+  
   <ul>
     {documents.map((doc, idx) => (
       <li key={idx}>
