@@ -8,8 +8,8 @@ export default function IndexPage() {
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [placesPerPage, setPlacesPerPage] = useState(9);
-  // Remove selectedMarca filter since we only want "Personal NON UE"
-  // const [selectedMarca, setSelectedMarca] = useState("");
+
+  const [searchTitle, setSearchTitle] = useState(""); // <-- new search state
 
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedAnul, setSelectedAnul] = useState("");
@@ -20,7 +20,6 @@ export default function IndexPage() {
   const [selectedTitleMin, setSelectedTitleMin] = useState("");
   const [selectedTitleMax, setSelectedTitleMax] = useState("");
 
-  // New states for filtering description keywords
   const [showOnlyContinental, setShowOnlyContinental] = useState(false);
   const [showOnlyHard, setShowOnlyHard] = useState(false);
   const [showOnlyNovotel, setShowOnlyNovotel] = useState(false);
@@ -32,8 +31,9 @@ export default function IndexPage() {
   }, []);
 
   const filteredPlaces = places.filter((place) => {
-    // Only show places where marca is "Personal NON UE" (case-insensitive)
     if (place.marca?.toLowerCase() !== "personal non ue") return false;
+
+    if (searchTitle && !place.title.toLowerCase().includes(searchTitle.toLowerCase())) return false;
 
     if (selectedModel && place.model !== selectedModel) return false;
     if (selectedAnul && place.anul !== selectedAnul) return false;
@@ -68,7 +68,7 @@ export default function IndexPage() {
   };
 
   const resetFilters = () => {
-    // No selectedMarca reset because there's no such filter now
+    setSearchTitle("");
     setSelectedModel("");
     setSelectedAnul("");
     setSelectedCombustibil("");
@@ -88,8 +88,18 @@ export default function IndexPage() {
       <div className="main2">
         <div className="container">
           <div className="filter-container">
+            {/* Search bar */}
+            <div className="filter-item" style={{ marginBottom: "10px" }}>
+              <input
+                type="text"
+                placeholder="Search by title..."
+                value={searchTitle}
+                onChange={(e) => setSearchTitle(e.target.value)}
+                style={{ padding: "8px", width: "100%", maxWidth: "300px" }}
+              />
+            </div>
+
             <div className="marca1-buttons">
-              {/* Removed Personal NON UE button, only description filters left */}
               <button
                 onClick={() => setShowOnlyContinental((prev) => !prev)}
                 className={`marca1-button capital-clean ${showOnlyContinental ? "active" : ""}`}
