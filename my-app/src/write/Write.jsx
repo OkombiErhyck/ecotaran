@@ -7,53 +7,9 @@ import { Navigate, useParams } from "react-router-dom";
 
 export default function Write() {
   const cars = [
-    {
-      brand: "Sector 6",
-      models: [
-        "Morcovi",
-        "Cartofi",
-        "Rosi",
-        "Varza",
-        "Dovleac",
-        "Salata",
-        "Vinete",
-        "Ghimbir",
-        "Ceapa",
-        "Usturoi",
-        "Ciuperci",
-        "Pastarnac",
-        "Telina",
-        "Loboda",
-        "Ardei Gras",
-        "Castravete",
-        "Mazare",
-        "Stevie",
-        "Ridiche",
-        "Ardei Iute",
-      ],
-    },
-    {
-      brand: "Sector 5",
-      models: [
-        "Mere",
-        "Pere",
-        "Pepene",
-        "Portocale",
-        "Capsuni",
-        "Alune",
-        "Cirese",
-        "Grepfrut",
-        "Clementine",
-        "Lime",
-        "Lamaie",
-        "Caise",
-        "Nectarine",
-      ],
-    },
-    { brand: "Sector 4", models: ["Carnati", "Sunca"] },
-    { brand: "Sector 3", models: ["Branza", "Lapte", "Oua"] },
-    { brand: "Sector 2", models: ["Vin", "Acidulate", "Neacidulate"] },
-    { brand: "Sector 1", models: ["Tei", "Rapita"] },
+    
+     
+    { brand: "Cazare", models: ["Tei", "Rapita"] },
     { brand: "Personal Ro", models: ["r", "of"] },
     { brand: "Personal Non UE", models: ["Tei", "Rapita"] },
      { brand: "Automobile", models: ["mas", "ina"] },
@@ -122,6 +78,7 @@ export default function Write() {
       return word;
     });
 
+    
     // Render new with additions highlighted if missing in old
     const newRendered = newWords.map((word, idx) => {
       if (word.trim() === "") return word;
@@ -137,6 +94,16 @@ export default function Write() {
 
     return { oldRendered, newRendered };
   }
+
+
+  // Set default description based on marca if no id is provided
+  // This is useful for new entries where marca is selected but no id exists yet
+useEffect(() => {
+  if (!id && marca && defaultDescriptions[marca]) {
+    setDescription(defaultDescriptions[marca]);
+  }
+}, [marca, id]);
+
 
   // Format modification history plain text, filter out "owner"
   function formatModifications(modHistory) {
@@ -340,6 +307,50 @@ async function deleteDocument(docUrl) {
     alert('Failed to delete document');
   }
 }
+
+const defaultDescriptions = {
+  
+  "Cazare": `Chirias : 
+Numar locatari :
+Proprietar : 
+Utilitati: 
+Administratie:
+Datorii:`,
+
+  "Personal Ro": `Angajator :  
+Contract de munca : 
+Ore de lucru: 
+Zile de lucru :
+Leasing: 
+Locuinta : 
+Data incepere CIM :
+Salariu: 
+Telefon : `,
+
+  "Personal Non UE": `Angajator : 
+Responsabil :  
+Contract de munca : 
+Ore de lucru: 
+Zile de lucru :
+Leasing: 
+Locuinta : 
+Data incepere CIM : 
+Salariu: `,
+
+  "Automobile": `Marca: 
+Numar Inmatriculare: 
+Data expirare RCA:  
+Data expirare ITP:  
+Data expirare Rovinieta:  
+Data ultima revizie : `,
+
+  "Companie": `Adresa: 
+Persoana de contact :  
+Telefon :  
+Tip contract : 
+Responsabil :  `,
+};
+ 
 
 
   return (
