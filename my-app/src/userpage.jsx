@@ -175,6 +175,20 @@ if (redirect) {
                     </div>
 
 
+                    <div className="col-lg-4 col-xs-6">
+                       <div className="box card-body p-0  shadow-sm mb-5">
+                          
+                           <div className="box_content">
+                           <a href="/legume">
+                           <img src={PlacesPage} className="img-fluid" alt=""/>
+                          
+                               <button className="btn1"> Modif Companii</button>
+                           </a>
+                           </div>
+                       </div>
+                    </div>
+
+
 <div className="col-lg-4 col-xs-6">
                        <div className="box card-body p-0  shadow-sm mb-5">
                           
