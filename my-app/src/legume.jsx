@@ -1,211 +1,116 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import "./IndexPage.css";
-import { UserContext } from "./UserContext";
-import { CartContext } from "./CartContext";
-import CartLink from "./CartLink";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './Myadds.css';
+import Image from './image';
+import { Link } from 'react-router-dom';
 
-function Legume() {
-  const { cart, setCart } = useContext(UserContext);
-  const { updateCartQuantity } = useContext(CartContext);
-  const cartLinkRef = useRef(null);
-  
+export default function PlacesPage() {
   const [places, setPlaces] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const placesPerPage = 90;
+  const [selectedMarca, setSelectedMarca] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
 
   useEffect(() => {
-    axios.get("/places").then((response) => {
-      const filteredPlaces = response.data.filter(
-        (place) => place.marca === "Legume"
+    // Fetch all places instead of user-specific places
+    axios.get('/places').then(({ data }) => {
+      // Filter places that include "personal" in the 'marca' field (case-insensitive)
+      const filtered = data.filter(place =>
+        place.marca && place.marca.toLowerCase().includes("companie")
       );
-      setPlaces(filteredPlaces);
+      setPlaces(filtered);
     });
   }, []);
 
-  const [loading, setLoading] = useState(false);
-  const [loadingPlaceId, setLoadingPlaceId] = useState(null);
+  const handleModelSelect = (event) => setSelectedModel(event.target.value);
 
-  const lastPlaceIndex = currentPage * placesPerPage;
-  const firstPlaceIndex = lastPlaceIndex - placesPerPage;
-  const currentPlaces = places.slice(firstPlaceIndex, lastPlaceIndex);
-  const totalPages = Math.ceil(places.length / placesPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    if (window.pageYOffset > 0) {
-      window.scrollTo(0, 0);
-    }
+  const handleDelete = (event, id) => {
+    event.preventDefault();
+    axios.delete(`/places/${id}`).then(() => {
+      setPlaces((prevPlaces) => prevPlaces.filter((place) => place._id !== id));
+    });
   };
 
-  const addToCart = (place, quantity) => {
-    setLoadingPlaceId(place._id);
-    setLoading(true);
-
-    const updatedPlace = { ...place, quantity: quantity || 1 }; // Set default quantity to 1 if not provided
-    let updatedCart = localStorage.getItem("cart");
-    if (!updatedCart) {
-      updatedCart = [];
-    } else {
-      updatedCart = JSON.parse(updatedCart);
-    }
-
-    const placeIndex = updatedCart.findIndex((item) => item._id === place._id);
-    if (placeIndex !== -1) {
-      updatedCart[placeIndex].quantity += quantity;
-    } else {
-      updatedCart.push(updatedPlace);
-    }
-
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCart(updatedCart);
-
-    // Call updateCartQuantity with the new cart quantity
-    updateCartQuantity(updatedCart.length);
-
-    setTimeout(() => {
-      setLoading(false);
-      setLoadingPlaceId(null);
-    }, 1000);
+  const resetFilters = () => {
+    setSelectedMarca("");
+    setSelectedModel("");
+    setSearchTitle("");
   };
 
-  const handleDecreaseQuantity = (place) => {
-    if (place.quantity > 1) {
-      place.quantity -= 1;
-      setPlaces([...places]);
-    }
-  };
-
-  const handleIncreaseQuantity = (place) => {
-    place.quantity = (place.quantity || 1) + 1;
-    setPlaces([...places]);
-  };
-
-  useEffect(() => {
-    if (cartLinkRef.current) {
-      cartLinkRef.current.forceUpdate();
-    }
-  }, [cart]);
+  const filteredPlaces = places.filter(place => {
+    const matchesMarca = selectedMarca ? place.marca === selectedMarca : true;
+    const matchesTitle = searchTitle
+      ? place.title?.toLowerCase().includes(searchTitle.toLowerCase())
+      : true;
+    return matchesMarca && matchesTitle;
+  });
 
   return (
     <>
-      <div className="top"></div>
+      <div className="top" style={{ marginTop: "80px" }}></div>
+
       <div className="main2">
+        <div className="filter-container">
+
+ <div className="filter-item">
+            <input
+              type="text"
+              placeholder="Caută după titlu..."
+              value={searchTitle}
+              onChange={(e) => setSearchTitle(e.target.value)}
+              style={{ padding: "8px", width: "200px" }}
+            />
+          </div>
+
+           
+
+          
+
+          <div className="filter-item">
+            <button onClick={resetFilters}>Reset</button>
+          </div>
+        </div>
+
         <div className="container">
           <div className="details container">
-            <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
-              {currentPlaces.length > 0 &&
-                currentPlaces.map((place) => (
-                  <div className="col" key={place._id}>
-                    <div className="box card-body p-0 shadow-sm mb-5">
-                    <Link to={"/place/" + place._id} key={place._id} className="link-no-underline"> 
-                      {place.photos.length > 0 && (
-                        <img
-                          src={place.photos[0]}
-                          className="img-fluid"
-                          alt={place.title}
-                          style={{
-                            height: "270px",
-                            width: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
-                      )}
-                      </Link>
-                      <div className="box_content">
-                        <h4>{place.title}</h4>
-                        <div className="row pl-2 pr-2">
-                           
-                            <div className="quantity-control">
-                              <div
-                                className="quantity-btn-container"
-                                style={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  alignContent: "flex-end",
-                                  justifyContent: "space-between",
-                                  background: "#d3d3d3",
-                                  borderRadius: "10%",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <button
-                                  className="quantity-btn"
-                                  style={{
-                                    backgroundColor: "rgb(154 154 154)",
-                                    color: "white",
-                                    padding: "5px",
-                                    border: "none",
-                                    borderRadius: "10%",
-                                    cursor: "pointer",
-                                    marginRight: "5px",
-                                  }}
-                                  onClick={() =>
-                                    handleDecreaseQuantity(place)
-                                  }
-                                >
-                                  -
-                                </button>
-                                <div className="quantity">
-                                  {place.quantity || 1}
-                                </div>
-                                <button
-                                  className="quantity-btn"
-                                  style={{
-                                    backgroundColor: "rgb(154 154 154)",
-                                    color: "white",
-                                    padding: "5px",
-                                    border: "none",
-                                    borderRadius: "10%",
-                                    cursor: "pointer",
-                                    marginLeft: "5px",
-                                  }}
-                                  onClick={() =>
-                                    handleIncreaseQuantity(place)
-                                  }
-                                >
-                                  +
-                                </button>
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  alignContent: "flex-end",
-                                  justifyContent: "space-around",
-                                  alignItems: "center",
-                                }}
-                              >
-                                {place.km} lei
-                              </div>
-
-                               
-                              <button
-                                style={{
-                                  padding: " 4px",
-                                  width: "300px",
-                                }}
-                                className="btn1"
-                                onClick={() => addToCart(place, place.quantity)}
-                              >
-                              {loadingPlaceId === place._id ? (
-                            <div className="loading-animation">
-                            <div className="spinner"></div>
-                          
-                            </div>
-                          ) : (
-                               <span>Adauga in cos</span> 
-                                )}
-                              </button>
-                              
-                            </div>
-                          
+            <div className="row row-cols-1 row-cols-md-3 g-4">
+              {filteredPlaces.length > 0 ? (
+                filteredPlaces.map(place => (
+                  <Link className="link-no-underline" to={"/write/" + place._id} key={place._id}>
+                    <div className="col">
+                      <div className="box card-body p-0 shadow-sm mb-5">
+                        {place.photos.length > 0 && (
+                          <Image
+                            src={place.photos[0]}
+                            className="img-fluid"
+                            style={{ height: "270px", width: "100%", objectFit: "cover" }}
+                          />
+                        )}
+                        <div className="box_content" style={{ display: "contain" }}>
+                          <h4>{place.title}</h4>
+                          <div className="row pl-2 pr-2">
+                            <div>{place.putere}</div>
+                            <button
+                              style={{ background: "#cccccc00", color: "var(--main)" }}
+                              className="btn1"
+                            >
+                              Detalii
+                            </button>
+                            <button
+                              style={{ color: "red" }}
+                              className="btn1"
+                              onClick={(event) => handleDelete(event, place._id)}
+                            >
+                              Sterge
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </Link>
+                ))
+              ) : (
+                <p>Nu s-au găsit rezultate.</p>
+              )}
             </div>
           </div>
         </div>
@@ -213,5 +118,3 @@ function Legume() {
     </>
   );
 }
-
-export default Legume;
