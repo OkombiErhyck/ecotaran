@@ -48,9 +48,9 @@ export default function IndexPage() {
     if (selectedTitleMin && !(place.title >= Number(selectedTitleMin))) return false;
     if (selectedTitleMax && !(place.title <= Number(selectedTitleMax))) return false;
 
-    if (showOnlyContinental && !place.description?.toLowerCase().includes("continental")) return false;
-    if (showOnlyHard && !place.description?.toLowerCase().includes("hard")) return false;
-    if (showOnlyNovotel && !place.description?.toLowerCase().includes("novotel")) return false;
+    if (showOnlyContinental && !place.description?.toLowerCase().includes("curatenie")) return false;
+    if (showOnlyHard && !place.description?.toLowerCase().includes("ddd")) return false;
+    if (showOnlyNovotel && !place.description?.toLowerCase().includes("leasing")) return false;
 
     return true;
   });
@@ -104,21 +104,21 @@ export default function IndexPage() {
                 onClick={() => setShowOnlyContinental((prev) => !prev)}
                 className={`marca1-button capital-clean ${showOnlyContinental ? "active" : ""}`}
               >
-                Continental
+                Curatenie
               </button>
 
               <button
                 onClick={() => setShowOnlyHard((prev) => !prev)}
                 className={`marca1-button complete-recruitment ${showOnlyHard ? "active" : ""}`}
               >
-                Hard Rock
+                DDD
               </button>
 
               <button
                 onClick={() => setShowOnlyNovotel((prev) => !prev)}
                 className={`marca1-button amt ${showOnlyNovotel ? "active" : ""}`}
               >
-                Novotel
+                Leasing
               </button>
             </div>
 
