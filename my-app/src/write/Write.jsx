@@ -57,6 +57,7 @@ export default function Write() {
     { brand: "Personal Ro", models: ["r", "of"] },
     { brand: "Personal Non UE", models: ["Tei", "Rapita"] },
      { brand: "Automobile", models: ["mas", "ina"] },
+     { brand: "Companie", models: ["ms", "ia"] },
   ];
 
   const { id } = useParams();
