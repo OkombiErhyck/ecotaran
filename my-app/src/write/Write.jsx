@@ -361,16 +361,16 @@ Responsabil :  `,
         <h2 style={{ color: "var(--main)" }}>Adauga  </h2>
         <form onSubmit={savePlace} className="writeForm">
           <div className="writeFormGroup ">
-            <h5>Nume sau Addresa</h5>
+            <h5>Titlu</h5>
             <input
               className="writeInput"
-              placeholder="ex: Sector 1 Bd. Iuliu Maniu nr 1"
+              placeholder="ex: Nume/Adresa/Marca/Firma"
               type="text"
               autoFocus={true}
               value={title}
               onChange={(ev) => setTitle(ev.target.value)}
             />
-            <h5>Locatia/Origine</h5>
+            <h5>Categorie</h5>
             <select
               className="writeInput"
               value={marca}
