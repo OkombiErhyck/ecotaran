@@ -240,11 +240,11 @@ padding: 20px;
  
     border: #ffffff00;
     border-radius: 5px;
-    background:#0d623b;
+    background:  rgb(52, 165, 42);
     color: var(--main);
 }
 .btn1:hover {
-  background-color: rgb(52, 165, 42);
+  background-color:#0d623b;
   color: #333;
 }
 .filter-item button {
@@ -545,18 +545,3 @@ padding: 20px;
     transform: rotate(360deg);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
