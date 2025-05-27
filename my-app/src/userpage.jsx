@@ -141,7 +141,7 @@ if (redirect) {
                            <a href="/Placespage">
                            <img src={PlacesPage} className="img-fluid" alt=""/>
                           
-                               <button className="btn1"> Modificari Cazari</button>
+                               <button className="btn1"> Modif Cazari</button>
                            </a>
                            </div>
                        </div>
@@ -154,7 +154,7 @@ if (redirect) {
                            <a href="/miere">
                            <img src={PlacesPage} className="img-fluid" alt=""/>
                           
-                               <button className="btn1"> Modifica Flota </button>
+                               <button className="btn1"> Modif Flota </button>
                            </a>
                            </div>
                        </div>
@@ -168,7 +168,7 @@ if (redirect) {
                            <a href="/details">
                            <img src={setting} className="img-fluid" alt=""/>
                           
-                               <button className="btn1"> Modifica Angajati</button>
+                               <button className="btn1"> Modif Angajati</button>
                            </a>
                            </div>
                        </div>
