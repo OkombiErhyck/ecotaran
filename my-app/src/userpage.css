@@ -21,7 +21,7 @@
  .userbox .usercontent {
 
     position: absolute;
-    top: 70%;
+    top: 230%;
     left: 50%;
     transform: translate(-50%,-50%);
     color: aliceblue !important;
@@ -34,7 +34,7 @@
  
  .userbox {
 
-height: 1970px;
+height: 2570px;
 background: #3b3b3b;
 
  }
@@ -47,7 +47,7 @@ position:relative
  @media (min-width: 768px){
  .userbox {
 
-    height: 1800px;
+    height: 2000px;
     background: #3b3b3b;
     
      }
