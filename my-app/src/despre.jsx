@@ -137,7 +137,7 @@ export default function IndexPage() {
           </div>
 
           <div className="details container">
-            <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
+         <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-4">
               {currentPlaces.length > 0 ? (
                 currentPlaces.map((place) => (
                   <Link to={"/place/" + place._id} key={place._id} className="link-no-underline">
