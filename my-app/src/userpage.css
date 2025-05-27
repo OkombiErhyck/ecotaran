@@ -4,7 +4,7 @@
    height: 92px;
  }
  
- /* Mobile view adjustments */
+ /* Optional: tweak for mobile bar only */
  @media (max-width: 768px) {
    .top {
      background: #000000;
@@ -12,39 +12,68 @@
    }
  
    .usercontent {
-     margin-top: 150px; /* Optional - tweak if needed */
+     margin-top: 150px;
    }
  }
  
- /* User box container */
+ /* Full page container */
  .userbox {
-   min-height: 100vh; /* Use full screen height */
+   min-height: 100vh;
    background: #3b3b3b;
    display: flex;
    justify-content: center;
    align-items: center;
    padding: 40px 20px;
-   position: relative; /* Context for absolute children if needed */
  }
  
- /* User content box */
+ /* Content box */
  .userbox .usercontent {
-   position: relative; /* Change to absolute if you want overlay */
    color: aliceblue !important;
    background: #000;
    padding: 70px 30px;
    text-align: center;
    box-shadow: 0px 15px 15px 10px rgba(0, 0, 0, 0.545);
    width: 100%;
-   max-width: 600px;
+   margin-top:100px;
+   max-width: 1100px;
    margin-bottom: 80px;
    border-radius: 10px;
  }
  
- /* Optional: reduce height for larger screens */
- @media (min-width: 768px) {
-   .userbox {
-     min-height: 800px;
-   }
+ /* Force 3-column grid for all screen sizes */
+ .details .row {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 20px;
+ }
+ 
+ .details .col-lg-4,
+ .details .col-xs-6 {
+   flex: 0 0 30%;    /* Roughly 3 per row */
+   max-width: 30%;
+   min-width: 250px; /* Prevents too small on mobile */
+ }
+ 
+ /* Make images and buttons look good inside box */
+ .box_content {
+   padding: 20px;
+ }
+ 
+ .box_content img {
+   max-width: 100px;
+   height: auto;
+   margin-bottom: 10px;
+ }
+ 
+ .btn1 {
+   margin-top: 10px;
+   background-color: var(--main, #4CAF50); /* fallback if --main undefined */
+   color: white;
+   border: none;
+   padding: 10px 20px;
+   border-radius: 8px;
+   font-weight: bold;
+   cursor: pointer;
  }
  
