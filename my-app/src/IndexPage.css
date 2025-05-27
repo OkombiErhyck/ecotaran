@@ -245,7 +245,7 @@ padding: 20px;
 }
 .btn1:hover {
   background-color:#0d623b;
-  color: #333;
+  color: #ffffff;
 }
 .filter-item button {
   background-color:var(--main);
