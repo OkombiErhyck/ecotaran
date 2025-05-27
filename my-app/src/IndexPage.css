@@ -241,7 +241,7 @@ padding: 20px;
     border: #ffffff00;
     border-radius: 5px;
     background:  rgb(52, 165, 42);
-    color: var(--main);
+    color: white;
 }
 .btn1:hover {
   background-color:#0d623b;
