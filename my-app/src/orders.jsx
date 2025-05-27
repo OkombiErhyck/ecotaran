@@ -203,116 +203,116 @@ const OrdersPage = () => {
   };
 
   return (
-    <div className="orders-container">
-      <br></br>
-      <br></br>
-      <br></br>
-      <h1 className="titluc">Cereri de Concediu</h1>
-      <div>
-        <div className="filter-container1"> 
-        <input
-          type="text"
-          placeholder="Cauta"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          
-        />
-         
-        <button className="filter-button1" onClick={() => handleFilter('Pending')}>In asteptare</button>
-        <button className="filter-button2" onClick={() => handleFilter('Accepted')}>Aprobate</button>
-        <button className="filter-button3" onClick={() => handleFilter('Rejected')}>Respinse</button>
-        <select onChange={(e) => handleMonthFilter(e.target.value)}>
-          <option value="">Selecteaza luna</option>
-          <option value={1}>Ianuarie</option>
-          <option value={2}>Februarie</option>
-          <option value={3}>Martie</option>
-          <option value={4}>Aprilie</option>
-          <option value={5}>Mai</option>
-          <option value={6}>Iunie</option>
-          <option value={7}>Iulie</option>
-          <option value={8}>August</option>
-          <option value={9}>Septembrie</option>
-          <option value={10}>Octombrie</option>
-          <option value={11}>Noembrie</option>
-          <option value={12}>Decembrie</option>
-        </select>
-        <button onClick={handleShowAllOrders}>Afiseaza toate cererile</button>
-      </div>
-      {showAllOrders && (
-        <>
-          {filteredOrders.length === 0 ? (
-            <h1>Nu a fost gasita nici o cerere</h1>
-          ) : (
-            filteredOrders.map((order, index) => (
-              <div
-                key={index}
-                className={`order ${order.delivered ? 'order-delivered' : ''}`}
-              >
-                <h3>Cererea #{index + 1}</h3>
-                <p>Creata la: {new Date(order.createdAt).toLocaleString()}</p>
-               <div
-  className="delivery-details"
-  style={{
-    backgroundColor:
-      order.status === "Accepted"
+   <div className="orders-container">
+  <br />
+  <br />
+  <br />
+  <h1 className="titluc">Cereri de Concediu</h1>
+  <div>
+    <div className="filter-container1">
+      <input
+        type="text"
+        placeholder="Cauta"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+      <button className="filter-button1" onClick={() => handleFilter('Pending')}>In asteptare</button>
+      <button className="filter-button2" onClick={() => handleFilter('Accepted')}>Aprobate</button>
+      <button className="filter-button3" onClick={() => handleFilter('Rejected')}>Respinse</button>
+      <select onChange={(e) => handleMonthFilter(e.target.value)}>
+        <option value="">Selecteaza luna</option>
+        <option value={1}>Ianuarie</option>
+        <option value={2}>Februarie</option>
+        <option value={3}>Martie</option>
+        <option value={4}>Aprilie</option>
+        <option value={5}>Mai</option>
+        <option value={6}>Iunie</option>
+        <option value={7}>Iulie</option>
+        <option value={8}>August</option>
+        <option value={9}>Septembrie</option>
+        <option value={10}>Octombrie</option>
+        <option value={11}>Noembrie</option>
+        <option value={12}>Decembrie</option>
+      </select>
+      <button onClick={handleShowAllOrders}>Afiseaza toate cererile</button>
+    </div>
+
+    {showAllOrders && (
+      <>
+        {filteredOrders.length === 0 ? (
+          <h1>Nu a fost gasita nici o cerere</h1>
+        ) : (
+          <div className="container">
+            <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
+              {filteredOrders.map((order, index) => (
+                <div className="col" key={index}>
+                  <div
+                    className="card p-3 shadow-sm"
+                    style={{
+                      backgroundColor:
+                        order.status === "Accepted"
         ? "#d0f7be"
         : order.status === "Pending"
         ? "#f8f6d0"
         : order.status === "Rejected"
         ? "#f8d0d0"
         : "#f0f0f0",
-    padding: "10px",
-    borderRadius: "8px",
-  }}
->
-                  <strong>Detalii:</strong>
-                  <p>Nume: {order.firstName}</p>
-                  <p>Nr. zile: {order.lastName}</p>
-                  <p>De la : {order.x}</p>
-                  <p>Pana la : {order.y}</p>
-                  <p>Inlocuitor: {order.rep}</p>
-                  <p>
-                    Tip: {order.email}
-                  </p>
-                  <p>Angajat al: {order.address}</p>
-                  <p>Functia: {order.city}</p>
-                  <p>Telefon: {order.zipCode}</p>
-                </div>
-                <div className="status-buttons">
-                  {order.status === 'Pending' && (
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <h5 className="mb-2">Cererea #{index + 1}</h5>
+                    <p><strong>Creata la:</strong> {new Date(order.createdAt).toLocaleString()}</p>
+                    <p><strong>Nume:</strong> {order.firstName}</p>
+                    <p><strong>Nr. zile:</strong> {order.lastName}</p>
+                    <p><strong>De la:</strong> {order.x}</p>
+                    <p><strong>Pana la:</strong> {order.y}</p>
+                    <p><strong>Inlocuitor:</strong> {order.rep}</p>
+                    <p><strong>Tip:</strong> {order.email}</p>
+                    <p><strong>Angajat al:</strong> {order.address}</p>
+                    <p><strong>Functia:</strong> {order.city}</p>
+                    <p><strong>Telefon:</strong> {order.zipCode}</p>
+
                     <div className="status-buttons">
-                      <button
-                        onClick={() => handleStatusChange(order._id, 'Accepted')}
-                        onMouseEnter={() => setStatusChangeMessage(null)}
-                      >
-                        Aproba
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(order._id, 'Rejected')}
-                        onMouseEnter={() => setStatusChangeMessage(null)}
-                      >
-                        Respinge
-                      </button>
+                      {order.status === 'Pending' && (
+                        <div className="status-buttons">
+                          <button
+                            className="filter-button2"
+                            onClick={() => handleStatusChange(order._id, 'Accepted')}
+                            onMouseEnter={() => setStatusChangeMessage(null)}
+                          >
+                            Aproba
+                          </button>
+                          <button
+                            className="filter-button3"
+                            onClick={() => handleStatusChange(order._id, 'Rejected')}
+                            onMouseEnter={() => setStatusChangeMessage(null)}
+                          >
+                            Respinge
+                          </button>
+                        </div>
+                      )}
+                      {order.status === 'Accepted' && (
+                         <button style={{ backgroundColor: '#87ff57' }} disabled>Cerere Aprobata</button>
+                      )}
+                      {order.status === 'Rejected' && (
+                      <button style={{ backgroundColor: '#d43535' }} disabled>Cerere Respinsa</button>
+                      )}
                     </div>
-                  )}
-                  {order.status === 'Accepted' && (
-                    <button style={{ backgroundColor: '#87ff57' }} disabled>Cerere Aprobata</button>
-                  )}
-                  {order.status === 'Rejected' && (
-                    <button style={{ backgroundColor: '#d43535' }} disabled>Cerere Respinsa</button>
-                  )}
+
+                    {statusChangeMessage && (
+                      <p className="status-change-message">{statusChangeMessage}</p>
+                    )}
+                  </div>
                 </div>
-                {statusChangeMessage && (
-                  <p className="status-change-message">{statusChangeMessage}</p>
-                )}
-              </div>
-              
-            ))
-          )}
-        </>
-      )}
-       </div>
-    </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </>
+    )}
+  </div>
+</div>
+
   );
 };
 
