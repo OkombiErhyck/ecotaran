@@ -112,18 +112,8 @@ export default function IndexPage() {
                             {place.title} {place.km}
                           </h4>
                           <div className="row pl-2 pr-2"></div>
-                          <button
-                            style={{
-                              background: "rgb(216 212 208 / 78%)",
-                              color: "var(--main)",
-                              padding: "14px",
-                              width: "131px",
-                              marginLeft: "126px",
-                            }}
-                            className="btn1"
-                          >
-                            Vezi locatia
-                          </button>
+                          <button className="btn1">Vezi detalii</button>
+
                         </div>
                       </div>
                     </div>
