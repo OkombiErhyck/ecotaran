@@ -158,18 +158,8 @@ export default function IndexPage() {
                           <h4>
                             {place.title} {place.km}
                           </h4>
-                          <button
-                            style={{
-                              background: "rgb(216 212 208 / 78%)",
-                              color: "var(--main)",
-                              padding: "14px",
-                              width: "131px",
-                              marginLeft: "126px",
-                            }}
-                            className="btn1"
-                          >
-                            Vezi detalii
-                          </button>
+                          <button className="btn1">Vezi detalii</button>
+
                         </div>
                       </div>
                     </div>
