@@ -443,7 +443,7 @@ Ce a fost cumparat-data:`
   <h5>Amanunte</h5>
   <textarea
     className="writeInput writeText"
-    placeholder="Introduceți numele"
+    placeholder="Introduceți datele"
     type="text"
     value={nume}
     onChange={ev => setNume(ev.target.value)}
