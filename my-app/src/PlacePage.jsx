@@ -139,7 +139,7 @@ export default function PlacePage() {
 
           {/* Right Bottom Small Column: Empty */}
           {/* Right Bottom Small Column: Display nume */}
-<div className="info-section small ">
+<div style={{ whiteSpace: "pre-wrap" }} className="info-section small  ">
   <h3>Amanunte</h3>
   <p>{place.nume || "Nu a fost adaugat nimic."}</p>
 </div>
