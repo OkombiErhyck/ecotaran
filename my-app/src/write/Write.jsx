@@ -98,11 +98,21 @@ export default function Write() {
 
   // Set default description based on marca if no id is provided
   // This is useful for new entries where marca is selected but no id exists yet
+ 
+
 useEffect(() => {
   if (!id && marca && defaultDescriptions[marca]) {
     setDescription(defaultDescriptions[marca]);
   }
 }, [marca, id]);
+
+useEffect(() => {
+  if (marca && defaultNumeTexts[marca] !== undefined) {
+    setNume(defaultNumeTexts[marca]);
+  }
+  // Don't overwrite if no default is found
+}, [marca]);
+
 
 
   // Format modification history plain text, filter out "owner"
@@ -310,12 +320,13 @@ async function deleteDocument(docUrl) {
 
 const defaultDescriptions = {
   
-  "Cazare": `Chirias : 
+  "Cazare": `Chiriasi :
+Nr. Pasaport/Buletin : 
 Numar locatari :
 Proprietar : 
 Utilitati: 
 Administratie:
-Datorii:`,
+Intretinere:`,
 
   "Personal Ro": `Angajator :  
 Contract de munca : 
@@ -350,7 +361,20 @@ Telefon :
 Tip contract : 
 Responsabil :  `,
 };
- 
+
+const defaultNumeTexts = {
+  "Cazare": `Data ultimei verificari:
+Conditiile in care a fost gasita cazarea:
+Cont Bancar Administratie:
+Punct de lucru Chiriasi:
+Ce a fost reparat-data:
+Ce a fost cumparat-data:`
+  ,
+  "Personal Ro": `Nume predefinit pentru Personal Ro`,
+  "Personal Non UE": `Nume predefinit pentru Personal Non UE`,
+  "Automobile": `Nume predefinit pentru Automobile`,
+  "Companie": `Nume predefinit pentru Companie`,
+};
 
 
   return (
@@ -414,6 +438,17 @@ Responsabil :  `,
               value={description}
               onChange={(ev) => setDescription(ev.target.value)}
             />
+
+<div className="writeFormGroup">
+  <h5>Amanunte</h5>
+  <textarea
+    className="writeInput writeText"
+    placeholder="Introduceți numele"
+    type="text"
+    value={nume}
+    onChange={ev => setNume(ev.target.value)}
+  />
+</div>
 
             <div className="istoric-modificari">
               {modificationText && (
