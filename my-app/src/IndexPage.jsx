@@ -8,6 +8,7 @@ export default function IndexPage() {
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [placesPerPage] = useState(9);
+  const [selectedSector, setSelectedSector] = useState("");
   const [selectedMarca, setSelectedMarca] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedAnul, setSelectedAnul] = useState("");
@@ -24,10 +25,13 @@ export default function IndexPage() {
     });
   }, []);
 
-  // Filter places: show only places where marca includes "Sector" AND filters below
   const filteredPlaces = places.filter((place) => {
+    const matchesSector =
+      selectedSector === "" || place.title.toLowerCase().includes(selectedSector.toLowerCase());
+
     return (
-      place.marca?.startsWith("Sector") && // show only "Sector" places
+      matchesSector &&
+      /sector [1-6]/i.test(place.title) && // Always require "Sector 1–6" in title
       (selectedMarca === "" || place.marca === selectedMarca) &&
       (selectedModel === "" || place.model === selectedModel) &&
       (selectedAnul === "" || place.anul === selectedAnul) &&
@@ -37,8 +41,8 @@ export default function IndexPage() {
           Number(place.putere) < Number(selectedPutere) + 100)) &&
       (selectedKmMin === "" || place.km >= Number(selectedKmMin)) &&
       (selectedKmMax === "" || place.km <= Number(selectedKmMax)) &&
-      (selectedTitleMin === "" || place.title >= Number(selectedTitleMin)) &&
-      (selectedTitleMax === "" || place.title <= Number(selectedTitleMax))
+      (selectedTitleMin === "" || Number(place.title) >= Number(selectedTitleMin)) &&
+      (selectedTitleMax === "" || Number(place.title) <= Number(selectedTitleMax))
     );
   });
 
@@ -54,11 +58,12 @@ export default function IndexPage() {
     }
   };
 
-  const handleMarcaClick = (marca) => {
-    setSelectedMarca(selectedMarca === marca ? "" : marca);
+  const handleSectorClick = (sector) => {
+    setSelectedSector(selectedSector === sector ? "" : sector);
   };
 
   const resetFilters = () => {
+    setSelectedSector("");
     setSelectedMarca("");
     setSelectedModel("");
     setSelectedAnul("");
@@ -81,8 +86,8 @@ export default function IndexPage() {
                 (sector) => (
                   <button
                     key={sector}
-                    onClick={() => handleMarcaClick(sector)}
-                    className={`marca1-button ${selectedMarca === sector ? "active" : ""}`}
+                    onClick={() => handleSectorClick(sector)}
+                    className={`marca1-button ${selectedSector === sector ? "active" : ""}`}
                   >
                     {sector}
                   </button>
@@ -93,8 +98,9 @@ export default function IndexPage() {
               <button onClick={resetFilters}>Reset</button>
             </div>
           </div>
+
           <div className="details container">
-           <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-4">
               {currentPlaces.length > 0 &&
                 currentPlaces.map((place) => (
                   <Link to={"/place/" + place._id} key={place._id} className="link-no-underline">
@@ -113,7 +119,6 @@ export default function IndexPage() {
                           </h4>
                           <div className="row pl-2 pr-2"></div>
                           <button className="btn1">Vezi detalii</button>
-
                         </div>
                       </div>
                     </div>
@@ -121,18 +126,18 @@ export default function IndexPage() {
                 ))}
             </div>
           </div>
-        </div>
-        <div className="pagination">
-          <ul>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-              <li key={pageNumber}>
-                <button onClick={() => handlePageChange(pageNumber)}>{pageNumber}</button>
-              </li>
-            ))}
-          </ul>
+
+          <div className="pagination">
+            <ul>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                <li key={pageNumber}>
+                  <button onClick={() => handlePageChange(pageNumber)}>{pageNumber}</button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </>
   );
 }
- 
