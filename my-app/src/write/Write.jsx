@@ -321,12 +321,14 @@ async function deleteDocument(docUrl) {
 const defaultDescriptions = {
   
   "Cazare": `Chiriasi :
-Nr. Pasaport/Buletin : 
 Numar locatari :
 Proprietar : 
 Utilitati: 
 Administratie:
-Intretinere:`,
+Program Administratie:
+Data afisare intretinere:
+Intretinere:
+Cont Bancar Administratie:`,
 
   "Personal Ro": `Angajator :  
 Contract de munca : 
@@ -363,10 +365,9 @@ Responsabil :  `,
 };
 
 const defaultNumeTexts = {
-  "Cazare": `Data ultimei verificari:
+  "Cazare": `Data darii in utilizare:
+Data ultimei verificari:
 Conditiile in care a fost gasita cazarea:
-Cont Bancar Administratie:
-Punct de lucru Chiriasi:
 Ce a fost reparat-data:
 Ce a fost cumparat-data:`
   ,
@@ -443,7 +444,7 @@ Ce a fost cumparat-data:`
   <h5>Amanunte</h5>
   <textarea
     className="writeInput writeText"
-    placeholder="Introduceți datele"
+    placeholder="Introduceți numele"
     type="text"
     value={nume}
     onChange={ev => setNume(ev.target.value)}
