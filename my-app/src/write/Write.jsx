@@ -293,14 +293,13 @@ useEffect(() => {
   if (!file) return;
 
   const formData = new FormData();
-  formData.append("document", file);
+  formData.append("document", file); // <-- use 'document' to match backend
 
   try {
     const { data } = await axios.post("/upload-doc", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    // data = { url: "...", originalName: "..." } from your backend
-    setDocuments((prev) => [...prev, { url: data.url, originalName: data.originalName }]);
+    setDocuments((prev) => [...prev, data.url]);  // use data.url from backend response
   } catch (e) {
     alert("Failed to upload document");
   }
@@ -419,15 +418,14 @@ Ce a fost cumparat-data:`
   <input type="file" onChange={uploadDocument} />
   
   <ul>
-  {documents.map((doc, idx) => (
-    <li key={idx}>
-      <a href={doc.url} target="_blank" rel="noopener noreferrer">
-        {doc.originalName || doc.url.split("/").pop()}
-      </a>
-    </li>
-  ))}
-</ul>
-
+    {documents.map((doc, idx) => (
+      <li key={idx}>
+        <a href={doc} target="_blank" rel="noopener noreferrer">
+          {doc.split("/").pop()}
+        </a>
+      </li>
+    ))}
+  </ul>
 </div>
 
           </div>
