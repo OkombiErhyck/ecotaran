@@ -15,6 +15,13 @@ export default function PlacePage() {
   const { updateCartQuantity } = useContext(CartContext);
   const [vin, setVin] = useState('');
   const [quantity, setQuantity] = useState(1);
+const [showDocuments, setShowDocuments] = useState(false);
+const documentsRef = useRef(null);
+const [showAmanunte, setShowAmanunte] = useState(false);
+const amanunteRef = useRef(null);
+
+
+
 
   useEffect(() => {
     if (!id) return;
@@ -77,6 +84,10 @@ export default function PlacePage() {
     .replace(/[-_]+/g, " ")           // Replace dashes/underscores with space
     .replace(/\b\w/g, (c) => c.toUpperCase()); // Capitalize first letters
 };
+
+
+
+
   return (
     <>
       <div className="main3">
@@ -110,38 +121,79 @@ export default function PlacePage() {
           </div>
 
           {/* Right Top Small Column: Documents */}
-          <div className="info-section small">
-            <h3>Documente atașate</h3>
-            {place.documents && place.documents.length > 0 ? (
-              <ul style={{ listStyle: "none", paddingLeft: 0 }}>
-                {place.documents.map((url, index) => (
-                  <li key={index} style={{ marginBottom: "10px" }}>
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        color: "var(--main)",
-                        textDecoration: "underline",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {getDocumentName(url)}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p style={{ color: "#aaa" }}>Niciun document atașat.</p>
-            )}
-          </div>
+         <div className="info-section small">
+  <h3
+    onClick={() => setShowDocuments(!showDocuments)}
+    style={{
+      cursor: "pointer",
+      userSelect: "none",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }}
+  >
+    Documente atașate
+    <span style={{ fontSize: "1.2em" }}>{showDocuments ? "▲" : "▼"}</span>
+  </h3>
+
+  <div
+    ref={documentsRef}
+    style={{
+      maxHeight: showDocuments
+        ? `${documentsRef.current?.scrollHeight}px`
+        : "0px",
+      overflow: "hidden",
+      transition: "max-height 0.4s ease",
+    }}
+  >
+    {place.documents && place.documents.length > 0 ? (
+      <ul style={{ listStyle: "none", paddingLeft: 0, marginTop: "10px" }}>
+        {place.documents.map((url, index) => (
+          <li key={index} style={{ marginBottom: "10px" }}>
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "var(--main)",
+                textDecoration: "underline",
+                fontWeight: "bold",
+              }}
+            >
+              {getDocumentName(url)}
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p style={{ color: "#aaa" }}>Niciun document atașat.</p>
+    )}
+  </div>
+</div>
+
 
           {/* Right Bottom Small Column: Empty */}
           {/* Right Bottom Small Column: Display nume */}
-<div style={{ whiteSpace: "pre-wrap" }} className="info-section small  ">
-  <h3>Amanunte</h3>
-  <p>{place.nume || "Nu a fost adaugat nimic."}</p>
+<div style={{ whiteSpace: "pre-wrap" }} className="info-section small">
+  <h3
+    onClick={() => setShowAmanunte(!showAmanunte)}
+    style={{ cursor: "pointer", userSelect: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+  >
+    Amanunte
+    <span style={{ fontSize: "1.2em" }}>{showAmanunte ? "▲" : "▼"}</span>
+  </h3>
+  <div
+    ref={amanunteRef}
+    style={{
+      maxHeight: showAmanunte ? `${amanunteRef.current?.scrollHeight}px` : "0px",
+      overflow: "hidden",
+      transition: "max-height 0.4s ease",
+    }}
+  >
+    <p>{place.nume || "Nu a fost adaugat nimic."}</p>
+  </div>
 </div>
+
 
         </div>
       </div>
