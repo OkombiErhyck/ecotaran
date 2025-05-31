@@ -26,8 +26,9 @@ app.use(express.json());
 app.use(CookieParser());
 app.use("/uploads", express.static(__dirname+"/uploads"));
 app.use(cors({
-    credentials: true,
-    origin: "https://ecotaran.vercel.app", 
+  origin: 'https://ecotaran.vercel.app', // your frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed HTTP methods
+  credentials: true, // if you use cookies or auth headers
 }));
 
 
