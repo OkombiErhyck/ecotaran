@@ -466,7 +466,8 @@ const docsMiddleware = multer({
     }
   }
 });
-pp.post("/upload-doc", docsMiddleware.single('document'), async (req, res) => {
+
+app.post("/upload-doc", docsMiddleware.single('document'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -480,6 +481,7 @@ pp.post("/upload-doc", docsMiddleware.single('document'), async (req, res) => {
     res.status(500).json({ error: "Failed to upload document" });
   }
 });
+
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     // Multer-specific error
@@ -489,6 +491,8 @@ app.use((err, req, res, next) => {
   }
   next();
 });
+
+
 
 app.get("/places", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
