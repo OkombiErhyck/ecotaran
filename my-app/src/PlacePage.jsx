@@ -68,16 +68,15 @@ export default function PlacePage() {
   };
 
   const getDocumentName = (url) => {
-    let filename = url.split("/").pop().split("?")[0].split("#")[0];
-    const parts = filename.split('_');
-    if (parts.length > 2) {
-      filename = parts.slice(2).join('_');
-    }
-    filename = filename.replace(/[-_]+/g, ' ');
-    filename = filename.replace(/\b\w/g, (c) => c.toUpperCase());
-    return filename;
-  };
+  const filename = decodeURIComponent(url.split("/").pop().split("?")[0]);
 
+  // Remove numeric prefix followed by a dash (e.g. 1748696351916-)
+  const cleanName = filename.replace(/^\d+-/, "");
+
+  return cleanName
+    .replace(/[-_]+/g, " ")           // Replace dashes/underscores with space
+    .replace(/\b\w/g, (c) => c.toUpperCase()); // Capitalize first letters
+};
   return (
     <>
       <div className="main3">
