@@ -475,12 +475,13 @@ app.post("/upload-doc", docsMiddleware.single('document'), async (req, res) => {
     const { path, originalname, mimetype } = req.file;
     const url = await uploadToS3(path, originalname, mimetype);
     fs.unlinkSync(path); // remove temp file
-    res.json({ url, originalName: originalname }); // return original name too
+    res.json({ url });
   } catch (error) {
     console.error("Document upload error:", error);
     res.status(500).json({ error: "Failed to upload document" });
   }
 });
+ 
 
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
