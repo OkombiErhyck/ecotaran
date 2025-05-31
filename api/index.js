@@ -466,7 +466,7 @@ const docsMiddleware = multer({
     }
   }
 });
-app.post("/upload-doc", docsMiddleware.single('document'), async (req, res) => {
+pp.post("/upload-doc", docsMiddleware.single('document'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -474,7 +474,7 @@ app.post("/upload-doc", docsMiddleware.single('document'), async (req, res) => {
     const { path, originalname, mimetype } = req.file;
     const url = await uploadToS3(path, originalname, mimetype);
     fs.unlinkSync(path); // remove temp file
-    res.json({ url });
+    res.json({ url, originalName: originalname }); // return original name too
   } catch (error) {
     console.error("Document upload error:", error);
     res.status(500).json({ error: "Failed to upload document" });
