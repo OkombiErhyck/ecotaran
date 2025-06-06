@@ -118,17 +118,35 @@ export default function PlacePage() {
 
         <div className="info-grid">
           {/* Left Large Column: Description */}
-          <div className="info-section large">
-            <h3>Descriere</h3>
-            <div className="descriptionContainer">
-              <p style={{ whiteSpace: "pre-line" }}>
-                {showMore ? place.description : trimDescription(place.description)}
-              </p>
-              {place.description.length > 400 && !showMore && (
-                <button onClick={handleShowMore}>Show more</button>
-              )}
-            </div>
-          </div>
+         {/* Left Large Column: Description */}
+<div className="info-section large">
+  <h3>Descriere</h3>
+  <div
+    className="descriptionContainer"
+    style={{
+      maxHeight: showMore ? "none" : "4000px",
+      overflowY: showMore ? "visible" : "auto",
+      paddingRight: "5px",
+    }}
+  >
+    {place.description ? (
+      <ul className="line-list">
+        {(showMore ? place.description : trimDescription(place.description))
+          .split(/\r?\n/)
+          .filter(line => line.trim() !== "")
+          .map((line, index) => (
+            <li key={index}>{line}</li>
+          ))}
+      </ul>
+    ) : (
+      <p style={{ color: "#aaa" }}>Nu a fost adăugat nimic.</p>
+    )}
+    {!showMore && place.description.length > 400 && (
+      <button onClick={handleShowMore}>Show more</button>
+    )}
+  </div>
+</div>
+
 
           {/* Right Top Small Column: Documents */}
           <div className="info-section small">
@@ -172,31 +190,47 @@ export default function PlacePage() {
           </div>
 
           {/* Right Bottom Small Column: Amanunte */}
-          <div style={{ whiteSpace: "pre-wrap" }} className="info-section small">
-            <h3
-              onClick={() => setShowAmanunte(!showAmanunte)}
-              style={{
-                cursor: "pointer",
-                userSelect: "none",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              Amanunte
-              <span style={{ fontSize: "1.2em" }}>{showAmanunte ? "▲" : "▼"}</span>
-            </h3>
-            <div
-              ref={amanunteRef}
-              style={{
-                maxHeight: showAmanunte ? `${amanunteRef.current?.scrollHeight}px` : "0px",
-                overflow: "hidden",
-                transition: "max-height 0.4s ease",
-              }}
-            >
-              <p>{place.nume || "Nu a fost adaugat nimic."}</p>
-            </div>
-          </div>
+         <div className="info-section small">
+  <h3
+    onClick={() => setShowAmanunte(!showAmanunte)}
+    style={{
+      cursor: "pointer",
+      userSelect: "none",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }}
+  >
+    Amanunte
+    <span style={{ fontSize: "1.2em" }}>{showAmanunte ? "▲" : "▼"}</span>
+  </h3>
+
+ <div
+  ref={amanunteRef}
+  className={`amanunte-container ${showAmanunte ? "expanded" : ""}`}
+  style={{
+    maxHeight: showAmanunte ? "400px" : "0px",
+    overflowY: "auto",
+    overflowX: "visible",
+    transition: "max-height 0.4s ease",
+  }}
+>
+  {place.nume ? (
+    <ul className="line-list">
+      {place.nume
+        .split(/\r?\n/)
+        .filter(line => line.trim() !== "")
+        .map((line, index) => (
+          <li key={index}>{line}</li>
+        ))}
+    </ul>
+  ) : (
+    <p style={{ margin: 0, color: "#888" }}>Nu a fost adăugat nimic.</p>
+  )}
+</div>
+
+</div>
+
         </div>
       </div>
     </>
