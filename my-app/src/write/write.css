@@ -19,6 +19,33 @@
   text-decoration: line-through;
 }
 
+.mod-entry {
+  margin-bottom: 12px;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.mod-entry summary {
+  outline: none;
+}
+
+.diff-added {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 0 2px;
+  border-radius: 4px;
+}
+
+.diff-removed {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0 2px;
+  border-radius: 4px;
+}
+
+
 .diff-added {
   background-color: #ffffff; /* light green */
   border-radius: 5px;
