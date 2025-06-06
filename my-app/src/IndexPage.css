@@ -86,52 +86,52 @@
 }
 /* Capital Clean Group - green background */
 .marca1-button.capital-clean {
-  background-color:#6c757d; /* bootstrap green */
+  background-color:#000000; /* bootstrap green */
   color: white;
   padding: 8px 15px;
   transition: background-color 0.3s ease;
 }
 
 .marca1-button.capital-clean:hover {
-  background-color: #00d6d6; /* aqua blue on hover */
+  background-color: var(--main); /* aqua blue on hover */
   color: #000;
 }
 
 .marca1-button.capital-clean.active {
-  box-shadow: 0 0 8px 2px #00ffff;
+  box-shadow: 0 0 8px 2px var(--main);
 }
 
 /* Complete Recruitment - let's use default styling, or you can customize */
 .marca1-button.complete-recruitment{ 
-  background-color: #6c757d; /* bootstrap gray */
+  background-color: #000000; /* bootstrap gray */
   color: white;
   padding: 8px 15px;
 
 }
 
 .marca1-button.complete-recruitment.active{ 
- box-shadow: 0 0 8px 2px #20ad41;
+ box-shadow: 0 0 8px 2px var(--main);
 
 }
 
 .marca1-button.complete-recruitment:hover {
-  background-color: #68bf4d; /* darker gray on hover */
+  background-color:var(--main); /* darker gray on hover */
   color: #000;
 }
 /* AMT - gray background */
 .marca1-button.amt {
-  background-color: #6c757d; /* bootstrap gray */
+  background-color: #000000; /* bootstrap gray */
   color: white;
   padding: 8px 15px;
 }
 
 .marca1-button.amt.active {
-  box-shadow: 0 0 8px 2px #6c757d;
+  box-shadow: 0 0 8px 2px var(--main);
 }
 
 /* Optional: add hover effect to AMT button */
 .marca1-button.amt:hover {
-  background-color: #749bb7;
+  background-color: var(--main);
   color: #000;
 }
 
