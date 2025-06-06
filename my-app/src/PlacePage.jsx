@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // <-- added useNavigate
 import "./PlacePlage.css";
 import Carousel from "react-bootstrap/Carousel";
 import Image from "./image";
@@ -9,19 +9,17 @@ import { CartContext } from "./CartContext";
 
 export default function PlacePage() {
   const { id } = useParams();
+  const navigate = useNavigate(); // <-- added hook
   const [place, setPlace] = useState(null);
   const [showMore, setShowMore] = useState(false);
   const { cart, setCart } = useContext(UserContext);
   const { updateCartQuantity } = useContext(CartContext);
   const [vin, setVin] = useState('');
   const [quantity, setQuantity] = useState(1);
-const [showDocuments, setShowDocuments] = useState(false);
-const documentsRef = useRef(null);
-const [showAmanunte, setShowAmanunte] = useState(false);
-const amanunteRef = useRef(null);
-
-
-
+  const [showDocuments, setShowDocuments] = useState(false);
+  const documentsRef = useRef(null);
+  const [showAmanunte, setShowAmanunte] = useState(false);
+  const amanunteRef = useRef(null);
 
   useEffect(() => {
     if (!id) return;
@@ -75,22 +73,18 @@ const amanunteRef = useRef(null);
   };
 
   const getDocumentName = (url) => {
-  const filename = decodeURIComponent(url.split("/").pop().split("?")[0]);
-
-  // Remove numeric prefix followed by a dash (e.g. 1748696351916-)
-  const cleanName = filename.replace(/^\d+-/, "");
-
-  return cleanName
-    .replace(/[-_]+/g, " ")           // Replace dashes/underscores with space
-    .replace(/\b\w/g, (c) => c.toUpperCase()); // Capitalize first letters
-};
-
-
-
+    const filename = decodeURIComponent(url.split("/").pop().split("?")[0]);
+    const cleanName = filename.replace(/^\d+-/, "");
+    return cleanName
+      .replace(/[-_]+/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  };
 
   return (
     <>
       <div className="main3">
+        
+
         <div className="carousel-container">
           <Carousel className="carousel" style={{ borderBottom: "solid 1px var(--main)" }}>
             {place.photos?.map((photo, index) => (
@@ -104,6 +98,22 @@ const amanunteRef = useRef(null);
               </Carousel.Item>
             ))}
           </Carousel>
+           {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            margin: "1rem",
+            padding: "0.5rem 1rem",
+            fontSize: "1rem",
+            backgroundColor: "var(--main)",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer"
+          }}
+        >
+          ← Înapoi
+        </button>
         </div>
 
         <div className="info-grid">
@@ -121,74 +131,72 @@ const amanunteRef = useRef(null);
           </div>
 
           {/* Right Top Small Column: Documents */}
-         <div className="info-section small">
-  <h3
-    onClick={() => setShowDocuments(!showDocuments)}
-    style={{
-      cursor: "pointer",
-      userSelect: "none",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-    }}
-  >
-    Documente atașate
-    <span style={{ fontSize: "1.2em" }}>{showDocuments ? "▲" : "▼"}</span>
-  </h3>
+          <div className="info-section small">
+            <h3
+              onClick={() => setShowDocuments(!showDocuments)}
+              style={{
+                cursor: "pointer",
+                userSelect: "none",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              Documente atașate
+              <span style={{ fontSize: "1.2em" }}>{showDocuments ? "▲" : "▼"}</span>
+            </h3>
 
-  <div
-    ref={documentsRef}
-    style={{
-      maxHeight: showDocuments
-        ? `${documentsRef.current?.scrollHeight}px`
-        : "0px",
-      overflow: "hidden",
-      transition: "max-height 0.4s ease",
-    }}
-  >
-    {place.documents && place.documents.length > 0 ? (
-      <ul className="doc-list-grid">
-  {place.documents.map((url, index) => (
-    <li key={index}>
-      <a href={url} target="_blank" rel="noopener noreferrer" title={getDocumentName(url)}>
-        <span className="doc-icon">📄</span>
-        <span className="doc-name">{getDocumentName(url)}</span>
-      </a>
-    </li>
-  ))}
-</ul>
+            <div
+              ref={documentsRef}
+              style={{
+                maxHeight: showDocuments ? `${documentsRef.current?.scrollHeight}px` : "0px",
+                overflow: "hidden",
+                transition: "max-height 0.4s ease",
+              }}
+            >
+              {place.documents && place.documents.length > 0 ? (
+                <ul className="doc-list-grid">
+                  {place.documents.map((url, index) => (
+                    <li key={index}>
+                      <a href={url} target="_blank" rel="noopener noreferrer" title={getDocumentName(url)}>
+                        <span className="doc-icon">📄</span>
+                        <span className="doc-name">{getDocumentName(url)}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ color: "#aaa" }}>Niciun document atașat.</p>
+              )}
+            </div>
+          </div>
 
-
-    ) : (
-      <p style={{ color: "#aaa" }}>Niciun document atașat.</p>
-    )}
-  </div>
-</div>
-
-
-          {/* Right Bottom Small Column: Empty */}
-          {/* Right Bottom Small Column: Display nume */}
-<div style={{ whiteSpace: "pre-wrap" }} className="info-section small">
-  <h3
-    onClick={() => setShowAmanunte(!showAmanunte)}
-    style={{ cursor: "pointer", userSelect: "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}
-  >
-    Amanunte
-    <span style={{ fontSize: "1.2em" }}>{showAmanunte ? "▲" : "▼"}</span>
-  </h3>
-  <div
-    ref={amanunteRef}
-    style={{
-      maxHeight: showAmanunte ? `${amanunteRef.current?.scrollHeight}px` : "0px",
-      overflow: "hidden",
-      transition: "max-height 0.4s ease",
-    }}
-  >
-    <p>{place.nume || "Nu a fost adaugat nimic."}</p>
-  </div>
-</div>
-
-
+          {/* Right Bottom Small Column: Amanunte */}
+          <div style={{ whiteSpace: "pre-wrap" }} className="info-section small">
+            <h3
+              onClick={() => setShowAmanunte(!showAmanunte)}
+              style={{
+                cursor: "pointer",
+                userSelect: "none",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              Amanunte
+              <span style={{ fontSize: "1.2em" }}>{showAmanunte ? "▲" : "▼"}</span>
+            </h3>
+            <div
+              ref={amanunteRef}
+              style={{
+                maxHeight: showAmanunte ? `${amanunteRef.current?.scrollHeight}px` : "0px",
+                overflow: "hidden",
+                transition: "max-height 0.4s ease",
+              }}
+            >
+              <p>{place.nume || "Nu a fost adaugat nimic."}</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
