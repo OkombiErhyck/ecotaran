@@ -139,56 +139,43 @@ useEffect(() => {
 
   // Format modification history for display with exact change highlighting for description field only
   function formatModificationsForDisplay(text) {
-    if (!text) return null;
+  if (!text) return null;
 
-    const entries = text.split(/\n\n\[\d+\]/).filter(Boolean);
+  const entries = text.split(/\n\n\[\d+\]/).filter(Boolean);
 
-    return entries.map((entry, i) => {
-      const userMatch = entry.match(/^\s*(.+?) a modificat câmpul "(.+?)":/m);
-      const oldValMatch = entry.match(/Veche valoare:\n\s*([\s\S]*?)\n\s*Noua valoare:/m);
-      const newValMatch = entry.match(/Noua valoare:\n\s*([\s\S]*?)\n\s*La data:/m);
-      const dateMatch = entry.match(/La data:\s*(.+)/m);
+  return entries.map((entry, i) => {
+    const userMatch = entry.match(/^\s*(.+?) a modificat câmpul "(.+?)":/m);
+    const oldValMatch = entry.match(/Veche valoare:\n\s*([\s\S]*?)\n\s*Noua valoare:/m);
+    const newValMatch = entry.match(/Noua valoare:\n\s*([\s\S]*?)\n\s*La data:/m);
+    const dateMatch = entry.match(/La data:\s*(.+)/m);
 
-      if (!userMatch) return <pre key={i}>{entry}</pre>;
+    if (!userMatch) return <pre key={i}>{entry}</pre>;
 
-      const user = userMatch[1].trim();
-      const field = userMatch[2].trim();
-      const oldValue = oldValMatch ? oldValMatch[1].trim() : "-";
-      const newValue = newValMatch ? newValMatch[1].trim() : "-";
-      const date = dateMatch ? dateMatch[1].trim() : "-";
+    const user = userMatch[1].trim();
+    const field = userMatch[2].trim();
+    const oldValue = oldValMatch ? oldValMatch[1].trim() : "-";
+    const newValue = newValMatch ? newValMatch[1].trim() : "-";
+    const date = dateMatch ? dateMatch[1].trim() : "-";
 
-      // If field is description, highlight exact changes inside
-      if (field === "description") {
-        const { oldRendered, newRendered } = diffHighlight(oldValue, newValue);
+    let content;
 
-        return (
-          <div key={i} className="mod-entry">
-            <strong>
-              [{i + 1}] {user}
-            </strong>{" "}
-            a modificat câmpul <em>"{field}"</em>:
-            <div className="old-value-box">
-              <strong>Veche valoare:</strong>
-              <pre>{oldRendered}</pre>
-            </div>
-            <div className="new-value-box">
-              <strong>Noua valoare:</strong>
-              <pre>{newRendered}</pre>
-            </div>
-            <div className="mod-date">
-              <small>La data: {date}</small>
-            </div>
+    if (field === "description") {
+      const { oldRendered, newRendered } = diffHighlight(oldValue, newValue);
+      content = (
+        <>
+          <div className="old-value-box">
+            <strong>Veche valoare:</strong>
+            <pre>{oldRendered}</pre>
           </div>
-        );
-      }
-
-      // Default display without diff for other fields
-      return (
-        <div key={i} className="mod-entry">
-          <strong>
-            [{i + 1}] {user}
-          </strong>{" "}
-          a modificat câmpul <em>"{field}"</em>:
+          <div className="new-value-box">
+            <strong>Noua valoare:</strong>
+            <pre>{newRendered}</pre>
+          </div>
+        </>
+      );
+    } else {
+      content = (
+        <>
           <div className="old-value-box">
             <strong>Veche valoare:</strong>
             <pre>{oldValue}</pre>
@@ -197,13 +184,25 @@ useEffect(() => {
             <strong>Noua valoare:</strong>
             <pre>{newValue}</pre>
           </div>
+        </>
+      );
+    }
+
+    return (
+      <details key={i} className="mod-entry">
+        <summary style={{ cursor: "pointer", fontWeight: "bold" }}>
+          [{i + 1}] {user} a modificat <em>"{field}"</em> — {date}
+        </summary>
+        <div style={{ marginTop: "8px" }}>
+          {content}
           <div className="mod-date">
             <small>La data: {date}</small>
           </div>
         </div>
-      );
-    });
-  }
+      </details>
+    );
+  });
+}
 
   useEffect(() => {
     if (!id) return;
