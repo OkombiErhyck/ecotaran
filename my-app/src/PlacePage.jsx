@@ -147,24 +147,18 @@ const amanunteRef = useRef(null);
     }}
   >
     {place.documents && place.documents.length > 0 ? (
-      <ul style={{ listStyle: "none", paddingLeft: 0, marginTop: "10px" }}>
-        {place.documents.map((url, index) => (
-          <li key={index} style={{ marginBottom: "10px" }}>
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                color: "var(--main)",
-                textDecoration: "underline",
-                fontWeight: "bold",
-              }}
-            >
-              {getDocumentName(url)}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <ul className="doc-list-grid">
+  {place.documents.map((url, index) => (
+    <li key={index}>
+      <a href={url} target="_blank" rel="noopener noreferrer" title={getDocumentName(url)}>
+        <span className="doc-icon">📄</span>
+        <span className="doc-name">{getDocumentName(url)}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+
     ) : (
       <p style={{ color: "#aaa" }}>Niciun document atașat.</p>
     )}
