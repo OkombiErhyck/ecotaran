@@ -437,15 +437,20 @@ Ce a fost cumparat-data:`
   <h5 style={{fontSize:'1.1rem'}}>Document Upload</h5>
   <input type="file" onChange={uploadDocument} />
   </div>
-  <ul>
-    {documents.map((doc, idx) => (
-      <li key={idx}>
-        <a href={doc} target="_blank" rel="noopener noreferrer">
-          {doc.split("/").pop()}
-        </a>
-      </li>
-    ))}
-  </ul>
+  <br>
+  </br>
+
+<ul className="doc-list">
+  {documents.map((doc, idx) => (
+    <li key={idx} onClick={() => window.open(doc, '_blank')}>
+      <span className="doc-icon">📄</span>
+      <a href={doc} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}>
+        {doc.split("/").pop()}
+      </a>
+    </li>
+  ))}
+</ul>
+
 </div>
 
           </div>
