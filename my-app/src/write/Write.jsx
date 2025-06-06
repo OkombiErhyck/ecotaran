@@ -340,14 +340,15 @@ Data incepere CIM :
 Salariu: 
 Telefon : `,
 
-  "Personal Non UE": `Angajator : 
-CNP :  
-Telefon : 
-Telefon :
+  "Personal Non UE": `Angajator :  
+Contract de munca : 
+Ore de lucru: 
+Zile de lucru :
 Leasing: 
 Locuinta : 
-Data incepere CIM : 
-Salariu: `,
+Data incepere CIM :
+Salariu: 
+Telefon :`,
 
   "Automobile": `Marca: 
 Numar Inmatriculare: 
@@ -370,7 +371,11 @@ Conditiile in care a fost gasita cazarea:
 Ce a fost reparat-data:
 Ce a fost cumparat-data:`
   ,
-  "Personal Ro": `Tara de origine:
+  "Personal Ro": ` IBAN:
+  Sex:
+  Data incepere CIM:`,
+  
+  "Personal Non UE": `Tara de origine:
   Data sosirii in tara:
   Data expirare permis de munca:
   Data expirare permis de sedere:
@@ -385,7 +390,6 @@ Ce a fost cumparat-data:`
   Data intocmire Aviz:
   Sex:
   CIM`,
-  "Personal Non UE": `Nume predefinit pentru Personal Non UE`,
   "Automobile": `Nume predefinit pentru Automobile`,
   "Companie": `Nume predefinit pentru Companie`,
 };
