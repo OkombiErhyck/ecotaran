@@ -44,7 +44,11 @@
   color: var(--main);
   font-size: 20px;
   text-transform: uppercase;
+  
 }
+
+ 
+
 
 .large {
   grid-row: span 2;
@@ -159,4 +163,56 @@
 @keyframes marquee {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
+}
+
+
+
+.doc-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  list-style: none;
+  padding-left: 0;
+  margin: 16px 0;
+}
+
+.doc-list-grid li {
+  background: linear-gradient(145deg, #2a2a2a, #1e1e1e);
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.doc-list-grid li:hover {
+  transform: translateY(-2px);
+  border-color: var(--main);
+  background: #2c2c2c;
+}
+
+.doc-list-grid a {
+  color: var(--main);
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.doc-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.doc-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
