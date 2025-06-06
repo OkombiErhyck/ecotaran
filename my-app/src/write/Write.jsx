@@ -428,7 +428,7 @@ Ce a fost cumparat-data:`
               ))}
             </select>
             <div style={{background: "var(--main)", color: "#fff", padding: "10px", borderRadius: "5px"}}> 
- <h5 style={{fontSize:'1.1rem'}}>Incarca Poze</h5>
+ 
             <PhotosUpLoader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
             </div>
             <br /> 
