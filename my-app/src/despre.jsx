@@ -107,29 +107,49 @@ export default function IndexPage() {
                 style={{ padding: "8px", width: "100%", maxWidth: "300px" }}
               />
             </div>
+<div className="marca1-buttons">
+  <button
+    onClick={() => {
+      setShowOnlyCapital((prev) => {
+        const newVal = !prev;
+        setShowOnlyComplete(false);
+        setShowOnlyAMT(false);
+        return newVal;
+      });
+    }}
+    className={`marca1-button capital-clean ${showOnlyCapital ? "active" : ""}`}
+  >
+    Capital Clean Group
+  </button>
 
-            <div className="marca1-buttons">
-              <button
-                onClick={() => setShowOnlyCapital((prev) => !prev)}
-                className={`marca1-button capital-clean ${showOnlyCapital ? "active" : ""}`}
-              >
-                Capital Clean Group
-              </button>
+  <button
+    onClick={() => {
+      setShowOnlyComplete((prev) => {
+        const newVal = !prev;
+        setShowOnlyCapital(false);
+        setShowOnlyAMT(false);
+        return newVal;
+      });
+    }}
+    className={`marca1-button complete-recruitment ${showOnlyComplete ? "active" : ""}`}
+  >
+    Complete Recruitment
+  </button>
 
-              <button
-                onClick={() => setShowOnlyComplete((prev) => !prev)}
-                className={`marca1-button complete-recruitment ${showOnlyComplete ? "active" : ""}`}
-              >
-                Complete Recruitment
-              </button>
-
-              <button
-                onClick={() => setShowOnlyAMT((prev) => !prev)}
-                className={`marca1-button amt ${showOnlyAMT ? "active" : ""}`}
-              >
-                AMT
-              </button>
-            </div>
+  <button
+    onClick={() => {
+      setShowOnlyAMT((prev) => {
+        const newVal = !prev;
+        setShowOnlyCapital(false);
+        setShowOnlyComplete(false);
+        return newVal;
+      });
+    }}
+    className={`marca1-button amt ${showOnlyAMT ? "active" : ""}`}
+  >
+    AMT
+  </button>
+</div>
 
             <div className="filter-item">
               <button onClick={resetFilters}>Reset</button>
