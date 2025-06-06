@@ -3,11 +3,13 @@
   padding: 1rem;
 }
 
+ 
+
 .upload-label {
   display: inline-block;
   margin-bottom: 1rem;
   cursor: pointer;
-  background-color: var(--main, #007bff);
+  background-color: black;
   color: white;
   padding: 10px 16px;
   border-radius: 8px;
@@ -16,7 +18,7 @@
 }
 
 .upload-label:hover {
-  background-color: #005bb5;
+  background-color: #309f23;
 }
 
 .upload-label input {
