@@ -452,7 +452,7 @@ Ce a fost cumparat-data:`
             <h4>Descriere</h4>
             <textarea
               className="writeInput writeText"
-              placeholder="Detalii despre produs"
+              placeholder="Detalii "
               type="text"
               value={description}
               onChange={(ev) => setDescription(ev.target.value)}
