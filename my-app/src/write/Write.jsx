@@ -498,7 +498,7 @@ Ce a fost cumparat-data:`
           </div>
 
           <button className="writeSubmit" type="submit">
-            Publish
+            Incarca Datele
           </button>
         </form>
       </div>
