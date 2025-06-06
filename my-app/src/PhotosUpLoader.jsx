@@ -46,7 +46,7 @@ export default function PhotosUpLoader({addedPhotos,onChange}) {
   <div className="photos-uploader">
     <label className="upload-label">
       <input type="file" multiple onChange={uploadPhoto} />
-      <span className="upload-text">Upload Photos</span>
+      <span className="upload-text">Incarca Poze</span>
     </label>
 
     {isLoading && <div className="loading">Se încarcă...</div>}
