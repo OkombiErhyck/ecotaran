@@ -374,8 +374,8 @@ Ce a fost cumparat-data:`
   "Personal Ro": ` IBAN:
   Sex:
   Data incepere CIM:`,
-  
-  "Personal Non UE": `Tara de origine:
+
+  "Personal Non UE": ` Tara de origine:
   Data sosirii in tara:
   Data expirare permis de munca:
   Data expirare permis de sedere:
@@ -389,7 +389,8 @@ Ce a fost cumparat-data:`
   Data emitere aviz:
   Data intocmire Aviz:
   Sex:
-  CIM`,
+  Data nasterii:
+  Data incepere CIM:`,
   "Automobile": `Nume predefinit pentru Automobile`,
   "Companie": `Nume predefinit pentru Companie`,
 };
