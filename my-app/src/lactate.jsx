@@ -100,27 +100,40 @@ export default function IndexPage() {
             </div>
 
             <div className="marca1-buttons">
-              <button
-                onClick={() => setShowOnlyContinental((prev) => !prev)}
-                className={`marca1-button capital-clean ${showOnlyContinental ? "active" : ""}`}
-              >
-                Continental
-              </button>
+  <button
+    onClick={() => {
+      setShowOnlyContinental(true);
+      setShowOnlyHard(false);
+      setShowOnlyNovotel(false);
+    }}
+    className={`marca1-button capital-clean ${showOnlyContinental ? "active" : ""}`}
+  >
+    Continental
+  </button>
 
-              <button
-                onClick={() => setShowOnlyHard((prev) => !prev)}
-                className={`marca1-button complete-recruitment ${showOnlyHard ? "active" : ""}`}
-              >
-                Hard Rock
-              </button>
+  <button
+    onClick={() => {
+      setShowOnlyContinental(false);
+      setShowOnlyHard(true);
+      setShowOnlyNovotel(false);
+    }}
+    className={`marca1-button complete-recruitment ${showOnlyHard ? "active" : ""}`}
+  >
+    Hard Rock
+  </button>
 
-              <button
-                onClick={() => setShowOnlyNovotel((prev) => !prev)}
-                className={`marca1-button amt ${showOnlyNovotel ? "active" : ""}`}
-              >
-                Novotel
-              </button>
-            </div>
+  <button
+    onClick={() => {
+      setShowOnlyContinental(false);
+      setShowOnlyHard(false);
+      setShowOnlyNovotel(true);
+    }}
+    className={`marca1-button amt ${showOnlyNovotel ? "active" : ""}`}
+  >
+    Novotel
+  </button>
+</div>
+
 
             <div className="filter-item">
               <button onClick={resetFilters}>Reset</button>
