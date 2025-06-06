@@ -216,3 +216,69 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.line-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.line-list li {
+  background-color: #2a2a2a;
+  padding: 10px 15px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  color: wheat;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+
+.line-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.line-list li {
+  background-color: #2a2a2a;
+  padding: 10px 15px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  color: wheat;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+.amanunte-container {
+  /* fallback scrollbar styles */
+  scrollbar-width: thin;         /* Firefox */
+  scrollbar-color: var(--main) #000000;    /* Firefox */
+}
+
+/* Webkit browsers */
+.amanunte-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.amanunte-container::-webkit-scrollbar-track {
+  background: #eee;
+  border-radius: 4px;
+}
+
+.amanunte-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+  border: 2px solid #eee; /* space around thumb */
+}
+
+/* Optional: hover effect */
+.amanunte-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
