@@ -428,13 +428,16 @@ Ce a fost cumparat-data:`
                 </option>
               ))}
             </select>
-
+            <div style={{background: "var(--main)", color: "#fff", padding: "10px", borderRadius: "5px"}}> 
+ <h5 style={{fontSize:'1.1rem'}}>Incarca Poze</h5>
             <PhotosUpLoader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-            <br />
+            </div>
+            <br /> 
             <div className="writeFormGroup">
-  <h5>Document Upload</h5>
+               <div style={{background: "var(--main)", color: "#fff", padding: "10px", borderRadius: "5px",}}> 
+  <h5 style={{fontSize:'1.1rem'}}>Document Upload</h5>
   <input type="file" onChange={uploadDocument} />
-  
+  </div>
   <ul>
     {documents.map((doc, idx) => (
       <li key={idx}>
@@ -462,7 +465,7 @@ Ce a fost cumparat-data:`
   <h5>Amanunte</h5>
   <textarea
     className="writeInput writeText"
-    placeholder="Introduceți numele"
+    placeholder="Introduceți "
     type="text"
     value={nume}
     onChange={ev => setNume(ev.target.value)}
