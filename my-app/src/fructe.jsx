@@ -10,6 +10,7 @@ export default function Fructe() {
   const allPermissions = [
     "Adauga",
     "Administrare",
+    "Concedii",
     "Modificari Cazari",
     "Modifica Flota",
     "Modifica Angajati",
