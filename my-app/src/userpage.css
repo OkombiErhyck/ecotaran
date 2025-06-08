@@ -77,3 +77,22 @@
    cursor: pointer;
  }
  
+.modifica-section-wrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 1.0s ease, opacity 1.1s ease;
+}
+
+.modifica-section-wrapper.open {
+  max-height: 1500px; /* Adjust if needed */
+  opacity: 1;
+}
+
+.modifica-section {
+  background-color: #242424;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 8px rgba(28, 28, 28, 0.1);
+}
