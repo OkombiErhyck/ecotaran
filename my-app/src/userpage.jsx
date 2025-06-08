@@ -147,7 +147,7 @@ function Userpage() {
                 </div>
               )}
 
-              {/* Modifica toggle button - always visible */}
+               {isButtonVisible("Modifica") && (
               <div className="col-lg-4 col-xs-6">
                 <div className="box card-body p-0 shadow-sm mb-5">
                   <div className="box_content">
@@ -161,7 +161,7 @@ function Userpage() {
                   </div>
                 </div>
               </div>
-
+  )}
               {/* Modifica section buttons, conditionally shown */}
               {showModificaButtons && (
                 <div className="modifica-section-wrapper open">
