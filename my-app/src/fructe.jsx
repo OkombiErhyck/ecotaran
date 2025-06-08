@@ -1,218 +1,113 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./IndexPage.css";
-import { UserContext } from "./UserContext";
-import { CartContext } from "./CartContext";
-import CartLink from "./CartLink";
-import { Link } from "react-router-dom";
 
+export default function Fructe() {
+  const [users, setUsers] = useState([]);
+  const [loadingUserId, setLoadingUserId] = useState(null);
+  const [search, setSearch] = useState("");
 
-function Fructe() {
-  const { cart, setCart } = useContext(UserContext);
-  const { updateCartQuantity } = useContext(CartContext);
-  const cartLinkRef = useRef(null);
-  
-  const [places, setPlaces] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const placesPerPage = 90;
+  const allPermissions = [
+    "Adauga",
+    "Administrare",
+    "Modificari Cazari",
+    "Modifica Flota",
+    "Modifica Angajati",
+    "Modif Companii",
+  ];
 
   useEffect(() => {
-    axios.get("/places").then((response) => {
-      const filteredPlaces = response.data.filter(
-        (place) => place.marca === "Fructe"
-      );
-      setPlaces(filteredPlaces);
-    });
+    async function fetchUsers() {
+      try {
+        const res = await axios.get("/users/permissions");
+        setUsers(res.data);
+      } catch (err) {
+        console.error("Failed to fetch users with permissions", err);
+      }
+    }
+    fetchUsers();
   }, []);
 
-  const [loading, setLoading] = useState(false);
-  const [loadingPlaceId, setLoadingPlaceId] = useState(null);
+  async function togglePermission(userId, permission) {
+    setLoadingUserId(userId);
+    try {
+      const user = users.find((u) => u._id === userId);
+      if (!user) return;
 
-  const lastPlaceIndex = currentPage * placesPerPage;
-  const firstPlaceIndex = lastPlaceIndex - placesPerPage;
-  const currentPlaces = places.slice(firstPlaceIndex, lastPlaceIndex);
-  const totalPages = Math.ceil(places.length / placesPerPage);
+      const newPermissions = {
+        ...(user.permissions || {}),
+        [permission]: !user.permissions?.[permission],
+      };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    if (window.pageYOffset > 0) {
-      window.scrollTo(0, 0);
+      await axios.put(`/users/${userId}/permissions`, { permissions: newPermissions });
+
+      setUsers((prevUsers) =>
+        prevUsers.map((u) =>
+          u._id === userId ? { ...u, permissions: newPermissions } : u
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update permission", error);
+    } finally {
+      setLoadingUserId(null);
     }
-  };
+  }
 
-  const addToCart = (place, quantity) => {
-    setLoadingPlaceId(place._id);
-    setLoading(true);
-
-    const updatedPlace = { ...place, quantity: quantity || 1 }; // Set default quantity to 1 if not provided
-    let updatedCart = localStorage.getItem("cart");
-    if (!updatedCart) {
-      updatedCart = [];
-    } else {
-      updatedCart = JSON.parse(updatedCart);
-    }
-
-    const placeIndex = updatedCart.findIndex((item) => item._id === place._id);
-    if (placeIndex !== -1) {
-      updatedCart[placeIndex].quantity += quantity;
-    } else {
-      updatedCart.push(updatedPlace);
-    }
-
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCart(updatedCart);
-
-    // Call updateCartQuantity with the new cart quantity
-    updateCartQuantity(updatedCart.length);
-
-    setTimeout(() => {
-      setLoading(false);
-      setLoadingPlaceId(null);
-    }, 1000);
-  };
-
-  const handleDecreaseQuantity = (place) => {
-    if (place.quantity > 1) {
-      place.quantity -= 1;
-      setPlaces([...places]);
-    }
-  };
-
-  const handleIncreaseQuantity = (place) => {
-    place.quantity = (place.quantity || 1) + 1;
-    setPlaces([...places]);
-  };
-
-  useEffect(() => {
-    if (cartLinkRef.current) {
-      cartLinkRef.current.forceUpdate();
-    }
-  }, [cart]);
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <>
-      <div className="top"></div>
-      <div className="main2">
-        <div className="container">
-          <div className="details container">
-            <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
-              {currentPlaces.length > 0 &&
-                currentPlaces.map((place) => (
-                  <div className="col" key={place._id}>
-                    <div className="box card-body p-0 shadow-sm mb-5">
-                    <Link to={"/place/" + place._id} key={place._id} className="link-no-underline"> 
-                      {place.photos.length > 0 && (
-                        <img
-                          src={place.photos[0]}
-                          className="img-fluid"
-                          alt={place.title}
-                          style={{
-                            height: "270px",
-                            width: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
-                      )}
-                      </Link>
-                      <div className="box_content">
-                        <h4>{place.title}</h4>
-                        <div className="row pl-2 pr-2">
-                           
-                            <div className="quantity-control">
-                              <div
-                                className="quantity-btn-container"
-                                style={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  alignContent: "flex-end",
-                                  justifyContent: "space-between",
-                                  background: "#d3d3d3",
-                                  borderRadius: "10%",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <button
-                                  className="quantity-btn"
-                                  style={{
-                                    backgroundColor: "rgb(154 154 154)",
-                                    color: "white",
-                                    padding: "5px",
-                                    border: "none",
-                                    borderRadius: "10%",
-                                    cursor: "pointer",
-                                    marginRight: "5px",
-                                  }}
-                                  onClick={() =>
-                                    handleDecreaseQuantity(place)
-                                  }
-                                >
-                                  -
-                                </button>
-                                <div className="quantity">
-                                  {place.quantity || 1}
-                                </div>
-                                <button
-                                  className="quantity-btn"
-                                  style={{
-                                    backgroundColor: "rgb(154 154 154)",
-                                    color: "white",
-                                    padding: "5px",
-                                    border: "none",
-                                    borderRadius: "10%",
-                                    cursor: "pointer",
-                                    marginLeft: "5px",
-                                  }}
-                                  onClick={() =>
-                                    handleIncreaseQuantity(place)
-                                  }
-                                >
-                                  +
-                                </button>
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  alignContent: "flex-end",
-                                  justifyContent: "space-around",
-                                  alignItems: "center",
-                                }}
-                              >
-                                {place.km} lei
-                              </div>
+    <div className="access-manager-container">
+      <h2 className="access-manager-title">Access Manager</h2>
+      
+      <input
+        type="text"
+        className="search-input"
+        placeholder="Search users..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-                               
-                              <button
-                                style={{
-                                  padding: " 4px",
-                                  width: "300px",
-                                }}
-                                className="btn1"
-                                onClick={() => addToCart(place, place.quantity)}
-                              >
-                              {loadingPlaceId === place._id ? (
-                            <div className="loading-animation">
-                            <div className="spinner"></div>
-                          
-                            </div>
-                          ) : (
-                               <span>Adauga in cos</span> 
-                                )}
-                              </button>
-                              
-                            </div>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+      {filteredUsers.length === 0 ? (
+        <p className="no-users-text">No users found.</p>
+      ) : (
+        <div className="users-grid">
+          {filteredUsers.map(user => (
+            <div key={user._id} className="user-card">
+              <div className="user-info">
+                <div className="avatar">
+                  {user.name
+                    .split(" ")
+                    .map(n => n[0])
+                    .join("")
+                    .toUpperCase()}
+                </div>
+                <div className="user-name">{user.name}</div>
+              </div>
+              <div className="permissions-list">
+                {allPermissions.map(perm => {
+                  const checked = !!user.permissions?.[perm];
+                  const isLoading = loadingUserId === user._id;
+                  return (
+                    <label key={perm} className="toggle-switch">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        disabled={isLoading}
+                        onChange={() => togglePermission(user._id, perm)}
+                      />
+                      <span className="slider"></span>
+                      <span className="permission-label">{perm}</span>
+                      {isLoading && <div className="spinner"></div>}
+                    </label>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 }
-
-export default Fructe;
