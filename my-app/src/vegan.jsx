@@ -9,7 +9,7 @@ export default function IndexPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [placesPerPage, setPlacesPerPage] = useState(9);
 
-  const [searchTitle, setSearchTitle] = useState(""); // <-- new search state
+  const [searchTitle, setSearchTitle] = useState("");
 
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedAnul, setSelectedAnul] = useState("");
@@ -20,9 +20,7 @@ export default function IndexPage() {
   const [selectedTitleMin, setSelectedTitleMin] = useState("");
   const [selectedTitleMax, setSelectedTitleMax] = useState("");
 
-  const [showOnlyContinental, setShowOnlyContinental] = useState(false);
-  const [showOnlyHard, setShowOnlyHard] = useState(false);
-  const [showOnlyNovotel, setShowOnlyNovotel] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(""); // "continental", "hard", "novotel" or ""
 
   useEffect(() => {
     axios.get("/places").then((response) => {
@@ -41,16 +39,17 @@ export default function IndexPage() {
     if (
       selectedPutere &&
       !(Number(place.putere) >= Number(selectedPutere) && Number(place.putere) < Number(selectedPutere) + 100)
-    )
-      return false;
+    ) return false;
+
     if (selectedKmMin && !(place.km >= Number(selectedKmMin))) return false;
     if (selectedKmMax && !(place.km <= Number(selectedKmMax))) return false;
     if (selectedTitleMin && !(place.title >= Number(selectedTitleMin))) return false;
     if (selectedTitleMax && !(place.title <= Number(selectedTitleMax))) return false;
 
-    if (showOnlyContinental && !place.description?.toLowerCase().includes("curatenie")) return false;
-    if (showOnlyHard && !place.description?.toLowerCase().includes("ddd")) return false;
-    if (showOnlyNovotel && !place.description?.toLowerCase().includes("leasing")) return false;
+    // Exclusive active filter
+    if (activeFilter === "continental" && !place.description?.toLowerCase().includes("curatenie")) return false;
+    if (activeFilter === "hard" && !place.description?.toLowerCase().includes("ddd")) return false;
+    if (activeFilter === "novotel" && !place.description?.toLowerCase().includes("leasing")) return false;
 
     return true;
   });
@@ -77,9 +76,7 @@ export default function IndexPage() {
     setSelectedKmMax("");
     setSelectedTitleMin("");
     setSelectedTitleMax("");
-    setShowOnlyContinental(false);
-    setShowOnlyHard(false);
-    setShowOnlyNovotel(false);
+    setActiveFilter("");
   };
 
   return (
@@ -88,7 +85,6 @@ export default function IndexPage() {
       <div className="main2">
         <div className="container">
           <div className="filter-container">
-            {/* Search bar */}
             <div className="filter-item" style={{ marginBottom: "10px" }}>
               <input
                 type="text"
@@ -101,22 +97,28 @@ export default function IndexPage() {
 
             <div className="marca1-buttons">
               <button
-                onClick={() => setShowOnlyContinental((prev) => !prev)}
-                className={`marca1-button capital-clean ${showOnlyContinental ? "active" : ""}`}
+                onClick={() =>
+                  setActiveFilter((prev) => (prev === "continental" ? "" : "continental"))
+                }
+                className={`marca1-button capital-clean ${activeFilter === "continental" ? "active" : ""}`}
               >
-                Curatenie
+                Curățenie
               </button>
 
               <button
-                onClick={() => setShowOnlyHard((prev) => !prev)}
-                className={`marca1-button complete-recruitment ${showOnlyHard ? "active" : ""}`}
+                onClick={() =>
+                  setActiveFilter((prev) => (prev === "hard" ? "" : "hard"))
+                }
+                className={`marca1-button complete-recruitment ${activeFilter === "hard" ? "active" : ""}`}
               >
                 DDD
               </button>
 
               <button
-                onClick={() => setShowOnlyNovotel((prev) => !prev)}
-                className={`marca1-button amt ${showOnlyNovotel ? "active" : ""}`}
+                onClick={() =>
+                  setActiveFilter((prev) => (prev === "novotel" ? "" : "novotel"))
+                }
+                className={`marca1-button amt ${activeFilter === "novotel" ? "active" : ""}`}
               >
                 Leasing
               </button>
@@ -128,7 +130,7 @@ export default function IndexPage() {
           </div>
 
           <div className="details container">
-           <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <div className="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-4">
               {currentPlaces.length > 0 ? (
                 currentPlaces.map((place) => (
                   <Link to={"/place/" + place._id} key={place._id} className="link-no-underline">
@@ -149,8 +151,7 @@ export default function IndexPage() {
                           <h4>
                             {place.title} {place.km}
                           </h4>
-                         <button className="btn1">Vezi detalii</button>
-
+                          <button className="btn1">Vezi detalii</button>
                         </div>
                       </div>
                     </div>
