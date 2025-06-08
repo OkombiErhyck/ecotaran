@@ -59,7 +59,7 @@ export default function Fructe() {
 
   return (
     <div className="access-manager-container">
-      <h2 className="access-manager-title">Access Manager</h2>
+      <h2 className="access-manager-title">Gestionare Acces</h2>
       
       <input
         type="text"
