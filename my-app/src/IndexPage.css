@@ -566,6 +566,11 @@ padding: 20px;
 .access-manager-container {
   max-width: 960px;
   margin: 2rem auto;
+  margin-top: 120px;
+  
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(124, 124, 124, 0.9);
   padding: 0 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #222;
@@ -593,7 +598,7 @@ padding: 20px;
 }
 .search-input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--main);
   box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
 }
 
@@ -637,7 +642,7 @@ padding: 20px;
 .avatar {
   width: 48px;
   height: 48px;
-  background: #007bff;
+  background: var(--main);
   border-radius: 50%;
   color: #fff;
   font-weight: 700;
@@ -707,7 +712,7 @@ padding: 20px;
 
 /* Checked state */
 .toggle-switch input:checked + .slider {
-  background-color: #007bff;
+  background-color: var(--main);
 }
 .toggle-switch input:checked + .slider:before {
   transform: translateX(18px);
