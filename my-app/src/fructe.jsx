@@ -15,7 +15,7 @@ export default function Fructe() {
     "Modifica Flota",
     "Modifica Angajati",
     "Modif Companii",
-    "Modifica"
+    "Modifica",
   ];
 
   useEffect(() => {
@@ -55,14 +55,30 @@ export default function Fructe() {
     }
   }
 
-  const filteredUsers = users.filter(user =>
+  async function deleteUser(userId) {
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
+    setLoadingUserId(userId);
+    try {
+      await axios.delete(`/users/${userId}`);
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+    } catch (error) {
+      console.error("Failed to delete user", error);
+      alert("Failed to delete user");
+    } finally {
+      setLoadingUserId(null);
+    }
+  }
+
+  const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="access-manager-container">
       <h2 className="access-manager-title">Gestionare Acces</h2>
-      
+
       <input
         type="text"
         className="search-input"
@@ -75,20 +91,29 @@ export default function Fructe() {
         <p className="no-users-text">No users found.</p>
       ) : (
         <div className="users-grid">
-          {filteredUsers.map(user => (
+          {filteredUsers.map((user) => (
             <div key={user._id} className="user-card">
               <div className="user-info">
                 <div className="avatar">
                   {user.name
                     .split(" ")
-                    .map(n => n[0])
+                    .map((n) => n[0])
                     .join("")
                     .toUpperCase()}
                 </div>
                 <div className="user-name">{user.name}</div>
               </div>
+
+              <button
+                className="delete-button"
+                disabled={loadingUserId === user._id}
+                onClick={() => deleteUser(user._id)}
+              >
+                {loadingUserId === user._id ? "Deleting..." : "Delete"}
+              </button>
+
               <div className="permissions-list">
-                {allPermissions.map(perm => {
+                {allPermissions.map((perm) => {
                   const checked = !!user.permissions?.[perm];
                   const isLoading = loadingUserId === user._id;
                   return (
