@@ -507,7 +507,40 @@ app.use((err, req, res, next) => {
   next();
 });
 
+app.get("/users", async (req, res) => {
+  const users = await User.find({}, { password: 0 }); // exclude password
+  res.json(users);
+});
+ 
 
+
+app.get("/users/permissions", async (req, res) => {
+  try {
+    const users = await User.find({}, "name email permissions");
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to get user permissions" });
+  }
+});
+
+// PUT update a user's permissions
+app.put("/users/:id/permissions", async (req, res) => {
+  const userId = req.params.id;
+  const newPermissions = req.body.permissions;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.permissions = newPermissions;
+    await user.save();
+
+    res.json({ success: true, permissions: user.permissions });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update permissions" });
+  }
+});
+ 
 
 app.get("/places", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
