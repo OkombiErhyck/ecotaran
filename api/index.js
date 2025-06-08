@@ -158,21 +158,35 @@ app.post("/login", async (req, res) => {
   });
 
   
-  app.get("/profile", (req,res) => {
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
-    mongoose.connect(process.env.MONGO_URL);
-    const {token} = req.cookies;
-    if (token) {
-        jwt.verify(token, jwtSecret, {}, async (err, user) => {
-               if (err) throw err;
-               
-               res.json(user);
-         });
-    } else {
-        res.json(null);
+ app.get("/profile", async (req, res) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+  mongoose.connect(process.env.MONGO_URL);
+
+  const { token } = req.cookies;
+  if (!token) {
+    return res.json(null);
+  }
+
+  jwt.verify(token, jwtSecret, {}, async (err, decodedUser) => {
+    if (err) return res.status(401).json({ error: "Invalid token" });
+
+    try {
+      // Assuming decodedUser contains user ID as decodedUser.id or decodedUser._id
+      const userId = decodedUser.id || decodedUser._id;
+      if (!userId) return res.json(null);
+
+      const user = await User.findById(userId, "name email permissions");
+      if (!user) return res.json(null);
+
+      res.json(user); // user with permissions
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch user" });
     }
   });
+});
+
+
 
 
 app.post("/logout", (req,res) => {
