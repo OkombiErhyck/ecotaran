@@ -105,12 +105,17 @@ export default function Fructe() {
               </div>
 
               <button
-                className="delete-button"
-                disabled={loadingUserId === user._id}
-                onClick={() => deleteUser(user._id)}
-              >
-                {loadingUserId === user._id ? "Deleting..." : "Delete"}
-              </button>
+  className="delete-button"
+  disabled={loadingUserId === user._id}
+  onClick={() => deleteUser(user._id)}
+>
+  {loadingUserId === user._id ? (
+    <span className="loader" />
+  ) : (
+    <span> Șterge utilizator</span>
+  )}
+</button>
+
 
               <div className="permissions-list">
                 {allPermissions.map((perm) => {
