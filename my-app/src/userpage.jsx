@@ -162,7 +162,7 @@ function Userpage() {
                     <div className="box card-body p-0 shadow-sm mb-5">
                       <div className="box_content">
                         <a href="/details">
-                          <img src={setting} className="img-fluid" alt="" />
+                          <img src={businessman} className="img-fluid" alt="" />
                           <button className="btn1">Modifica Angajati</button>
                         </a>
                       </div>
