@@ -14,6 +14,7 @@ export default function Fructe() {
     "Modifica Flota",
     "Modifica Angajati",
     "Modif Companii",
+    "Modifica"
   ];
 
   useEffect(() => {
