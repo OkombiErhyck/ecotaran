@@ -163,7 +163,7 @@ export default function PlacePage() {
             {label}:{" "}
             <span
               onClick={() => handleFuzzyNavigate(extracted.trim())}
-              style={{ cursor: "pointer", color: "var(--main)", textDecoration: "underline" }}
+              style={{ cursor: "pointer", color: "var(--main)", fontWeight: "bold" }}
             >
               {extracted}
             </span>
@@ -270,7 +270,7 @@ export default function PlacePage() {
             {label}:{" "}
             <span
               onClick={() => handleFuzzyNavigate(extracted)}
-              style={{ cursor: "pointer", color: "var(--main)", textDecoration: "underline" }}
+              style={{ cursor: "pointer", color: "var(--main)", fontWeight: "bold" }}
             >
               {extracted}
             </span>
