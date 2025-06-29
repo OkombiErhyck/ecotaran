@@ -80,6 +80,23 @@ export default function PlacePage() {
       .replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
+  const handleFuzzyNavigate = async (partialTitle) => {
+  try {
+    const res = await axios.get(`/place/search-by-title/${encodeURIComponent(partialTitle)}`);
+    if (res.data && res.data._id) {
+      navigate(`/place/${res.data._id}`);
+    } else {
+      alert("Nu a fost găsit niciun loc cu acest nume.");
+    }
+  } catch (err) {
+    console.error("Eroare la căutare:", err);
+    alert("Aceasta companie nu exista.");
+  }
+};
+
+
+
+
   return (
     <>
       <div className="main3">
@@ -130,14 +147,34 @@ export default function PlacePage() {
     }}
   >
     {place.description ? (
-      <ul className="line-list">
-        {(showMore ? place.description : trimDescription(place.description))
-          .split(/\r?\n/)
-          .filter(line => line.trim() !== "")
-          .map((line, index) => (
-            <li key={index}>{line}</li>
-          ))}
-      </ul>
+     <ul className="line-list">
+  {(showMore ? place.description : trimDescription(place.description))
+    .split(/\r?\n/)
+    .filter(line => line.trim() !== "")
+    .map((line, index) => {
+      const match = line.match(/^(?:Contract de munca|Angajator|)\s*:\s*(.+)$/i);
+
+
+      if (match) {
+        const extracted = match[1].trim(); // gets text after "Contract de munca :"
+        return (
+          <li key={index}>
+            Contract de muncă:{" "}
+            <span
+              onClick={() => handleFuzzyNavigate(extracted)}
+              style={{ cursor: "pointer", color: "var(--main)", textDecoration: "underline" }}
+            >
+              {extracted}
+            </span>
+          </li>
+        );
+      } else {
+        return <li key={index}>{line}</li>;
+      }
+    })}
+</ul>
+
+
     ) : (
       <p style={{ color: "#aaa" }}>Nu a fost adăugat nimic.</p>
     )}
@@ -216,14 +253,33 @@ export default function PlacePage() {
   }}
 >
   {place.nume ? (
-    <ul className="line-list">
-      {place.nume
-        .split(/\r?\n/)
-        .filter(line => line.trim() !== "")
-        .map((line, index) => (
-          <li key={index}>{line}</li>
-        ))}
-    </ul>
+   <ul className="line-list">
+  {place.nume
+    .split(/\r?\n/)
+    .filter((line) => line.trim() !== "")
+    .map((line, index) => {
+      const match = line.match(/^(Personal in leasing)\s*:\s*(.+)$/i);
+
+      if (match) {
+        const label = match[1];
+        const extracted = match[2].trim(); // gets text after colon
+        return (
+          <li key={index}>
+            {label}:{" "}
+            <span
+              onClick={() => handleFuzzyNavigate(extracted)}
+              style={{ cursor: "pointer", color: "var(--main)", textDecoration: "underline" }}
+            >
+              {extracted}
+            </span>
+          </li>
+        );
+      } else {
+        return <li key={index}>{line}</li>;
+      }
+    })}
+</ul>
+
   ) : (
     <p style={{ margin: 0, color: "#888" }}>Nu a fost adăugat nimic.</p>
   )}
