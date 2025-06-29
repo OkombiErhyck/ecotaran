@@ -512,7 +512,22 @@ app.get("/users", async (req, res) => {
   res.json(users);
 });
  
+app.get('/place/search-by-title/:query', async (req, res) => {
+  const query = decodeURIComponent(req.params.query);
 
+  try {
+    const place = await Place.findOne({
+      title: { $regex: query, $options: "i" }, // fuzzy, case-insensitive
+    });
+
+    if (!place) return res.status(404).json({ message: "Not found" });
+
+    res.json(place);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 app.get("/users/permissions", async (req, res) => {
   try {
