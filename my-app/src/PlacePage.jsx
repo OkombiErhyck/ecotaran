@@ -90,7 +90,7 @@ export default function PlacePage() {
     }
   } catch (err) {
     console.error("Eroare la căutare:", err);
-    alert("Aceasta companie nu exista.");
+    alert("Nu a fost gasit .");
   }
 };
 
@@ -152,16 +152,17 @@ export default function PlacePage() {
     .split(/\r?\n/)
     .filter(line => line.trim() !== "")
     .map((line, index) => {
-      const match = line.match(/^(?:Contract de munca|Angajator|)\s*:\s*(.+)$/i);
-
+      const match = line.match(/^(Contract de munca|Angajator|Locuinta)\s*:\s*(.+)$/i);
 
       if (match) {
-        const extracted = match[1].trim(); // gets text after "Contract de munca :"
+        const label = match[1];     // "Contract de munca" or "Angajator" or "Locuinta"
+        const extracted = match[2]; // the text after colon
+
         return (
           <li key={index}>
-            Contract de muncă:{" "}
+            {label}:{" "}
             <span
-              onClick={() => handleFuzzyNavigate(extracted)}
+              onClick={() => handleFuzzyNavigate(extracted.trim())}
               style={{ cursor: "pointer", color: "var(--main)", textDecoration: "underline" }}
             >
               {extracted}
@@ -173,6 +174,7 @@ export default function PlacePage() {
       }
     })}
 </ul>
+
 
 
     ) : (
