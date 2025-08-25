@@ -6,6 +6,7 @@ export default function Fructe() {
   const [users, setUsers] = useState([]);
   const [loadingUserId, setLoadingUserId] = useState(null);
   const [search, setSearch] = useState("");
+  const [selectedFamily, setSelectedFamily] = useState(""); // NEW
 
   const allPermissions = [
     "Adauga",
@@ -16,12 +17,19 @@ export default function Fructe() {
     "Modifica Angajati",
     "Modif Companii",
     "Modifica",
+    "Vezi Cazari",
+    "Flota",
+    "Companii",
+    "Personal Ro",
+    "Personal Strain",
+
   ];
 
   useEffect(() => {
     async function fetchUsers() {
       try {
         const res = await axios.get("/users/permissions");
+        console.log("Fetched users:", res.data);
         setUsers(res.data);
       } catch (err) {
         console.error("Failed to fetch users with permissions", err);
@@ -71,14 +79,21 @@ export default function Fructe() {
     }
   }
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // Extract unique families from users
+  const families = Array.from(new Set(users.map((u) => u.family).filter(Boolean)));
+
+  // Apply filters
+  const filteredUsers = users.filter((user) => {
+    const matchFamily = selectedFamily ? user.family === selectedFamily : true;
+    const matchSearch = user.name.toLowerCase().includes(search.toLowerCase());
+    return matchFamily && matchSearch;
+  });
 
   return (
     <div className="access-manager-container">
       <h2 className="access-manager-title">Gestionare Acces</h2>
 
+      {/* Search input */}
       <input
         type="text"
         className="search-input"
@@ -86,6 +101,25 @@ export default function Fructe() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
+
+      {/* Family filter buttons */}
+      <div className="family-filter">
+        <button
+          onClick={() => setSelectedFamily("")}
+          className={selectedFamily === "" ? "active" : ""}
+        >
+          Toate Firmele
+        </button>
+        {families.map((fam) => (
+          <button
+            key={fam}
+            onClick={() => setSelectedFamily(fam)}
+            className={selectedFamily === fam ? "active" : ""}
+          >
+            {fam}
+          </button>
+        ))}
+      </div>
 
       {filteredUsers.length === 0 ? (
         <p className="no-users-text">No users found.</p>
@@ -101,21 +135,17 @@ export default function Fructe() {
                     .join("")
                     .toUpperCase()}
                 </div>
-                <div className="user-name">{user.name}</div>
+                <div className="user-name">{user.name} </div>
+                <div className="user-family">  {user.family}</div> {/* SHOW FAMILY */}
               </div>
 
               <button
-  className="delete-button"
-  disabled={loadingUserId === user._id}
-  onClick={() => deleteUser(user._id)}
->
-  {loadingUserId === user._id ? (
-    <span className="loader" />
-  ) : (
-    <span> Șterge utilizator</span>
-  )}
-</button>
-
+                className="delete-button"
+                disabled={loadingUserId === user._id}
+                onClick={() => deleteUser(user._id)}
+              >
+                {loadingUserId === user._id ? <span className="loader" /> : "Șterge utilizator"}
+              </button>
 
               <div className="permissions-list">
                 {allPermissions.map((perm) => {
