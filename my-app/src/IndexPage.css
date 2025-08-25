@@ -839,4 +839,40 @@ padding: 20px;
     transform: rotate(360deg);
   }
 }
+.user-family{
+  padding: 0 5px;
+  font-weight:bold;
+  background-color: var(--main);
+  border-radius: 5px;
+  margin-left: 5px;
+  
+}
+.family-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0 25px 0;
+}
+
+.family-filter button {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: #f9f9f9;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+}
+
+.family-filter button:hover {
+  background: #ececec;
+  border-color: #aaa;
+}
+
+.family-filter button.active {
+  background: #4caf50;   /* green highlight */
+  color: white;
+  border-color: #4caf50;
+  font-weight: bold;
+}
 
