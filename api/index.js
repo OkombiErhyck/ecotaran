@@ -276,12 +276,21 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-app.post("/places", (req,res) => {
-  mongoose.connect(process.env.MONGO_URL);
+app.post("/places", async (req, res) => {
+  await mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
   res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
-  const {token} = req.cookies;
-  const {title, marca, model, km, anul, addedPhotos, description, perks,
+
+  const { token } = req.cookies;
+  const {
+    title,
+    marca,
+    model,
+    km,
+    anul,
+    addedPhotos,
+    description,
+    perks,
     culoare,
     nume,
     mail,
@@ -293,20 +302,31 @@ app.post("/places", (req,res) => {
     caroserie,
     putere,
     normaeuro,
-    combustibil} = req.body;
-  jwt.verify(token, jwtSecret, {}, (err, userData) => {
+    combustibil,
+  } = req.body;
+
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) throw err;
-    const placeDoc = Place.create({
+
+    // 1️⃣ find user to get family name
+    const user = await User.findById(userData.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // 2️⃣ create place with family info
+    const placeDoc = await Place.create({
       owner: userData.id,
+      family: user.family, // ✅ assign family to place
       title,
       marca,
       anul,
       model,
       km,
       nume,
-    mail,
-    telefon,
-      photos:addedPhotos,
+      mail,
+      telefon,
+      photos: addedPhotos,
       description,
       perks,
       culoare,
@@ -317,9 +337,9 @@ app.post("/places", (req,res) => {
       caroserie,
       putere,
       normaeuro,
-      combustibil
-
+      combustibil,
     });
+
     res.json(placeDoc);
   });
 });
@@ -340,17 +360,21 @@ app.get("/user-places", (req,res) => {
 });
 
 
-app.get("/places/:id", async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "https://ecotaran.vercel.app");
+app.get("/places", async (req, res) => {
+  await mongoose.connect(process.env.MONGO_URL);
+  const { token } = req.cookies;
 
-  const { id } = req.params;
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) return res.status(401).json({ error: "Unauthorized" });
 
-  const place = await Place.findById(id)
-    .populate("modificationHistory.user", "username email"); // ⬅️ Add this line
+    const user = await User.findById(userData.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-  res.json(place);
+    // ✅ Only return places that match the user’s family
+    const places = await Place.find({ family: user.family });
+
+    res.json(places);
+  });
 });
 
 
@@ -531,12 +555,13 @@ app.get('/place/search-by-title/:query', async (req, res) => {
 
 app.get("/users/permissions", async (req, res) => {
   try {
-    const users = await User.find({}, "name email permissions");
+    const users = await User.find({}, "name email family permissions"); 
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: "Failed to get user permissions" });
   }
 });
+
 
 // PUT update a user's permissions
 app.put("/users/:id/permissions", async (req, res) => {
