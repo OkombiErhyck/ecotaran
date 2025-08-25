@@ -46,7 +46,7 @@ function Userpage() {
           <div className="details container">
             <div className="row">
 
-              {/* Buttons always visible (no permission required) */}
+             {isButtonVisible("Concedii") && (
               <div className="col-lg-4 col-xs-6">
                 <div className="box card-body p-0 shadow-sm mb-5">
                   <div className="box_content">
@@ -57,7 +57,8 @@ function Userpage() {
                   </div>
                 </div>
               </div>
-
+             )}
+{isButtonVisible("Personal Ro") && (
               <div className="col-lg-4 col-xs-6">
                 <div className="box card-body p-0 shadow-sm mb-5">
                   <div className="box_content">
@@ -68,7 +69,8 @@ function Userpage() {
                   </div>
                 </div>
               </div>
-
+)}
+{isButtonVisible("Personal Strain") && (
               <div className="col-lg-4 col-xs-6">
                 <div className="box card-body p-0 shadow-sm mb-5">
                   <div className="box_content">
@@ -79,10 +81,10 @@ function Userpage() {
                   </div>
                 </div>
               </div>
-
+)}
               {/* Buttons requiring permission */}
 
-               
+               {isButtonVisible("Vezi Cazari") && (
                 <div className="col-lg-4 col-xs-6">
                   <div className="box card-body p-0 shadow-sm mb-5">
                     <div className="box_content">
@@ -93,9 +95,9 @@ function Userpage() {
                     </div>
                   </div>
                 </div>
-              
+               )}
 
-               
+               {isButtonVisible("Flota") && (
                 <div className="col-lg-4 col-xs-6">
                   <div className="box card-body p-0 shadow-sm mb-5">
                     <div className="box_content">
@@ -106,9 +108,9 @@ function Userpage() {
                     </div>
                   </div>
                 </div>
-              
+               )}
 
-               
+               {isButtonVisible("Companii") && (
                 <div className="col-lg-4 col-xs-6">
                   <div className="box card-body p-0 shadow-sm mb-5">
                     <div className="box_content">
@@ -119,7 +121,7 @@ function Userpage() {
                     </div>
                   </div>
                 </div>
-              
+               )}
 
               {isButtonVisible("Adauga") && (
                 <div className="col-lg-4 col-xs-6">
@@ -222,6 +224,8 @@ function Userpage() {
                   </div>
                 </div>
               )}
+
+              
 
               {/* Logout button always visible */}
               <div className="col-lg-4 col-xs-6">
