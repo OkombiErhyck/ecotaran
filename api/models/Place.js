@@ -33,7 +33,10 @@ const placeSchema = new mongoose.Schema({
   modificationHistory: [modificationEntrySchema],
   documents: [{ type: String }],
 
+  family: { type: String, required: true }, // ⬅️ new field // 🔑 NEW → family name/group
 });
+ 
+
 
 const PlaceModel = mongoose.model('Place', placeSchema);
 
