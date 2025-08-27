@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { UserContext } from "./UserContext"; 
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Image from "./image";
@@ -12,7 +13,7 @@ export default function IndexPage() {
 
   const [selectedMarca, setSelectedMarca] = useState(""); // category selected
   const [searchTitle, setSearchTitle] = useState("");
-
+const { user } = useContext(UserContext); // <-- define user
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedAnul, setSelectedAnul] = useState("");
   const [selectedCombustibil, setSelectedCombustibil] = useState("");
@@ -83,18 +84,27 @@ export default function IndexPage() {
   return (
     <div className="userbox">
       <div className="usercontent">
-       <h1
+    <h1
   style={{
-    marginBottom: "20px",
+    marginBottom: "40px",
     textAlign: "center",
     color: "aliceblue",
-    fontSize: "28px",
+    fontSize: "38px",
     fontWeight: "bold",
     textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
   }}
 >
-  {selectedMarca ? `${selectedMarca}` : "Selectează o categorie"}
+  {selectedMarca ? (
+    selectedMarca
+  ) : (
+    <>
+      <span style={{ color: "var(--main, #4CAF50)" }}>Bine ai venit, </span>
+      {user?.name}
+    </>
+  )}
 </h1>
+
+
 
 
         {!selectedMarca ? (
