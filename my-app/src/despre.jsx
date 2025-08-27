@@ -8,7 +8,6 @@ import "./userpage.css";
 import Logout from "./images/logout.png";
 import setting from "./images/setting.png";
 
-
 export default function IndexPage() {
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,29 +30,34 @@ export default function IndexPage() {
   const [showOnlyComplete, setShowOnlyComplete] = useState(false);
   const [showOnlyAMT, setShowOnlyAMT] = useState(false);
 
-  const marcas = [
-    "Personal Ro", "Personal Non UE","Automobile", "Companie",
-    "Cazare"
-  ];
+  const [categories, setCategories] = useState([]);
 
-  // online black & white icons for each category
-const categoryIcons = {
-  "Personal Ro": "https://img.icons8.com/ios/100/user--v1.png",
-  "Personal Non UE": "https://img.icons8.com/ios/100/conference-call.png",
-  "Automobile": "https://img.icons8.com/ios/100/car--v1.png",
-  "Companii": "https://img.icons8.com/ios/100/company.png",
-  "Cazare": "https://img.icons8.com/ios/100/real-estate.png",   // 🏠 fixed!
-  
-};
+  const categoryIcons = {
+    "Personal Ro": "https://img.icons8.com/ios/100/user--v1.png",
+    "Personal Non UE": "https://img.icons8.com/ios/100/conference-call.png",
+    "Automobile": "https://img.icons8.com/ios/100/car--v1.png",
+    "Companie": "https://img.icons8.com/ios/100/company.png",
+    "Cazare": "https://img.icons8.com/ios/100/real-estate.png",
+  };
 
   // Fetch places
   useEffect(() => {
-    axios.get("/places").then((res) => setPlaces(res.data));
+    axios.get("/places").then((res) => {
+      setPlaces(res.data);
+
+      // Detect all categories dynamically from places
+      const allCategories = res.data
+        .map(place => place.marca)
+        .filter(Boolean); // remove undefined/null
+
+      setCategories([...new Set(allCategories)]); // unique categories
+    });
   }, []);
 
+  // Filter places based on selected category, search, and only user's family
   const filteredPlaces = places.filter((place) => {
-    if (!selectedMarca) return false;
-    if (place.marca !== selectedMarca) return false;
+    if (user?.family && place.family !== user.family) return false;
+    if (selectedMarca && place.marca !== selectedMarca) return false;
     if (searchTitle && !place.title.toLowerCase().includes(searchTitle.toLowerCase())) return false;
     if (selectedModel && place.model !== selectedModel) return false;
     if (selectedAnul && place.anul !== selectedAnul) return false;
@@ -106,7 +110,7 @@ const categoryIcons = {
         {!selectedMarca && (
           <div className="details container">
             <div className="row">
-              {marcas.map((marca) => (
+              {categories.length > 0 ? categories.map((marca) => (
                 <div key={marca} className="col-lg-4 col-xs-6 mb-3">
                   <div className="box card-body p-0 shadow-sm">
                     <div className="box_content text-center">
@@ -114,7 +118,7 @@ const categoryIcons = {
                         src={categoryIcons[marca] || display}
                         className="img-fluid mb-2"
                         alt={marca}
-                        style={{ height: "75px", objectFit: "contain", filter: " " }} // black & white
+                        style={{ height: "75px", objectFit: "contain" }}
                       />
                       <button className="btn1" onClick={() => setSelectedMarca(marca)}>
                         {marca}
@@ -122,27 +126,25 @@ const categoryIcons = {
                     </div>
                   </div>
                 </div>
-              ))}
+              )) : <p style={{ color: "white" }}>Nu există categorii.</p>}
+
+              {/* ADMIN BUTTON */}
+              <div className="col-lg-4 col-xs-6">
+                <div className="box card-body p-0 shadow-sm mb-5">
+                  <div className="box_content">
+                    <a href="/fructe">
+                      <img src={setting} className="img-fluid" alt="" />
+                      <button className="btn1">Administrare</button>
+                    </a>
+                  </div>
+                </div>
+              </div>
 
               {/* LOGOUT BUTTON */}
-
-
-
-              <div className="col-lg-4 col-xs-6">
-                                <div className="box card-body p-0 shadow-sm mb-5">
-                                  <div className="box_content">
-                                    <a href="/fructe">
-                                      <img src={setting} className="img-fluid" alt="" />
-                                      <button className="btn1">Administrare</button>
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-
               <div className="col-lg-4 col-xs-6 mb-3">
                 <div className="box card-body p-0 shadow-sm">
                   <div className="box_content text-center">
-                   <img src={Logout} className="img-fluid" alt="" />
+                    <img src={Logout} className="img-fluid" alt="" />
                     <button
                       className="btn1"
                       onClick={async () => {
@@ -156,185 +158,47 @@ const categoryIcons = {
                 </div>
               </div>
 
-                
             </div>
           </div>
         )}
 
         {/* BACK + SEARCH + PLACES GRID */}
-        {selectedMarca && (
-          <>
-            <div className="details container mb-4">
-              <div className="row justify-content-center align-items-center" style={{ gap: "20px" }}>
-                {/* BACK BUTTON */}
-                <div className="col-lg-3 col-xs-6 mb-2">
-                  <button
-                    style={{
-                      width: "100%",
-                      backgroundColor: "#1a1a1a",
-                      color: "var(--main, #4CAF50)",
-                      border: "2px solid var(--main, #4CAF50)",
-                      padding: "12px 25px",
-                      borderRadius: "12px",
-                      fontWeight: "bold",
-                      fontSize: "16px",
-                      cursor: "pointer",
-                      boxShadow: "0px 5px 15px rgba(0,0,0,0.4)",
-                      transition: "all 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "var(--main, #4CAF50)";
-                      e.target.style.color = "#fff";
-                      e.target.style.transform = "translateY(-2px)";
-                      e.target.style.boxShadow = "0px 8px 20px rgba(0,0,0,0.5)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "#1a1a1a";
-                      e.target.style.color = "var(--main, #4CAF50)";
-                      e.target.style.transform = "translateY(0)";
-                      e.target.style.boxShadow = "0px 5px 15px rgba(0,0,0,0.4)";
-                    }}
-                    onClick={resetFilters}
-                  >
-                    Înapoi
-                  </button>
-                </div>
+       {selectedMarca && ( <> <div className="details container mb-4"> 
+        <div className="row justify-content-center align-items-center" style={{ gap: "20px" }}> {/* BACK BUTTON */} <div className="col-lg-3 col-xs-6 mb-2"> <button style={{ width: "100%", backgroundColor: "#1a1a1a", color: "var(--main, #4CAF50)", border: "2px solid var(--main, #4CAF50)", padding: "12px 25px", borderRadius: "12px", fontWeight: "bold", fontSize: "16px", cursor: "pointer", boxShadow: "0px 5px 15px rgba(0,0,0,0.4)", transition: "all 0.3s ease", }} onMouseEnter={(e) => { e.target.style.backgroundColor = "var(--main, #4CAF50)"; e.target.style.color = "#fff"; e.target.style.transform = "translateY(-2px)"; e.target.style.boxShadow = "0px 8px 20px rgba(0,0,0,0.5)"; }} onMouseLeave={(e) => { e.target.style.backgroundColor = "#1a1a1a"; e.target.style.color = "var(--main, #4CAF50)"; e.target.style.transform = "translateY(0)"; e.target.style.boxShadow = "0px 5px 15px rgba(0,0,0,0.4)"; }} onClick={resetFilters} > Înapoi </button> </div> {/* SEARCH BAR */}
+        <div className="col-lg-4 col-xs-6 mb-2" style={{ position: "relative" }}> 
+          <input type="text" placeholder="Cautare..." value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} style={{ padding: "12px 50px 12px 15px", width: "100%", borderRadius: "12px", fontSize: "16px", border: "2px solid var(--main, #4CAF50)", backgroundColor: "#1a1a1a", color: "aliceblue", boxShadow: "0px 5px 15px rgba(0,0,0,0.4)", }} />
+           {searchTitle && ( <button onClick={() => setSearchTitle("")} style={{ position: "absolute", right: "19px", top: "50%", transform: "translateY(-50%)", backgroundColor: "var(--main, #4CAF50)", color: "#fff", border: "none", borderRadius: "8px", padding: "4px 8px", cursor: "pointer", fontWeight: "bold", fontSize: "14px", boxShadow: "0px 3px 10px rgba(0,0,0,0.3)", }} onMouseEnter={(e) => { e.target.style.opacity = 0.8; }} onMouseLeave={(e) => { e.target.style.opacity = 1; }} > sterge </button> )} 
+           </div> 
+           </div> 
+           </div>
 
-                {/* SEARCH BAR */}
-                <div className="col-lg-4 col-xs-6 mb-2" style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    placeholder="Cautare..."
-                    value={searchTitle}
-                    onChange={(e) => setSearchTitle(e.target.value)}
-                    style={{
-                      padding: "12px 50px 12px 15px",
-                      width: "100%",
-                      borderRadius: "12px",
-                      fontSize: "16px",
-                      border: "2px solid var(--main, #4CAF50)",
-                      backgroundColor: "#1a1a1a",
-                      color: "aliceblue",
-                      boxShadow: "0px 5px 15px rgba(0,0,0,0.4)",
-                    }}
-                  />
-                  {searchTitle && (
-                    <button
-                      onClick={() => setSearchTitle("")}
-                      style={{
-                        position: "absolute",
-                        right: "19px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        backgroundColor: "var(--main, #4CAF50)",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "8px",
-                        padding: "4px 8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        fontSize: "14px",
-                        boxShadow: "0px 3px 10px rgba(0,0,0,0.3)",
-                      }}
-                      onMouseEnter={(e) => { e.target.style.opacity = 0.8; }}
-                      onMouseLeave={(e) => { e.target.style.opacity = 1; }}
-                    >
-                      sterge
-                    </button>
-                  )}
-                </div>
+            <div className="details container">
+              <div className="row">
+                {currentPlaces.length > 0 ? currentPlaces.map((place) => (
+                  <div key={place._id} className="col-lg-4 col-xs-6">
+                    <div className="box card-body p-0 shadow-sm mb-5" style={{ position: "relative" }}>
+                      {place.photos.length > 0 ? (
+                        <Image src={place.photos[0]} className="img-fluid" style={{ height: "270px", width: "100%", objectFit: "cover" }} />
+                      ) : (
+                        <img src={display} alt="fallback" style={{ height: "270px", width: "100%", objectFit: "cover" }} />
+                      )}
+
+                   <Link to={"/write/" + place._id} style={{ position: "absolute", top: "10px", right: "10px", backgroundColor: "rgba(0,0,0,0.5)", padding: "6px", borderRadius: "50%", display: "flex", justifyContent: "center", alignItems: "center", textDecoration: "none", }} title="Editează" > <img src="https://img.icons8.com/ios-glyphs/24/ffffff/pencil.png" alt="Edit" style={{ width: "20px", height: "20px" }} /> </Link>
+                      <div className="box_content text-center" style={{ paddingTop: "10px" }}>
+                        <h4>{place.title}</h4>
+                       <Link to={"/place/" + place._id} className="btn1" style={{ textDecoration: "none" }}> Vezi detalii </Link>
+                      </div>
+                    </div>
+                  </div>
+                )) : <p style={{ color: "white" }}>Nu s-au găsit rezultate.</p>}
               </div>
             </div>
 
-            {/* PLACES GRID */}
-         {/* PLACES GRID */}
-<div className="details container">
-  <div className="row">
-    {currentPlaces.length > 0 ? currentPlaces.map((place) => (
-      <div key={place._id} className="col-lg-4 col-xs-6">
-        <div className="box card-body p-0 shadow-sm mb-5" style={{ position: "relative" }}>
-          {/* Image */}
-          {place.photos.length > 0 ? (
-            <Image
-              src={place.photos[0]}
-              className="img-fluid"
-              style={{ height: "270px", width: "100%", objectFit: "cover" }}
-            />
-          ) : (
-            <img
-              src={display}
-              alt="fallback"
-              style={{ height: "270px", width: "100%", objectFit: "cover" }}
-            />
-          )}
-
-          {/* Edit icon */}
-          <Link 
-            to={"/write/" + place._id} 
-            style={{
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-              backgroundColor: "rgba(0,0,0,0.5)",
-              padding: "6px",
-              borderRadius: "50%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              textDecoration: "none",
-            }}
-            title="Editează"
-          >
-            <img 
-              src="https://img.icons8.com/ios-glyphs/24/ffffff/pencil.png" 
-              alt="Edit" 
-              style={{ width: "20px", height: "20px" }}
-            />
-          </Link>
-
-          <div className="box_content text-center" style={{ paddingTop: "10px" }}>
-            <h4>{place.title}</h4>
-            <Link to={"/place/" + place._id} className="btn1" style={{ textDecoration: "none" }}>
-              Vezi detalii
-            </Link>
-          </div>
-        </div>
-      </div>
-    )) : <p>Nu s-au găsit rezultate.</p>}
-  </div>
-</div>
-
-
-            {/* PAGINATION */}
             <div className="mt-4" style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
               <ul style={{ listStyle: "none", padding: 0, display: "flex", gap: "10px" }}>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
                   <li key={pageNumber}>
-                    <button
-                      onClick={() => handlePageChange(pageNumber)}
-                      style={{
-                        backgroundColor: "#1a1a1a",
-                        color: "var(--main, #4CAF50)",
-                        border: "2px solid var(--main, #4CAF50)",
-                        padding: "10px 16px",
-                        borderRadius: "8px",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        transition: "all 0.3s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = "var(--main, #4CAF50)";
-                        e.target.style.color = "#fff";
-                        e.target.style.transform = "translateY(-2px)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = "#1a1a1a";
-                        e.target.style.color = "var(--main, #4CAF50)";
-                        e.target.style.transform = "translateY(0)";
-                      }}
-                    >
-                      {pageNumber}
-                    </button>
+                    <button onClick={() => handlePageChange(pageNumber)} className="btn1">{pageNumber}</button>
                   </li>
                 ))}
               </ul>
