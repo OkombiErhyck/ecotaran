@@ -37,17 +37,17 @@ export default function IndexPage() {
   ];
 
   // online black & white icons for each category
-  const categoryIcons = {
-    "Personal Ro": "https://img.icons8.com/ios-filled/100/000000/user.png",
-    "Personal Strain": "https://img.icons8.com/ios-filled/100/000000/group.png",
-    "Flota": "https://img.icons8.com/ios-filled/100/000000/car.png",
-    "Companii": "https://img.icons8.com/ios-filled/100/000000/company.png",
-    "Cazari": "https://img.icons8.com/ios-filled/100/000000/bed.png",
-    "Modifica Flota": "https://img.icons8.com/ios-filled/100/000000/maintenance.png",
-    "Modifica Angajati": "https://img.icons8.com/ios-filled/100/000000/conference.png",
-    "Modifica Cazari": "https://img.icons8.com/ios-filled/100/000000/hotel-information.png",
-    "Modif Companii": "https://img.icons8.com/ios-filled/100/000000/edit-property.png",
-  };
+const categoryIcons = {
+  "Personal Ro": "https://img.icons8.com/ios/100/user--v1.png",
+  "Personal Strain": "https://img.icons8.com/ios/100/conference-call.png",
+  "Flota": "https://img.icons8.com/ios/100/car--v1.png",
+  "Companii": "https://img.icons8.com/ios/100/company.png",
+  "Cazari": "https://img.icons8.com/ios/100/real-estate.png",   // 🏠 fixed!
+  "Modifica Flota": "https://img.icons8.com/ios/100/maintenance.png",
+  "Modifica Angajati": "https://img.icons8.com/ios/100/manager.png",
+  "Modifica Cazari": "https://img.icons8.com/ios/100/home-page.png",
+  "Modif Companii": "https://img.icons8.com/ios/100/edit-property.png",
+};
 
   // Fetch places
   useEffect(() => {
