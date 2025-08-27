@@ -6,7 +6,7 @@ import Image from "./image";
 import display from "./images/display.png"; // fallback/default image
 import "./userpage.css";
 import Logout from "./images/logout.png";
-
+import setting from "./images/setting.png";
 
 
 export default function IndexPage() {
@@ -32,21 +32,18 @@ export default function IndexPage() {
   const [showOnlyAMT, setShowOnlyAMT] = useState(false);
 
   const marcas = [
-    "Personal Ro", "Personal Strain", "Flota", "Companii",
-    "Cazari", "Modifica Flota", "Modifica Angajati", "Modifica Cazari", "Modif Companii"
+    "Personal Ro", "Personal Non UE","Automobile", "Companie",
+    "Cazare"
   ];
 
   // online black & white icons for each category
 const categoryIcons = {
   "Personal Ro": "https://img.icons8.com/ios/100/user--v1.png",
-  "Personal Strain": "https://img.icons8.com/ios/100/conference-call.png",
-  "Flota": "https://img.icons8.com/ios/100/car--v1.png",
+  "Personal Non UE": "https://img.icons8.com/ios/100/conference-call.png",
+  "Automobile": "https://img.icons8.com/ios/100/car--v1.png",
   "Companii": "https://img.icons8.com/ios/100/company.png",
-  "Cazari": "https://img.icons8.com/ios/100/real-estate.png",   // 🏠 fixed!
-  "Modifica Flota": "https://img.icons8.com/ios/100/maintenance.png",
-  "Modifica Angajati": "https://img.icons8.com/ios/100/manager.png",
-  "Modifica Cazari": "https://img.icons8.com/ios/100/home-page.png",
-  "Modif Companii": "https://img.icons8.com/ios/100/edit-property.png",
+  "Cazare": "https://img.icons8.com/ios/100/real-estate.png",   // 🏠 fixed!
+  
 };
 
   // Fetch places
@@ -128,6 +125,20 @@ const categoryIcons = {
               ))}
 
               {/* LOGOUT BUTTON */}
+
+
+
+              <div className="col-lg-4 col-xs-6">
+                                <div className="box card-body p-0 shadow-sm mb-5">
+                                  <div className="box_content">
+                                    <a href="/fructe">
+                                      <img src={setting} className="img-fluid" alt="" />
+                                      <button className="btn1">Administrare</button>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+
               <div className="col-lg-4 col-xs-6 mb-3">
                 <div className="box card-body p-0 shadow-sm">
                   <div className="box_content text-center">
@@ -145,6 +156,7 @@ const categoryIcons = {
                 </div>
               </div>
 
+                
             </div>
           </div>
         )}
@@ -235,29 +247,63 @@ const categoryIcons = {
             </div>
 
             {/* PLACES GRID */}
-            <div className="details container">
-              <div className="row">
-                {currentPlaces.length > 0 ? currentPlaces.map((place) => (
-                  <div key={place._id} className="col-lg-4 col-xs-6">
-                    <Link to={"/place/" + place._id} className="link-no-underline">
-                      <div className="box card-body p-0 shadow-sm mb-5">
-                        {place.photos.length > 0 && (
-                          <Image
-                            src={place.photos[0]}
-                            className="img-fluid"
-                            style={{ height: "270px", width: "100%", objectFit: "cover" }}
-                          />
-                        )}
-                        <div className="box_content text-center">
-                          <h4>{place.title}</h4>
-                          <button className="btn1">Vezi detalii</button>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                )) : <p>Nu s-au găsit rezultate.</p>}
-              </div>
-            </div>
+         {/* PLACES GRID */}
+<div className="details container">
+  <div className="row">
+    {currentPlaces.length > 0 ? currentPlaces.map((place) => (
+      <div key={place._id} className="col-lg-4 col-xs-6">
+        <div className="box card-body p-0 shadow-sm mb-5" style={{ position: "relative" }}>
+          {/* Image */}
+          {place.photos.length > 0 ? (
+            <Image
+              src={place.photos[0]}
+              className="img-fluid"
+              style={{ height: "270px", width: "100%", objectFit: "cover" }}
+            />
+          ) : (
+            <img
+              src={display}
+              alt="fallback"
+              style={{ height: "270px", width: "100%", objectFit: "cover" }}
+            />
+          )}
+
+          {/* Edit icon */}
+          <Link 
+            to={"/write/" + place._id} 
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              padding: "6px",
+              borderRadius: "50%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+            title="Editează"
+          >
+            <img 
+              src="https://img.icons8.com/ios-glyphs/24/ffffff/pencil.png" 
+              alt="Edit" 
+              style={{ width: "20px", height: "20px" }}
+            />
+          </Link>
+
+          <div className="box_content text-center" style={{ paddingTop: "10px" }}>
+            <h4>{place.title}</h4>
+            <Link to={"/place/" + place._id} className="btn1" style={{ textDecoration: "none" }}>
+              Vezi detalii
+            </Link>
+          </div>
+        </div>
+      </div>
+    )) : <p>Nu s-au găsit rezultate.</p>}
+  </div>
+</div>
+
 
             {/* PAGINATION */}
             <div className="mt-4" style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
