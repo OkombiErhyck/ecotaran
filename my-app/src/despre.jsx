@@ -7,13 +7,18 @@ import display from "./images/display.png"; // fallback/default image
 import "./userpage.css";
 import Logout from "./images/logout.png";
 import setting from "./images/setting.png";
+import Carousel from "react-bootstrap/Carousel";
+
+
 
 export default function IndexPage() {
   const [places, setPlaces] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [placesPerPage, setPlacesPerPage] = useState(9);
+const [showMore, setShowMore] = useState(false);
 
   const [selectedMarca, setSelectedMarca] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState(null); // 👈 NEW: virtual page 2
   const [searchTitle, setSearchTitle] = useState("");
   const { user } = useContext(UserContext);
 
@@ -48,13 +53,13 @@ export default function IndexPage() {
       // Detect all categories dynamically from places
       const allCategories = res.data
         .map(place => place.marca)
-        .filter(Boolean); // remove undefined/null
+        .filter(Boolean);
 
-      setCategories([...new Set(allCategories)]); // unique categories
+      setCategories([...new Set(allCategories)]);
     });
   }, []);
 
-  // Filter places based on selected category, search, and only user's family
+  // Filter places
   const filteredPlaces = places.filter((place) => {
     if (user?.family && place.family !== user.family) return false;
     if (selectedMarca && place.marca !== selectedMarca) return false;
@@ -77,7 +82,8 @@ export default function IndexPage() {
   const firstPlaceIndex = lastPlaceIndex - placesPerPage;
   const currentPlaces = filteredPlaces.slice(firstPlaceIndex, lastPlaceIndex);
   const totalPages = Math.ceil(filteredPlaces.length / placesPerPage);
-
+const [showDocuments, setShowDocuments] = React.useState(false);
+const [showAmanunte, setShowAmanunte] = React.useState(false);
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     if (window.pageYOffset > 0) window.scrollTo(0, 0);
@@ -85,6 +91,7 @@ export default function IndexPage() {
 
   const resetFilters = () => {
     setSelectedMarca("");
+    setSelectedPlace(null); // reset place details too
     setSearchTitle("");
     setSelectedModel("");
     setSelectedAnul("");
@@ -103,10 +110,11 @@ export default function IndexPage() {
     <div className="userbox">
       <div className="usercontent">
         <h1 style={{ marginBottom: "40px", textAlign: "center", color: "aliceblue", fontSize: "38px", fontWeight: "bold", textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}>
-          {selectedMarca ? selectedMarca : <><span style={{ color: "var(--main, #4CAF50)" }}>Bine ai venit, </span>{user?.name}</>}
+          {selectedMarca ? (selectedPlace ? selectedPlace.title : selectedMarca) : 
+          <><span style={{ color: "var(--main, #4CAF50)" }}>Bine ai venit, </span>{user?.name}</>}
         </h1>
 
-        {/* CATEGORY GRID */}
+        {/* PAGE 1 - CATEGORY GRID */}
         {!selectedMarca && (
           <div className="details container">
             <div className="row">
@@ -126,7 +134,7 @@ export default function IndexPage() {
                     </div>
                   </div>
                 </div>
-              )) : <p style={{ color: "white" }}>Nu există categorii.</p>}
+              )) : <p style={{ color: "white" }}>Se incarca...</p>}
 
               {/* ADMIN BUTTON */}
               <div className="col-lg-4 col-xs-6">
@@ -162,15 +170,29 @@ export default function IndexPage() {
           </div>
         )}
 
-        {/* BACK + SEARCH + PLACES GRID */}
-       {selectedMarca && ( <> <div className="details container mb-4"> 
-        <div className="row justify-content-center align-items-center" style={{ gap: "20px" }}> {/* BACK BUTTON */} <div className="col-lg-3 col-xs-6 mb-2"> <button style={{ width: "100%", backgroundColor: "#1a1a1a", color: "var(--main, #4CAF50)", border: "2px solid var(--main, #4CAF50)", padding: "12px 25px", borderRadius: "12px", fontWeight: "bold", fontSize: "16px", cursor: "pointer", boxShadow: "0px 5px 15px rgba(0,0,0,0.4)", transition: "all 0.3s ease", }} onMouseEnter={(e) => { e.target.style.backgroundColor = "var(--main, #4CAF50)"; e.target.style.color = "#fff"; e.target.style.transform = "translateY(-2px)"; e.target.style.boxShadow = "0px 8px 20px rgba(0,0,0,0.5)"; }} onMouseLeave={(e) => { e.target.style.backgroundColor = "#1a1a1a"; e.target.style.color = "var(--main, #4CAF50)"; e.target.style.transform = "translateY(0)"; e.target.style.boxShadow = "0px 5px 15px rgba(0,0,0,0.4)"; }} onClick={resetFilters} > Înapoi </button> </div> {/* SEARCH BAR */}
-        <div className="col-lg-4 col-xs-6 mb-2" style={{ position: "relative" }}> 
-          <input type="text" placeholder="Cautare..." value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} style={{ padding: "12px 50px 12px 15px", width: "100%", borderRadius: "12px", fontSize: "16px", border: "2px solid var(--main, #4CAF50)", backgroundColor: "#1a1a1a", color: "aliceblue", boxShadow: "0px 5px 15px rgba(0,0,0,0.4)", }} />
-           {searchTitle && ( <button onClick={() => setSearchTitle("")} style={{ position: "absolute", right: "19px", top: "50%", transform: "translateY(-50%)", backgroundColor: "var(--main, #4CAF50)", color: "#fff", border: "none", borderRadius: "8px", padding: "4px 8px", cursor: "pointer", fontWeight: "bold", fontSize: "14px", boxShadow: "0px 3px 10px rgba(0,0,0,0.3)", }} onMouseEnter={(e) => { e.target.style.opacity = 0.8; }} onMouseLeave={(e) => { e.target.style.opacity = 1; }} > sterge </button> )} 
-           </div> 
-           </div> 
-           </div>
+        {/* PAGE 2 - PLACES GRID */}
+        {selectedMarca && !selectedPlace && (
+          <>
+            <div className="details container mb-4">
+              <div className="row justify-content-center align-items-center" style={{ gap: "20px" }}>
+                {/* BACK BUTTON */}
+                <div className="col-lg-3 col-xs-6 mb-2">
+                  <button style={{ width: "100%" }}
+                    className="btn1"
+                    onClick={resetFilters}
+                  >Înapoi</button>
+                </div>
+                {/* SEARCH BAR */}
+                <div className="col-lg-4 col-xs-6 mb-2" style={{ position: "relative" }}>
+                  <input type="text"
+                    placeholder="Cautare..."
+                    value={searchTitle}
+                    onChange={(e) => setSearchTitle(e.target.value)}
+                    style={{ padding: "12px 15px", width: "100%", borderRadius: "12px" }}
+                  />
+                </div>
+              </div>
+            </div>
 
             <div className="details container">
               <div className="row">
@@ -183,28 +205,232 @@ export default function IndexPage() {
                         <img src={display} alt="fallback" style={{ height: "270px", width: "100%", objectFit: "cover" }} />
                       )}
 
-                   <Link to={"/write/" + place._id} style={{ position: "absolute", top: "10px", right: "10px", backgroundColor: "rgba(0,0,0,0.5)", padding: "6px", borderRadius: "50%", display: "flex", justifyContent: "center", alignItems: "center", textDecoration: "none", }} title="Editează" > <img src="https://img.icons8.com/ios-glyphs/24/ffffff/pencil.png" alt="Edit" style={{ width: "20px", height: "20px" }} /> </Link>
                       <div className="box_content text-center" style={{ paddingTop: "10px" }}>
                         <h4>{place.title}</h4>
-                       <Link to={"/place/" + place._id} className="btn1" style={{ textDecoration: "none" }}> Vezi detalii </Link>
+                        <button className="btn1" onClick={() => setSelectedPlace(place)}>
+                          Vezi detalii
+                        </button>
                       </div>
                     </div>
                   </div>
                 )) : <p style={{ color: "white" }}>Nu s-au găsit rezultate.</p>}
               </div>
             </div>
-
-            <div className="mt-4" style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
-              <ul style={{ listStyle: "none", padding: 0, display: "flex", gap: "10px" }}>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-                  <li key={pageNumber}>
-                    <button onClick={() => handlePageChange(pageNumber)} className="btn1">{pageNumber}</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </>
         )}
+
+        {/* PAGE 3 - PLACE DETAILS */}
+   {selectedPlace && (
+  <div
+    style={{
+      marginTop: "90px",
+      background: "#3c3c3c",
+      padding: "20px",
+      borderBottom: "2px solid var(--main)",
+      borderRadius: "12px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "2rem"
+    }}
+  >
+    {/* Back Button */}
+    <div style={{ marginBottom: "1rem" }}>
+      <button
+        onClick={() => setSelectedPlace(null)}
+        style={{
+          padding: "0.6rem 1.2rem",
+          backgroundColor: "var(--main)",
+          color: "#fff",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+          fontWeight: "bold"
+        }}
+      >
+        ← Înapoi la listă
+      </button>
+    </div>
+
+    {/* Carousel */}
+    {selectedPlace.photos?.length > 0 && (
+      <Carousel
+        style={{
+          borderBottom: "2px solid var(--main)",
+          borderRadius: "12px",
+          overflow: "hidden"
+        }}
+      >
+        {selectedPlace.photos.map((photo, index) => (
+          <Carousel.Item key={index}>
+            <Image
+              className="d-block w-100"
+              src={photo}
+              alt={`Slide ${index + 1}`}
+              style={{ objectFit: "contain", maxHeight: "500px", width: "100%" }}
+            />
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    )}
+
+    {/* Info Grid */}
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "2fr 1fr",
+        gap: "20px"
+      }}
+    >
+      {/* Description */}
+      <div
+        style={{
+          background: "#1a1a1a",
+          padding: "1rem",
+          borderRadius: "10px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+          color: "wheat"
+        }}
+      >
+        <h3 style={{ color: "var(--main)", marginBottom: "0.5rem" }}>Descriere</h3>
+
+        {selectedPlace.description ? (
+          selectedPlace.description.length > 400 ? (
+            // Collapsible if long
+            <>
+              <div
+                style={{
+                  maxHeight: showMore ? "none" : "200px",
+                  overflow: "hidden",
+                  transition: "max-height 0.4s ease"
+                }}
+              >
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {selectedPlace.description.split(/\r?\n/).filter(line => line.trim() !== "").map((line, idx) => (
+                    <li
+                      key={idx}
+                      style={{
+                        background: "#2a2a2a",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
+                      }}
+                    >
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <button
+                onClick={() => setShowMore(prev => !prev)}
+                style={{
+                  marginTop: "8px",
+                  padding: "0.4rem 0.8rem",
+                  border: "none",
+                  borderRadius: "6px",
+                  backgroundColor: "var(--main)",
+                  color: "#fff",
+                  cursor: "pointer"
+                }}
+              >
+                {showMore ? "Show less" : "Show more"}
+              </button>
+            </>
+          ) : (
+            // Display normally if short
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+              {selectedPlace.description.split(/\r?\n/).filter(line => line.trim() !== "").map((line, idx) => (
+                <li
+                  key={idx}
+                  style={{
+                    background: "#2a2a2a",
+                    padding: "8px 12px",
+                    borderRadius: "6px",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
+                  }}
+                >
+                  {line}
+                </li>
+              ))}
+            </ul>
+          )
+        ) : (
+          <p style={{ color: "#aaa" }}>Nu a fost adăugat nimic.</p>
+        )}
+      </div>
+
+      {/* Right Column */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        {/* Documents */}
+        <div style={{
+          background: "#1a1a1a",
+          padding: "1rem",
+          borderRadius: "10px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+          color: "wheat"
+        }}>
+          <h3
+            onClick={() => setShowDocuments(prev => !prev)}
+            style={{ color: "var(--main)", marginBottom: "0.5rem", cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+          >
+            Documente atașate <span>{showDocuments ? "▲" : "▼"}</span>
+          </h3>
+          <div style={{
+            maxHeight: showDocuments ? "200px" : "0px",
+            overflowY: "auto",
+            transition: "max-height 0.3s ease"
+          }}>
+            {selectedPlace.documents && selectedPlace.documents.length > 0 ? (
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
+                {selectedPlace.documents.map((url, index) => {
+                  const filename = decodeURIComponent(url.split("/").pop().split("?")[0]).replace(/^\d+-/, "");
+                  return (
+                    <li key={index} style={{ background: "#2a2a2a", padding: "6px 10px", borderRadius: "6px", boxShadow: "0 1px 2px rgba(0,0,0,0.2)" }}>
+                      <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--main)", textDecoration: "none" }}>
+                        📄 {filename}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : <p style={{ color: "#aaa" }}>Niciun document atașat.</p>}
+          </div>
+        </div>
+
+        {/* Amanunte */}
+        <div style={{
+          background: "#1a1a1a",
+          padding: "1rem",
+          borderRadius: "10px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+          color: "wheat"
+        }}>
+          <h3
+            onClick={() => setShowAmanunte(prev => !prev)}
+            style={{ color: "var(--main)", marginBottom: "0.5rem", cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+          >
+            Amanunte <span>{showAmanunte ? "▲" : "▼"}</span>
+          </h3>
+          <div style={{
+            maxHeight: showAmanunte ? "200px" : "0px",
+            overflowY: "auto",
+            transition: "max-height 0.3s ease"
+          }}>
+            <style>{`div::-webkit-scrollbar { width: 6px; height: 6px; }
+      div::-webkit-scrollbar-track { background: #000; }
+      div::-webkit-scrollbar-thumb { background-color: var(--main); border-radius: 10px; border: none; /* removes arrows/buttons */ }`}</style>
+ 
+            <p><b>Model:</b> {selectedPlace.model}</p>
+            <p><b>Anul:</b> {selectedPlace.anul}</p>
+            <p><b>Kilometri:</b> {selectedPlace.km}</p>
+            <p><b>Putere:</b> {selectedPlace.putere}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+)}
+
+
       </div>
     </div>
   );
