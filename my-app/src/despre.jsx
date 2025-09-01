@@ -266,24 +266,29 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
               className="d-block w-100"
               src={photo}
               alt={`Slide ${index + 1}`}
-              style={{ objectFit: "contain", maxHeight: "500px", width: "100%" }}
+              style={{
+                objectFit: "contain",
+                maxHeight: "500px",
+                width: "100%"
+              }}
             />
           </Carousel.Item>
         ))}
       </Carousel>
     )}
 
-    {/* Info Grid */}
+    {/* Info Grid (Responsive) */}
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: "2fr 1fr",
+        display: "flex",
+        flexWrap: "wrap",
         gap: "20px"
       }}
     >
       {/* Description */}
       <div
         style={{
+          flex: "2 1 600px", // takes 2/3 width on large, full width on small
           background: "#1a1a1a",
           padding: "1rem",
           borderRadius: "10px",
@@ -291,11 +296,12 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
           color: "wheat"
         }}
       >
-        <h3 style={{ color: "var(--main)", marginBottom: "0.5rem" }}>Descriere</h3>
+        <h3 style={{ color: "var(--main)", marginBottom: "0.5rem" }}>
+          Descriere
+        </h3>
 
         {selectedPlace.description ? (
           selectedPlace.description.length > 400 ? (
-            // Collapsible if long
             <>
               <div
                 style={{
@@ -304,24 +310,36 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
                   transition: "max-height 0.4s ease"
                 }}
               >
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-                  {selectedPlace.description.split(/\r?\n/).filter(line => line.trim() !== "").map((line, idx) => (
-                    <li
-                      key={idx}
-                      style={{
-                        background: "#2a2a2a",
-                        padding: "8px 12px",
-                        borderRadius: "6px",
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
-                      }}
-                    >
-                      {line}
-                    </li>
-                  ))}
+                <ul
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px"
+                  }}
+                >
+                  {selectedPlace.description
+                    .split(/\r?\n/)
+                    .filter((line) => line.trim() !== "")
+                    .map((line, idx) => (
+                      <li
+                        key={idx}
+                        style={{
+                          background: "#2a2a2a",
+                          padding: "8px 12px",
+                          borderRadius: "6px",
+                          boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
+                        }}
+                      >
+                        {line}
+                      </li>
+                    ))}
                 </ul>
               </div>
               <button
-                onClick={() => setShowMore(prev => !prev)}
+                onClick={() => setShowMore((prev) => !prev)}
                 style={{
                   marginTop: "8px",
                   padding: "0.4rem 0.8rem",
@@ -336,21 +354,32 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
               </button>
             </>
           ) : (
-            // Display normally if short
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-              {selectedPlace.description.split(/\r?\n/).filter(line => line.trim() !== "").map((line, idx) => (
-                <li
-                  key={idx}
-                  style={{
-                    background: "#2a2a2a",
-                    padding: "8px 12px",
-                    borderRadius: "6px",
-                    boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
-                  }}
-                >
-                  {line}
-                </li>
-              ))}
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px"
+              }}
+            >
+              {selectedPlace.description
+                .split(/\r?\n/)
+                .filter((line) => line.trim() !== "")
+                .map((line, idx) => (
+                  <li
+                    key={idx}
+                    style={{
+                      background: "#2a2a2a",
+                      padding: "8px 12px",
+                      borderRadius: "6px",
+                      boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
+                    }}
+                  >
+                    {line}
+                  </li>
+                ))}
             </ul>
           )
         ) : (
@@ -359,76 +388,142 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
       </div>
 
       {/* Right Column */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div
+        style={{
+          flex: "1 1 300px", // shrinks to fit, full width on small
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px"
+        }}
+      >
         {/* Documents */}
-        <div style={{
-          background: "#1a1a1a",
-          padding: "1rem",
-          borderRadius: "10px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-          color: "wheat"
-        }}>
+        <div
+          style={{
+            background: "#1a1a1a",
+            padding: "1rem",
+            borderRadius: "10px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+            color: "wheat"
+          }}
+        >
           <h3
-            onClick={() => setShowDocuments(prev => !prev)}
-            style={{ color: "var(--main)", marginBottom: "0.5rem", cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+            onClick={() => setShowDocuments((prev) => !prev)}
+            style={{
+              color: "var(--main)",
+              marginBottom: "0.5rem",
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "space-between"
+            }}
           >
             Documente atașate <span>{showDocuments ? "▲" : "▼"}</span>
           </h3>
-          <div style={{
-            maxHeight: showDocuments ? "200px" : "0px",
-            overflowY: "auto",
-            transition: "max-height 0.3s ease"
-          }}>
-            {selectedPlace.documents && selectedPlace.documents.length > 0 ? (
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div
+            style={{
+              maxHeight: showDocuments ? "200px" : "0px",
+              overflowY: "auto",
+              transition: "max-height 0.3s ease"
+            }}
+          >
+            {selectedPlace.documents &&
+            selectedPlace.documents.length > 0 ? (
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: 0,
+                  margin: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "6px"
+                }}
+              >
                 {selectedPlace.documents.map((url, index) => {
-                  const filename = decodeURIComponent(url.split("/").pop().split("?")[0]).replace(/^\d+-/, "");
+                  const filename = decodeURIComponent(
+                    url.split("/").pop().split("?")[0]
+                  ).replace(/^\d+-/, "");
                   return (
-                    <li key={index} style={{ background: "#2a2a2a", padding: "6px 10px", borderRadius: "6px", boxShadow: "0 1px 2px rgba(0,0,0,0.2)" }}>
-                      <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--main)", textDecoration: "none" }}>
+                    <li
+                      key={index}
+                      style={{
+                        background: "#2a2a2a",
+                        padding: "6px 10px",
+                        borderRadius: "6px",
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
+                      }}
+                    >
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: "var(--main)",
+                          textDecoration: "none"
+                        }}
+                      >
                         📄 {filename}
                       </a>
                     </li>
                   );
                 })}
               </ul>
-            ) : <p style={{ color: "#aaa" }}>Niciun document atașat.</p>}
+            ) : (
+              <p style={{ color: "#aaa" }}>Niciun document atașat.</p>
+            )}
           </div>
         </div>
 
         {/* Amanunte */}
-        <div style={{
-          background: "#1a1a1a",
-          padding: "1rem",
-          borderRadius: "10px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-          color: "wheat"
-        }}>
+       <div
+          style={{
+            background: "#1a1a1a",
+            padding: "1rem",
+            borderRadius: "10px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+            color: "wheat"
+          }}
+        >
           <h3
             onClick={() => setShowAmanunte(prev => !prev)}
-            style={{ color: "var(--main)", marginBottom: "0.5rem", cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+            style={{
+              color: "var(--main)",
+              marginBottom: "0.5rem",
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "space-between"
+            }}
           >
             Amanunte <span>{showAmanunte ? "▲" : "▼"}</span>
           </h3>
-          <div style={{
-            maxHeight: showAmanunte ? "200px" : "0px",
-            overflowY: "auto",
-            transition: "max-height 0.3s ease"
-          }}>
-            <style>{`div::-webkit-scrollbar { width: 6px; height: 6px; }
-      div::-webkit-scrollbar-track { background: #000; }
-      div::-webkit-scrollbar-thumb { background-color: var(--main); border-radius: 10px; border: none; /* removes arrows/buttons */ }`}</style>
- 
-            <p><b>Model:</b> {selectedPlace.model}</p>
-            <p><b>Anul:</b> {selectedPlace.anul}</p>
-            <p><b>Kilometri:</b> {selectedPlace.km}</p>
-            <p><b>Putere:</b> {selectedPlace.putere}</p>
+          <div style={{ maxHeight: showAmanunte ? "300px" : "0px", overflowY: "auto", transition: "max-height 0.4s ease" }}>
+            {selectedPlace.nume ? (
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+                {selectedPlace.nume
+                  .split(/\r?\n/)
+                  .filter(line => line.trim() !== "")
+                  .map((line, idx) => (
+                    <li
+                      key={idx}
+                      style={{
+                        background: "#2a2a2a",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
+                      }}
+                    >
+                      {line}
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              <p style={{ color: "#aaa", margin: 0 }}>Nu a fost adăugat nimic.</p>
+            )}
           </div>
         </div>
       </div>
     </div>
-      </div>
+  </div>
 )}
+
 
 
       </div>
