@@ -508,7 +508,7 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
                         background: "#2a2a2a",
                         padding: "8px 12px",
                         borderRadius: "6px",
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)" 
                       }}
                     >
                       {line}
