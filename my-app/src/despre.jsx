@@ -193,6 +193,7 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
                 </div>
               </div>
             </div>
+            
 
             <div className="details container">
               <div className="row">
