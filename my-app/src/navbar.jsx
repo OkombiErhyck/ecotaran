@@ -38,8 +38,8 @@ const NavBar = () => {
     <>
       <nav className={`navbar navbar-expand-lg fixed-top ${navbar ? "active" : ""}`}>
         <div className="navbar-middle">
-          <Link to="/" className="navbar-brand">
-            <span>UP</span>Recruitment
+          <Link to="/despre" className="navbar-brand">
+            <span>OEA</span> Management
           </Link>
         </div>
 
@@ -53,8 +53,8 @@ const NavBar = () => {
           <ul className="navbar-nav">
 
             {user ? (
-              <li className={`nav-item ${location.pathname === "/userpage" ? "active" : ""}`}>
-                <Link to="/userpage" className="navbar-brand" onClick={() => setMobileMenuOpen(false)}>
+              <li className={`nav-item ${location.pathname === "/despre" ? "active" : ""}`}>
+                <Link to="/despre" className="navbar-brand" onClick={() => setMobileMenuOpen(false)}>
                   {user.name}
                 </Link>
               </li>
