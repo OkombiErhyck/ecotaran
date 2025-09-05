@@ -24,18 +24,22 @@ const Header = () => {
     style={{
       fontSize: "4rem",
       fontWeight: "bold",
-      color: "#000000ff",
-      backgroundColor: "rgba(133, 133, 133, 0.61)", // semi-transparent black
-      padding: "60px 40px",
-      borderRadius: "50%", // makes it round
-      display: "inline-block",
-      textAlign: "center",
-      lineHeight: "1"
+      color: "#ffffffff",
+      backgroundColor: "rgba(126, 123, 123, 0.5)", // semi-transparent
+      width: "180px",
+      height: "170px",
+      borderRadius: "50%", // perfect circle
+      display: "flex",
+    
+      justifyContent: "center",
+      alignItems: "center",
+      textAlign: "center"
     }}
   >
-OEA
+    OEA
   </span>
 </div>
+
 
 
                         </div>
