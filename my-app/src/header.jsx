@@ -18,7 +18,26 @@ const Header = () => {
                 <div className="logo">
                     <div className="logo-container">
                         <div className="logo-side front">
-                            <img src={adauga} alt="Logo" className="logo-img" />
+                           <div className="logo-side front">
+  <span
+    className="logo-img"
+    style={{
+      fontSize: "4rem",
+      fontWeight: "bold",
+      color: "#000000ff",
+      backgroundColor: "rgba(133, 133, 133, 0.61)", // semi-transparent black
+      padding: "60px 40px",
+      borderRadius: "50%", // makes it round
+      display: "inline-block",
+      textAlign: "center",
+      lineHeight: "1"
+    }}
+  >
+OEA
+  </span>
+</div>
+
+
                         </div>
                         <div className="logo-side back">
                            
