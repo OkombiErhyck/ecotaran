@@ -25,7 +25,7 @@ function Login(){
 
  }
  if (redirect) {
-  return <Navigate to={'/userpage'}/>;
+  return <Navigate to={'/despre'}/>;
  }
 
    return(
