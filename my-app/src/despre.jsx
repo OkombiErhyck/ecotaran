@@ -8,7 +8,7 @@ import "./userpage.css";
 import Logout from "./images/logout.png";
 import setting from "./images/setting.png";
 import Carousel from "react-bootstrap/Carousel";
-
+import Anunt from "./images/add.png";
 
 
 export default function IndexPage() {
@@ -43,6 +43,7 @@ const [showMore, setShowMore] = useState(false);
     "Automobile": "https://img.icons8.com/ios/100/car--v1.png",
     "Companie": "https://img.icons8.com/ios/100/company.png",
     "Cazare": "https://img.icons8.com/ios/100/real-estate.png",
+    
   };
 
   // Fetch places
@@ -136,6 +137,22 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
                 </div>
               )) : <p style={{ color: "white" }}>Se incarca...</p>}
 
+
+
+ {/* Adauga BUTTON */}
+<div className="col-lg-4 col-xs-6">
+                <div className="box card-body p-0 shadow-sm mb-5">
+                  <div className="box_content">
+                    <a href="/write">
+                      <img src={Anunt} className="img-fluid" alt="" />
+                      <button className="btn1">Adauga</button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+
+
               {/* ADMIN BUTTON */}
               <div className="col-lg-4 col-xs-6">
                 <div className="box card-body p-0 shadow-sm mb-5">
@@ -148,6 +165,7 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
                 </div>
               </div>
 
+               
               {/* LOGOUT BUTTON */}
               <div className="col-lg-4 col-xs-6 mb-3">
                 <div className="box card-body p-0 shadow-sm">
@@ -197,24 +215,61 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
 
             <div className="details container">
               <div className="row">
-                {currentPlaces.length > 0 ? currentPlaces.map((place) => (
-                  <div key={place._id} className="col-lg-4 col-xs-6">
-                    <div className="box card-body p-0 shadow-sm mb-5" style={{ position: "relative" }}>
-                      {place.photos.length > 0 ? (
-                        <Image src={place.photos[0]} className="img-fluid" style={{ height: "270px", width: "100%", objectFit: "cover" }} />
-                      ) : (
-                        <img src={display} alt="fallback" style={{ height: "270px", width: "100%", objectFit: "cover" }} />
-                      )}
+               {currentPlaces.length > 0 ? currentPlaces.map((place) => (
+  <div key={place._id} className="col-lg-4 col-xs-6">
+    <div className="box card-body p-0 shadow-sm mb-5" style={{ position: "relative" }}>
+      {/* Place Image */}
+      {place.photos.length > 0 && (
+        <Image
+          src={place.photos[0]}
+          className="img-fluid"
+          style={{ height: "270px", width: "100%", objectFit: "cover",   }}
+        />
+      )}
 
-                      <div className="box_content text-center" style={{ paddingTop: "10px" }}>
-                        <h4>{place.title}</h4>
-                        <button className="btn1" onClick={() => setSelectedPlace(place)}>
-                          Vezi detalii
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )) : <p style={{ color: "white" }}>Nu s-au găsit rezultate.</p>}
+      {/* ✏️ Edit Place Button */}
+      <button
+  onClick={() => window.location.href = `/write/${place._id}`}
+  style={{
+    position: "absolute",
+    top: "10px",
+    right: "10px",
+    width: "32px",
+    height: "32px",
+    borderRadius: "16px",
+    border: "none",
+    backgroundColor: "rgba(0,0,0,0.4)",
+    display: "flex",
+    justifyContent: "center",
+    
+    alignItems: "center",
+    cursor: "pointer",
+    transition: "background-color 0.2s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.6)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.4)";
+  }}
+>
+  <img
+    src="https://img.icons8.com/ios-filled/16/ffffff/pencil.png"
+    alt="Edit"
+    style={{ width: "16px", height: "16px" }}
+  />
+</button>
+
+
+      {/* Place Info */}
+      <div className="box_content text-center">
+        <h4>{place.title}</h4>
+        <button  onClick={() => setSelectedPlace(place)}className="btn1">Vezi detalii</button>
+      </div>
+    </div>
+  </div>
+)) : <p>Nu s-au găsit rezultate.</p>}
+
               </div>
             </div>
           </>
@@ -508,7 +563,7 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
                         background: "#2a2a2a",
                         padding: "8px 12px",
                         borderRadius: "6px",
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)" 
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
                       }}
                     >
                       {line}
