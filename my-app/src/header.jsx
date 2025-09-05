@@ -1,8 +1,9 @@
 import HeaderImg from "./images/green.jpg";
-import LogoImg from "./images/logo up.png";
+import adauga from "./images/fruits.png";
  
 import "./header.css";
 import { Link } from "react-router-dom";
+
 
 const Header = () => {
     return (
@@ -17,7 +18,7 @@ const Header = () => {
                 <div className="logo">
                     <div className="logo-container">
                         <div className="logo-side front">
-                            <img src={LogoImg} alt="Logo" className="logo-img" />
+                            <img src={adauga} alt="Logo" className="logo-img" />
                         </div>
                         <div className="logo-side back">
                            
@@ -28,8 +29,8 @@ const Header = () => {
                   <h2> 
                     Suntem aici pentru <span>tine</span> !
                   </h2>
-                  <Link to="/checkout" className="btn">
-                    Creeaza cererea <span>de concediu</span>
+                  <Link to="/login" className="btn">
+                   Incepe <span>activitatea</span>
                   </Link>
                 </div>
             </div>
