@@ -5,6 +5,7 @@ import Perks from "../Perks";
 import PhotosUpLoader from "../PhotosUpLoader";
 import { Navigate, useParams } from "react-router-dom";
 
+
 export default function Write() {
   const cars = [
     
@@ -263,10 +264,10 @@ useEffect(() => {
     };
     if (id) {
       await axios.put("/places", { id, ...placeData });
-      setRedirect("/userpage");
+      setRedirect("/despre");
     } else {
       await axios.post("/places", placeData);
-      setRedirect("/userpage");
+      setRedirect("/despre");
     }
   }
 
