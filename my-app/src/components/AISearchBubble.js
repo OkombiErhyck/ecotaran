@@ -18,7 +18,7 @@ export default function AISearchBubble() {
     setError(null);
 
     try {
-      const res = await fetch('https://ecotaran-nigs.vercel.app', {
+      const res = await fetch("https://ecotaran-nigs.vercel.app/ai-search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
@@ -173,5 +173,6 @@ export default function AISearchBubble() {
     </div>
   );
 }
+
 
 
