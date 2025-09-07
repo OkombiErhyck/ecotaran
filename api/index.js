@@ -109,6 +109,85 @@ mongoose.connection.once('open', () => {
 });
 
 
+
+
+async function askAI(question) {
+  if (!process.env.OPENAI_API_KEY) {
+    console.warn("⚠️ No OPENAI_API_KEY provided. Skipping AI.");
+    return null;
+  }
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a JSON API. Extract what field the user wants from the Place schema (title, description, telefon, mail, owner, etc.). Return only JSON like {\"field\":\"description\"}.",
+          },
+          { role: "user", content: question },
+        ],
+      }),
+    });
+
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content || null;
+  } catch (err) {
+    console.error("AI error:", err.message);
+    return null;
+  }
+}
+
+app.post("/ai-search", async (req, res) => {
+  await mongoose.connect(process.env.MONGO_URL);
+  const { query } = req.body;
+
+  try {
+    // 1️⃣ Find all places where any main fields match the query
+    const mainMatches = await Place.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { marca: { $regex: query, $options: "i" } },
+        { model: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+        { nume: { $regex: query, $options: "i" } }, // owner name
+      ],
+    });
+
+    if (!mainMatches.length) {
+      return res.json({ message: "No matching places found." });
+    }
+
+    // 2️⃣ Collect titles of the found places
+    const relatedTitles = mainMatches.map(place => place.title);
+
+    // 3️⃣ Find other places where description contains any of those titles
+    const relatedMatches = await Place.find({
+      description: { $in: relatedTitles.map(title => new RegExp(title, "i")) },
+      _id: { $nin: mainMatches.map(p => p._id) } // exclude already found main matches
+    });
+
+    // 4️⃣ Combine results
+    const allMatches = [...mainMatches, ...relatedMatches];
+
+    res.json(allMatches);
+  } catch (err) {
+    console.error("AI search error:", err);
+    res.status(500).json({ error: "Failed to process search" });
+  }
+});
+
+
+
+
+
 app.post("/register", async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   res.header("Access-Control-Allow-Credentials", "true");
