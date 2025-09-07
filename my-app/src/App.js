@@ -4,6 +4,7 @@ import axios from 'axios';
 import { UserContextProvider } from './UserContext';
 import { CartProvider } from "./CartContext";
 import './App.css';
+import AISearchBubble from "./components/AISearchBubble";
 
 
 
@@ -45,7 +46,7 @@ const Details2 = lazy(() => import('./details2'));
 const CartLink = lazy(() => import('./CartLink'));
 const Placesearch = lazy(() => import('./placesearch'));
 
-axios.defaults.baseURL = 'https://ecotaran-nigs.vercel.app';
+axios.defaults.baseURL = 'http://localhost:4000';
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -153,7 +154,7 @@ function App() {
                 />
                 <Route path='/reset-password' element={<ResetPassword />} />
                 <Route path='/despre' element={<Despre />} />
-           
+          
                 <Route path='/categorii' element={<Categorii />} />
                 <Route path='/legume' element={<Legume />} />
                 <Route path='/fructe' element={<Fructe />} />
@@ -174,11 +175,13 @@ function App() {
                 />
                 <Route path="/orders" element={<Orders orders={previousOrders} />} />
               </Routes>
-              
+                <AISearchBubble />
             </Suspense>
           </CartProvider>
         </Router>
+        
       </UserContextProvider>
+      
     </div>
   );
 }
