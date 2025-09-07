@@ -4,7 +4,7 @@ import axios from 'axios';
 import { UserContextProvider } from './UserContext';
 import { CartProvider } from "./CartContext";
 import './App.css';
-import AISearchBubble from "./components/AISearchBubble";
+import AISearchBubble from "./AISearchBubble";
 
 
 
