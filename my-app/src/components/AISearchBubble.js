@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AISearchBubble.css";
 
@@ -9,10 +9,38 @@ export default function AISearchBubble() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const navigate = useNavigate(); // React Router hook
+  const navigate = useNavigate();
+
+  // ✅ Check login status from backend
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("https://ecotaran-nigs.vercel.app/profile", {
+          method: "GET",
+          credentials: "include", // important to send cookies
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setIsLoggedIn(!!data);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (err) {
+        console.error("Auth check failed:", err);
+        setIsLoggedIn(false);
+      }
+    };
+    checkAuth();
+  }, []);
 
   const handleSearch = async () => {
+    if (!isLoggedIn) {
+      setError("⚠️ You must be logged in to search.");
+      return;
+    }
+
     if (!query) return;
     setLoading(true);
     setError(null);
@@ -21,6 +49,7 @@ export default function AISearchBubble() {
       const res = await fetch("https://ecotaran-nigs.vercel.app/ai-search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // send cookies
         body: JSON.stringify({ query }),
       });
       if (!res.ok) throw new Error("Failed to fetch results");
@@ -52,7 +81,7 @@ export default function AISearchBubble() {
 
   const renderField = (label, value) => {
     if (!value) return null;
-    if (typeof value === "object") return null; 
+    if (typeof value === "object") return null;
     return (
       <p className="field">
         <strong>{label}:</strong> {highlightText(value.toString())}
@@ -82,22 +111,30 @@ export default function AISearchBubble() {
           </div>
 
           <div className="bubble-body">
-            <input
-              type="text"
-              placeholder="Search for a place..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-            <button className="search-btn" onClick={handleSearch}>
-              Search
-            </button>
+            {!isLoggedIn ? (
+              <p className="status error">⚠️ Please log in to use search.</p>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Search for a place..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+                <button className="search-btn" onClick={handleSearch}>
+                  Search
+                </button>
+              </>
+            )}
 
             {loading && <p className="status">Loading...</p>}
             {error && <p className="status error">{error}</p>}
 
             <div className="results">
-              {results.length === 0 && !loading && <p>No results found</p>}
+              {results.length === 0 && !loading && isLoggedIn && (
+                <p>No results found</p>
+              )}
 
               {results.map((place) => {
                 const isExpanded = expanded[place._id] || false;
@@ -173,6 +210,3 @@ export default function AISearchBubble() {
     </div>
   );
 }
-
-
-
