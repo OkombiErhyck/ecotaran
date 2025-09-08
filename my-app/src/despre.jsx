@@ -16,6 +16,8 @@ export default function IndexPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [placesPerPage, setPlacesPerPage] = useState(9);
 const [showMore, setShowMore] = useState(false);
+ const [editingField, setEditingField] = useState(null);
+  const [fieldValue, setFieldValue] = useState("");
 
   const [selectedMarca, setSelectedMarca] = useState("");
   const [selectedPlace, setSelectedPlace] = useState(null); // 👈 NEW: virtual page 2
@@ -79,6 +81,8 @@ const [showMore, setShowMore] = useState(false);
     return true;
   });
 
+  
+
   const lastPlaceIndex = currentPage * placesPerPage;
   const firstPlaceIndex = lastPlaceIndex - placesPerPage;
   const currentPlaces = filteredPlaces.slice(firstPlaceIndex, lastPlaceIndex);
@@ -107,6 +111,62 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
     setShowOnlyAMT(false);
   };
 
+ const saveField = async (field) => {
+    try {
+      const res = await axios.put(`/places/${selectedPlace._id}/update-field`, {
+        field,
+        value: fieldValue,
+      });
+      setSelectedPlace(res.data);
+      setEditingField(null);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update field");
+    }
+  };
+
+  // --- Upload doc ---
+  const handleDocUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("document", file);
+    try {
+      const res = await axios.post(
+        `/places/${selectedPlace._id}/upload-doc`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      setSelectedPlace(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed");
+    }
+  };
+
+  // --- Delete doc ---
+  const handleDocDelete = async (url) => {
+    try {
+      const filename = url.split("/").pop();
+      await axios.delete(`/places/${selectedPlace._id}/delete-doc`, {
+        data: { filename },
+      });
+      setSelectedPlace((prev) => ({
+        ...prev,
+        documents: prev.documents.filter((d) => d !== url),
+      }));
+    } catch (err) {
+      console.error(err);
+      alert("Delete failed");
+    }
+  };
+
+  const getDocumentName = (url) => {
+    const filename = decodeURIComponent(url.split("/").pop().split("?")[0]);
+    return filename.replace(/^\d+-/, "").replace(/[-_]+/g, " ");
+  };
+
+  
   return (
     <div className="userbox">
       <div className="usercontent">
@@ -276,313 +336,134 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
         )}
 
         {/* PAGE 3 - PLACE DETAILS */}
-   {selectedPlace && (
-  <div
-    style={{
-      marginTop: "90px",
-      background: "#3c3c3c",
-      padding: "20px",
-      borderBottom: "2px solid var(--main)",
-      borderRadius: "12px",
-      display: "flex",
-      flexDirection: "column",
-      gap: "2rem"
-    }}
-  >
-    {/* Back Button */}
-    <div style={{ marginBottom: "1rem" }}>
-      <button
-        onClick={() => setSelectedPlace(null)}
-        style={{
-          padding: "0.6rem 1.2rem",
-          backgroundColor: "var(--main)",
-          color: "#fff",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontWeight: "bold"
-        }}
-      >
-        ← Înapoi la listă
-      </button>
-    </div>
-
-    {/* Carousel */}
-    {selectedPlace.photos?.length > 0 && (
-      <Carousel
-        style={{
-          borderBottom: "2px solid var(--main)",
-          borderRadius: "12px",
-          overflow: "hidden"
-        }}
-      >
-        {selectedPlace.photos.map((photo, index) => (
-          <Carousel.Item key={index}>
-            <Image
-              className="d-block w-100"
-              src={photo}
-              alt={`Slide ${index + 1}`}
-              style={{
-                objectFit: "contain",
-                maxHeight: "500px",
-                width: "100%"
-              }}
-            />
-          </Carousel.Item>
-        ))}
-      </Carousel>
-    )}
-
-    {/* Info Grid (Responsive) */}
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "20px"
-      }}
-    >
-      {/* Description */}
-      <div
-        style={{
-          flex: "2 1 600px", // takes 2/3 width on large, full width on small
-          background: "#1a1a1a",
-          padding: "1rem",
-          borderRadius: "10px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-          color: "wheat"
-        }}
-      >
-        <h3 style={{ color: "var(--main)", marginBottom: "0.5rem" }}>
-          Descriere
-        </h3>
-
-        {selectedPlace.description ? (
-          selectedPlace.description.length > 400 ? (
-            <>
-              <div
-                style={{
-                  maxHeight: showMore ? "none" : "200px",
-                  overflow: "hidden",
-                  transition: "max-height 0.4s ease"
-                }}
-              >
-                <ul
-                  style={{
-                    listStyle: "none",
-                    padding: 0,
-                    margin: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "8px"
-                  }}
-                >
-                  {selectedPlace.description
-                    .split(/\r?\n/)
-                    .filter((line) => line.trim() !== "")
-                    .map((line, idx) => (
-                      <li
-                        key={idx}
-                        style={{
-                          background: "#2a2a2a",
-                          padding: "8px 12px",
-                          borderRadius: "6px",
-                          boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
-                        }}
-                      >
-                        {line}
-                      </li>
-                    ))}
-                </ul>
-              </div>
-              <button
-                onClick={() => setShowMore((prev) => !prev)}
-                style={{
-                  marginTop: "8px",
-                  padding: "0.4rem 0.8rem",
-                  border: "none",
-                  borderRadius: "6px",
-                  backgroundColor: "var(--main)",
-                  color: "#fff",
-                  cursor: "pointer"
-                }}
-              >
-                {showMore ? "Show less" : "Show more"}
-              </button>
-            </>
-          ) : (
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px"
-              }}
-            >
-              {selectedPlace.description
-                .split(/\r?\n/)
-                .filter((line) => line.trim() !== "")
-                .map((line, idx) => (
-                  <li
-                    key={idx}
-                    style={{
-                      background: "#2a2a2a",
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
-                    }}
-                  >
-                    {line}
-                  </li>
-                ))}
-            </ul>
-          )
-        ) : (
-          <p style={{ color: "#aaa" }}>Nu a fost adăugat nimic.</p>
-        )}
-      </div>
-
-      {/* Right Column */}
-      <div
-        style={{
-          flex: "1 1 300px", // shrinks to fit, full width on small
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px"
-        }}
-      >
-        {/* Documents */}
-        <div
-          style={{
-            background: "#1a1a1a",
-            padding: "1rem",
-            borderRadius: "10px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-            color: "wheat"
-          }}
-        >
-          <h3
-            onClick={() => setShowDocuments((prev) => !prev)}
-            style={{
-              color: "var(--main)",
-              marginBottom: "0.5rem",
-              cursor: "pointer",
-              display: "flex",
-              justifyContent: "space-between"
-            }}
-          >
-            Documente atașate <span>{showDocuments ? "▲" : "▼"}</span>
-          </h3>
+    {selectedPlace && (
           <div
             style={{
-              maxHeight: showDocuments ? "200px" : "0px",
-              overflowY: "auto",
-              transition: "max-height 0.3s ease"
-            }}
-          >
-            {selectedPlace.documents &&
-            selectedPlace.documents.length > 0 ? (
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "6px"
-                }}
-              >
-                {selectedPlace.documents.map((url, index) => {
-                  const filename = decodeURIComponent(
-                    url.split("/").pop().split("?")[0]
-                  ).replace(/^\d+-/, "");
-                  return (
-                    <li
-                      key={index}
-                      style={{
-                        background: "#2a2a2a",
-                        padding: "6px 10px",
-                        borderRadius: "6px",
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
-                      }}
-                    >
-                      <a
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: "var(--main)",
-                          textDecoration: "none"
-                        }}
-                      >
-                        📄 {filename}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p style={{ color: "#aaa" }}>Niciun document atașat.</p>
-            )}
-          </div>
-        </div>
-
-        {/* Amanunte */}
-       <div
-          style={{
-            background: "#1a1a1a",
-            padding: "1rem",
-            borderRadius: "10px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-            color: "wheat"
-          }}
-        >
-          <h3
-            onClick={() => setShowAmanunte(prev => !prev)}
-            style={{
-              color: "var(--main)",
-              marginBottom: "0.5rem",
-              cursor: "pointer",
+              marginTop: "90px",
+              background: "#3c3c3c",
+              padding: "20px",
+              borderBottom: "2px solid var(--main)",
+              borderRadius: "12px",
               display: "flex",
-              justifyContent: "space-between"
+              flexDirection: "column",
+              gap: "2rem",
             }}
           >
-            Amanunte <span>{showAmanunte ? "▲" : "▼"}</span>
-          </h3>
-          <div style={{ maxHeight: showAmanunte ? "300px" : "0px", overflowY: "auto", transition: "max-height 0.4s ease" }}>
-            {selectedPlace.nume ? (
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-                {selectedPlace.nume
-                  .split(/\r?\n/)
-                  .filter(line => line.trim() !== "")
-                  .map((line, idx) => (
-                    <li
-                      key={idx}
-                      style={{
-                        background: "#2a2a2a",
-                        padding: "8px 12px",
-                        borderRadius: "6px",
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.2)"
+            {/* Back */}
+            <button
+              onClick={() => setSelectedPlace(null)}
+              style={{
+                padding: "0.6rem 1.2rem",
+                backgroundColor: "var(--main)",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: "bold",
+                marginBottom: "1rem",
+              }}
+            >
+              ← Înapoi la listă
+            </button>
+
+            {/* Carousel */}
+            {selectedPlace.photos?.length > 0 && (
+              <Carousel>
+                {selectedPlace.photos.map((photo, i) => (
+                  <Carousel.Item key={i}>
+                    <Image
+                      className="d-block w-100"
+                      src={photo}
+                      alt=""
+                      style={{ objectFit: "contain", maxHeight: "500px" }}
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            )}
+
+            {/* Info Grid */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+              {/* Description with inline edit */}
+              <div style={{ flex: "2 1 600px", background: "#1a1a1a", padding: "1rem", borderRadius: "10px", color: "wheat" }}>
+                <h3 style={{ color: "var(--main)" }}>Descriere</h3>
+                {editingField === "description" ? (
+                  <div>
+                    <textarea
+                      value={fieldValue}
+                      onChange={(e) => setFieldValue(e.target.value)}
+                      rows={6}
+                      style={{ width: "100%" }}
+                    />
+                    <button onClick={() => saveField("description")}>💾 Save</button>
+                    <button onClick={() => setEditingField(null)}>✖ Cancel</button>
+                  </div>
+                ) : (
+                  <div>
+                    <p>{selectedPlace.description || "Nu a fost adăugat nimic."}</p>
+                    <button
+                      onClick={() => {
+                        setEditingField("description");
+                        setFieldValue(selectedPlace.description || "");
                       }}
                     >
-                      {line}
-                    </li>
-                  ))}
-              </ul>
-            ) : (
-              <p style={{ color: "#aaa", margin: 0 }}>Nu a fost adăugat nimic.</p>
-            )}
+                      ✏️ Edit
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Documents */}
+              <div style={{ flex: "1 1 300px", background: "#1a1a1a", padding: "1rem", borderRadius: "10px", color: "wheat" }}>
+                <h3
+                  onClick={() => setShowDocuments((p) => !p)}
+                  style={{ color: "var(--main)", cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+                >
+                  Documente atașate <span>{showDocuments ? "▲" : "▼"}</span>
+                </h3>
+                <div style={{ maxHeight: showDocuments ? "300px" : "0px", overflowY: "auto", transition: "max-height 0.3s ease" }}>
+                  {selectedPlace.documents?.length > 0 ? (
+                    <ul style={{ listStyle: "none", padding: 0 }}>
+                      {selectedPlace.documents.map((url, i) => (
+                        <li key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--main)" }}>
+                            📄 {getDocumentName(url)}
+                          </a>
+                          <button onClick={() => handleDocDelete(url)}>🗑️</button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p style={{ color: "#aaa" }}>Niciun document atașat.</p>
+                  )}
+                  <input type="file" onChange={handleDocUpload} />
+                </div>
+              </div>
+
+              {/* Amanunte */}
+              <div style={{ flex: "1 1 300px", background: "#1a1a1a", padding: "1rem", borderRadius: "10px", color: "wheat" }}>
+                <h3
+                  onClick={() => setShowAmanunte((p) => !p)}
+                  style={{ color: "var(--main)", cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+                >
+                  Amanunte <span>{showAmanunte ? "▲" : "▼"}</span>
+                </h3>
+                <div style={{ maxHeight: showAmanunte ? "300px" : "0px", overflowY: "auto", transition: "max-height 0.3s ease" }}>
+                  {selectedPlace.nume ? (
+                    <ul style={{ listStyle: "none", padding: 0 }}>
+                      {selectedPlace.nume.split(/\r?\n/).map((line, i) => (
+                        <li key={i}>{line}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p style={{ color: "#aaa" }}>Nu a fost adăugat nimic.</p>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
-
-
+        )}
       </div>
     </div>
   );
-}
+} 
