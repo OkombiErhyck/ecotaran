@@ -274,6 +274,101 @@ app.post("/logout", (req,res) => {
 });
 
 
+
+
+
+// ✏️ Update a single field of a Place
+app.put("/places/:id/update-field", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { field, value } = req.body;
+
+    if (!field) return res.status(400).json({ error: "Field is required" });
+
+    const updated = await Place.findByIdAndUpdate(
+      id,
+      { [field]: value },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    console.error("Update field error:", err);
+    res.status(500).json({ error: "Failed to update field" });
+  }
+});
+
+// 📄 Upload and attach a new document to a Place
+app.post("/places/:id/upload-doc", docsMiddleware.single("document"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+
+    const { id } = req.params;
+    const { path, originalname, mimetype } = req.file;
+
+    const url = await uploadToS3(path, originalname, mimetype);
+    fs.unlinkSync(path);
+
+    const updated = await Place.findByIdAndUpdate(
+      id,
+      { $push: { documents: url } },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    console.error("Upload doc error:", err);
+    res.status(500).json({ error: "Failed to upload document" });
+  }
+});
+
+// ❌ Remove a document from a Place
+app.delete("/places/:id/delete-doc", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { filename } = req.body;
+
+    if (!filename) return res.status(400).json({ error: "Filename required" });
+
+    await s3
+      .deleteObject({
+        Bucket: bucket,
+        Key: filename,
+      })
+      .promise();
+
+    const fileUrl = `https://${bucket}.s3.amazonaws.com/${filename}`;
+    const updated = await Place.findByIdAndUpdate(
+      id,
+      { $pull: { documents: fileUrl } },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    console.error("Delete doc error:", err);
+    res.status(500).json({ error: "Failed to delete document" });
+  }
+});
+
+
+app.put("/places/:id", async (req, res) => {
+  try {
+    const placeId = req.params.id;
+    const updates = req.body; // e.g., { description: "new text" }
+    
+    const updatedPlace = await Place.findByIdAndUpdate(placeId, updates, { new: true });
+    if (!updatedPlace) return res.status(404).json({ error: "Place not found" });
+
+    res.json(updatedPlace);
+  } catch (err) {
+    console.error("Error updating place:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+
 const photosMiddleware = multer({dest:'/tmp',  limits: { fileSize: 80000000 }});
 app.options("/upload", (req, res) => {
  res.header("Access-Control-Allow-Origin", "*");
