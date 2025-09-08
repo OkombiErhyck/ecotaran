@@ -491,13 +491,17 @@ const saveField = async (field, target) => {
                         style={{
                           background: "#444",
                           border: "none",
-                          borderRadius: "6px",
-                          padding: "4px 8px",
+                          borderRadius: "16px",
+                          padding: "2px 6px",
                           cursor: "pointer",
                           color: "#fff",
                         }}
                       >
-                        ✏️
+                         <img
+    src="https://img.icons8.com/ios-filled/16/ffffff/pencil.png"
+    alt="Edit"
+    style={{ width: "16px", height: "16px" }}
+  />
                       </button>
                     </>
                   )}
@@ -527,7 +531,11 @@ const saveField = async (field, target) => {
               alignSelf: "flex-start",
             }}
           >
-            ➕ Adaugă rând
+            <img
+    src="https://img.icons8.com/ios-glyphs/24/ffffff/plus-math.png"
+    alt="Add"
+    style={{ width: "16px", height: "16px" }}
+  /> Adaugă
           </button>
 
           {editingField === "description-new" && (
@@ -550,8 +558,8 @@ const saveField = async (field, target) => {
                 style={{
                   background: "var(--main)",
                   border: "none",
-                  borderRadius: "6px",
-                  padding: "4px 8px",
+                  borderRadius: "16px",
+                  padding: "4px 4px",
                   cursor: "pointer",
                   color: "#fff",
                 }}
@@ -563,8 +571,8 @@ const saveField = async (field, target) => {
                 style={{
                   background: "#555",
                   border: "none",
-                  borderRadius: "6px",
-                  padding: "4px 8px",
+                  borderRadius: "16px",
+                  padding: "4px 4px",
                   cursor: "pointer",
                   color: "#fff",
                 }}
