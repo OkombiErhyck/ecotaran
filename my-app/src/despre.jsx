@@ -111,45 +111,105 @@ const [showAmanunte, setShowAmanunte] = React.useState(false);
     setShowOnlyAMT(false);
   };
 
+const toBackendField = (field) => (field === "amanunte" ? "nume" : field);
+
+// helper to fetch the latest place from backend (returns place object)
+const fetchLatestPlace = async () => {
+  const res = await axios.get(`/places/${selectedPlace._id}`);
+  return res.data;
+};
+
+// apply update to server and update UI state reliably
+const applyUpdateToServerAndState = async (backendField, updatedValue) => {
+  // PUT the updated field
+  const putRes = await axios.put(`/places/${selectedPlace._id}`, {
+    [backendField]: updatedValue,
+  });
+
+  // If API returns updated doc, use it; otherwise fetch fresh
+  let updatedPlace = putRes?.data;
+  if (!updatedPlace || !updatedPlace._id) {
+    updatedPlace = (await axios.get(`/places/${selectedPlace._id}`)).data;
+  }
+
+  // update UI state
+  setSelectedPlace(updatedPlace);
+  setPlaces((prev) => prev.map((p) => (p._id === updatedPlace._id ? updatedPlace : p)));
+};
+
+// Save (edit or add) a line for 'description' or 'amanunte' (maps to nume)
 const saveField = async (field, target) => {
   try {
-    if (field !== "description") return;
+    const backendField = toBackendField(field);
 
-    // 1) Get existing description lines
-    const lines = (selectedPlace.description ?? "").split(/\r?\n/);
+    // 1) Read the latest server value to avoid overwriting concurrent updates
+    const latest = await fetchLatestPlace();
+    const raw = latest[backendField] ?? "";
 
-    // 2) Apply edit/append
+    // 2) Build lines array (keep empty strings if present)
+    // If raw === "" => lines = []
+    const lines = raw === "" ? [] : raw.split(/\r?\n/);
+
+    // 3) Apply change
     if (target === "new") {
-      lines.push(fieldValue);
+      if (!fieldValue || !fieldValue.trim()) {
+        alert("Introduceți un text valid înainte de salvare.");
+        return;
+      }
+      lines.push(fieldValue.trim());
     } else if (typeof target === "number") {
-      lines[target] = fieldValue;
+      if (target < 0 || target >= lines.length) {
+        alert("Index invalid.");
+        return;
+      }
+      lines[target] = fieldValue; // keep exact value (no forced trim)
+    } else {
+      console.warn("Unknown target for saveField:", target);
+      return;
     }
 
-    // 3) Join back
-    const updatedDescription = lines.join("\n");
+    // 4) Join and send
+    const updatedValue = lines.join("\n");
+    await applyUpdateToServerAndState(backendField, updatedValue);
 
-    // 4) Save to backend
-    await axios.put(`/places/${selectedPlace._id}`, {
-      description: updatedDescription,
-    });
-
-    // 5) Update UI state
-    setSelectedPlace((prev) => ({ ...prev, description: updatedDescription }));
-    setPlaces((prev) =>
-      prev.map((p) =>
-        p._id === selectedPlace._id ? { ...p, description: updatedDescription } : p
-      )
-    );
-
-    // 6) Reset
+    // 5) Reset editing state
     setEditingField(null);
     setFieldValue("");
   } catch (err) {
-    console.error(err);
+    console.error("saveField error:", err);
     alert("Nu s-a putut salva. Încearcă din nou.");
   }
 };
 
+// Delete a single row (by index) from description / amanunte
+const deleteField = async (field, idx) => {
+  try {
+    const backendField = toBackendField(field);
+
+    // get latest
+    const latest = await fetchLatestPlace();
+    const raw = latest[backendField] ?? "";
+    const lines = raw === "" ? [] : raw.split(/\r?\n/);
+
+    if (idx < 0 || idx >= lines.length) {
+      alert("Index invalid pentru ștergere.");
+      return;
+    }
+
+    // remove
+    lines.splice(idx, 1);
+    const updatedValue = lines.join("\n");
+
+    await applyUpdateToServerAndState(backendField, updatedValue);
+
+    // clear editing state if it targeted this row
+    setEditingField(null);
+    setFieldValue("");
+  } catch (err) {
+    console.error("deleteField error:", err);
+    alert("Nu s-a putut șterge. Încearcă din nou.");
+  }
+};
 
   // --- Upload doc ---
   const handleDocUpload = async (e) => {
@@ -467,7 +527,7 @@ const saveField = async (field, target) => {
                         💾
                       </button>
                       <button
-                        onClick={() => setEditingField(null)}
+                        onClick={() => deleteField("description", idx)}
                         style={{
                           background: "#555",
                           border: "none",
@@ -758,98 +818,100 @@ const saveField = async (field, target) => {
       gap: "8px",
     }}
   >
-    {selectedPlace.nume
-      ? selectedPlace.nume.split(/\r?\n/).map((line, idx) => (
-          <div
-            key={idx}
-            style={{
-              background: "#2a2a2a",
-              padding: "10px 14px",
-              borderRadius: "8px",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            {editingField === `nume-${idx}` ? (
-              <>
-                <input
-                  type="text"
-                  value={fieldValue}
-                  onChange={(e) => setFieldValue(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid #555",
-                    background: "#1a1a1a",
-                    color: "wheat",
-                  }}
+    {(selectedPlace.nume ?? "").split(/\r?\n/).length > 0 &&
+    (selectedPlace.nume ?? "") !== "" ? (
+      (selectedPlace.nume ?? "").split(/\r?\n/).map((line, idx) => (
+        <div
+          key={idx}
+          style={{
+            background: "#2a2a2a",
+            padding: "10px 14px",
+            borderRadius: "8px",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          {editingField === `amanunte-${idx}` ? (
+            <>
+              <input
+                type="text"
+                value={fieldValue}
+                onChange={(e) => setFieldValue(e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: "8px",
+                  borderRadius: "6px",
+                  border: "1px solid #555",
+                  background: "#1a1a1a",
+                  color: "wheat",
+                }}
+              />
+              <button
+                onClick={() => saveField("amanunte", idx)}
+                style={{
+                  background: "var(--main)",
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  cursor: "pointer",
+                  color: "#fff",
+                }}
+                title="Salvează rând"
+              >
+                💾
+              </button>
+              <button
+                onClick={() => deleteField("amanunte", idx)}
+                style={{
+                  background: "#a00",
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  cursor: "pointer",
+                  color: "#fff",
+                }}
+                title="Șterge rând"
+              >
+                ✖
+              </button>
+            </>
+          ) : (
+            <>
+              <span style={{ flex: 1 }}>{line}</span>
+              <button
+                onClick={() => {
+                  setEditingField(`amanunte-${idx}`);
+                  setFieldValue(line);
+                }}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#fff",
+                }}
+                title="Editează rând"
+              >
+                <img
+                  src="https://img.icons8.com/ios-filled/16/ffffff/pencil.png"
+                  alt="Edit"
+                  style={{ width: "16px", height: "16px" }}
                 />
-                <button
-                  onClick={() => saveField("nume", idx)}
-                  style={{
-                    background: "var(--main)",
-                    border: "none",
-                    borderRadius: "6px",
-                    padding: "4px 8px",
-                    cursor: "pointer",
-                    color: "#fff",
-                  }}
-                >
-                  💾
-                </button>
-                <button
-                  onClick={() => setEditingField(null)}
-                  style={{
-                    background: "#555",
-                    border: "none",
-                    borderRadius: "6px",
-                    padding: "4px 8px",
-                    cursor: "pointer",
-                    color: "#fff",
-                  }}
-                >
-                  ✖
-                </button>
-              </>
-            ) : (
-              <>
-                <span style={{ flex: 1 }}>{line}</span>
-                <button
-                  onClick={() => {
-                    setEditingField(`nume-${idx}`);
-                    setFieldValue(line);
-                  }}
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "#fff",
-                  }}
-                >
-                  <img
-                    src="https://img.icons8.com/ios-filled/16/ffffff/pencil.png"
-                    alt="Edit"
-                    style={{ width: "16px", height: "16px" }}
-                  />
-                </button>
-              </>
-            )}
-          </div>
-        ))
-      : (
-        <div style={{ color: "#aaa", fontStyle: "italic" }}>
-          Nu a fost adăugat nimic.
+              </button>
+            </>
+          )}
         </div>
-      )}
+      ))
+    ) : (
+      <div style={{ color: "#aaa", fontStyle: "italic" }}>Nu a fost adăugat nimic.</div>
+    )}
 
     {/* Add New Row */}
     <button
       onClick={() => {
-        setEditingField("nume-new");
+        setEditingField("amanunte-new");
         setFieldValue("");
       }}
       style={{
@@ -872,7 +934,7 @@ const saveField = async (field, target) => {
       Adaugă
     </button>
 
-    {editingField === "nume-new" && (
+    {editingField === "amanunte-new" && (
       <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
         <input
           type="text"
@@ -888,7 +950,7 @@ const saveField = async (field, target) => {
           }}
         />
         <button
-          onClick={() => saveField("nume", "new")}
+          onClick={() => saveField("amanunte", "new")}
           style={{
             background: "var(--main)",
             border: "none",
@@ -917,6 +979,8 @@ const saveField = async (field, target) => {
     )}
   </div>
 </div>
+
+
 
       </div>
     </div>
