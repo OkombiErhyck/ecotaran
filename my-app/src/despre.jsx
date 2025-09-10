@@ -435,22 +435,7 @@ const deleteField = async (field, idx) => {
       gap: "2rem",
     }}
   >
-    {/* Back */}
-    <button
-      onClick={() => setSelectedPlace(null)}
-      style={{
-        padding: "0.6rem 1.2rem",
-        backgroundColor: "var(--main)",
-        color: "#fff",
-        border: "none",
-        borderRadius: "8px",
-        cursor: "pointer",
-        fontWeight: "bold",
-        marginBottom: "1rem",
-      }}
-    >
-      ← Înapoi la listă
-    </button>
+    
 
     {/* Carousel */}
     {selectedPlace.photos?.length > 0 && (
@@ -467,6 +452,25 @@ const deleteField = async (field, idx) => {
         ))}
       </Carousel>
     )}
+
+
+{/* Back */}
+    <button
+      onClick={() => setSelectedPlace(null)}
+      style={{
+        padding: "0.6rem 1.2rem",
+        backgroundColor: "var(--main)",
+        color: "#fff",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+        fontWeight: "bold",
+        marginBottom: "1rem",
+      }}
+    >
+      ← Înapoi la listă
+    </button>
+
 
     {/* Info Grid */}
     <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
