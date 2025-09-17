@@ -364,14 +364,60 @@ const deleteField = async (field, idx) => {
                {currentPlaces.length > 0 ? currentPlaces.map((place) => (
   <div key={place._id} className="col-lg-4 col-xs-6">
     <div className="box card-body p-0 shadow-sm mb-5" style={{ position: "relative" }}>
-      {/* Place Image */}
-      {place.photos.length > 0 && (
-        <Image
-          src={place.photos[0]}
-          className="img-fluid"
-          style={{ height: "270px", width: "100%", objectFit: "cover",   }}
-        />
-      )}
+      {/* Place Image / PDF Preview */}
+{place.photos.length > 0 && (
+  place.photos[0].toLowerCase().endsWith(".pdf") ? (
+    <div
+      style={{
+        position: "relative",
+        height: "270px",
+        width: "100%",
+        border: "1px solid #ddd",
+        borderRadius: "6px",
+        overflow: "hidden", // hide scrollbars
+        background: "#f5f5f5",
+      }}
+    >
+      <iframe
+        src={place.photos[0]}
+        style={{
+          width: "100%",
+          height: "100%",
+          border: "none",
+          overflow: "hidden", // hide scrollbars inside iframe
+        }}
+        title="PDF Preview"
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "8px",
+          left: "8px",
+          background: "rgba(0,0,0,0.6)",
+          color: "#fff",
+          padding: "2px 6px",
+          borderRadius: "3px",
+          fontSize: "0.85rem",
+          fontWeight: "bold",
+        }}
+      >
+        PDF
+      </div>
+    </div>
+  ) : (
+    <Image
+      src={place.photos[0]}
+      className="img-fluid"
+      style={{
+        height: "270px",
+        width: "100%",
+        objectFit: "cover",
+        borderRadius: "6px",
+      }}
+    />
+  )
+)}
+
 
       {/* ✏️ Edit Place Button */}
       <button
@@ -438,20 +484,62 @@ const deleteField = async (field, idx) => {
     
 
     {/* Carousel */}
-    {selectedPlace.photos?.length > 0 && (
-      <Carousel>
-        {selectedPlace.photos.map((photo, i) => (
-          <Carousel.Item key={i}>
+{selectedPlace.photos?.length > 0 && (
+  <Carousel>
+    {selectedPlace.photos.map((file, i) => {
+      const isPdf = file.toLowerCase().endsWith(".pdf");
+
+      return (
+        <Carousel.Item key={i}>
+          {isPdf ? (
+            <div style={{ textAlign: "center" }}>
+              <iframe
+                src={file}
+                title={`pdf-${i}`}
+                style={{
+                  width: "100%",
+                  height: "500px",
+                  border: "none",
+                  borderRadius: "6px",
+                  background: "#fff",
+                }}
+              />
+              <a
+                href={file}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-block",
+                  marginTop: "10px",
+                  padding: "6px 12px",
+                  background: "var(--main)",
+                  color: "#fff",
+                  borderRadius: "4px",
+                  fontSize: "14px",
+                  textDecoration: "none",
+                }}
+              >
+                📄 Descarcă PDF
+              </a>
+            </div>
+          ) : (
             <Image
               className="d-block w-100"
-              src={photo}
+              src={file}
               alt=""
-              style={{ objectFit: "contain", maxHeight: "500px" }}
+              style={{
+                objectFit: "contain",
+                maxHeight: "500px",
+                borderRadius: "6px",
+              }}
             />
-          </Carousel.Item>
-        ))}
-      </Carousel>
-    )}
+          )}
+        </Carousel.Item>
+      );
+    })}
+  </Carousel>
+)}
+
 
 
 {/* Back */}
