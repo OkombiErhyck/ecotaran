@@ -429,9 +429,10 @@ Ce a fost cumparat-data:`
               ))}
             </select>
             <div style={{background: "var(--main)", color: "#fff", padding: "10px", borderRadius: "5px"}}> 
- 
-            <PhotosUpLoader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-            </div>
+  <h5 style={{fontSize:'1.1rem'}}>Fișiere (imagini + PDF)</h5>
+  <PhotosUpLoader addedPhotos={addedPhotos} onChange={setAddedPhotos} accept="image/*,application/pdf" />
+</div>
+
             <br /> 
             <div className="writeFormGroup">
                <div style={{background: "var(--main)", color: "#fff", padding: "10px", borderRadius: "5px",}}> 
